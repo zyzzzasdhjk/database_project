@@ -6,17 +6,36 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1211</width>
-    <height>856</height>
+    <width>1210</width>
+    <height>864</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
+  <widget class="QWidget" name="C">
+   <layout class="QVBoxLayout" name="verticalLayout" stretch="1,12,2">
+    <property name="spacing">
+     <number>0</number>
+    </property>
     <item>
-     <layout class="QVBoxLayout" name="main_layout"/>
+     <layout class="QHBoxLayout" name="top_layout"/>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="middle_layout" stretch="2,10">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <item>
+       <layout class="QVBoxLayout" name="left_layout"/>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="right_layout"/>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="bottom_layout"/>
     </item>
    </layout>
   </widget>
@@ -25,7 +44,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1211</width>
+     <width>1210</width>
      <height>26</height>
     </rect>
    </property>
