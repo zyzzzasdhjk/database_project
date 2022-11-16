@@ -9,12 +9,13 @@ class PlayList(QWidget, Ui_PlayList):
         self.Headers = ['操作', '标题', '歌手', '专辑', '时间']
         self.model.setHorizontalHeaderLabels(self.Headers)
         self.setupUi(self)
-        self.PlaylistMusicList.setModel(self.model)
+        self.PlaylistMusicListTableView.setModel(self.model)
+        # 自适应布局
+        self.PlaylistMusicListTableView.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
 
 if __name__ == '__main__':
     # 0. 导入所需要的包和模块
-    from PyQt5.Qt import *
     import sys
     import qdarkstyle
 

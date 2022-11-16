@@ -34,7 +34,7 @@
         <number>20</number>
        </property>
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_8">
+        <layout class="QVBoxLayout" name="verticalLayout_8" stretch="5,1">
          <item>
           <widget class="QGraphicsView" name="graphicsView"/>
          </item>
@@ -183,7 +183,11 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_4">
        <item>
-        <widget class="QTableView" name="PlaylistMusicList"/>
+        <widget class="QTableView" name="PlaylistMusicListTableView">
+         <property name="sizeAdjustPolicy">
+          <enum>QAbstractScrollArea::AdjustToContentsOnFirstShow</enum>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
