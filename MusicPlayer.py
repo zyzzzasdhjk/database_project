@@ -2,7 +2,9 @@ import threading
 from PyQt5 import QtWidgets
 import pygame
 import sys
-from PyQt5.QtWidgets import QLabel, QWidget
+
+from PyQt5.QtGui import QStandardItemModel, QStandardItem
+from PyQt5.QtWidgets import QLabel, QWidget, QTableView, QVBoxLayout
 from mutagen.mp3 import MP3
 
 from gui import main_ui, music_ui  # 导入ui文件
@@ -40,6 +42,7 @@ def set_music_time(t):  # 修改音乐播放的时间
     global music_time_change_flag
     music_time_change_flag = 0
 
+
 class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
     def __init__(self):
         super(Main_window, self).__init__()
@@ -48,10 +51,11 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         self.ini_window()
 
     def ini_window(self):
-        self.main_layout.addWidget(self.music)
+        self.bottom_layout.addWidget(self.music)
+        self.music.show()
 
 
-class Music_player(QtWidgets.QMainWindow, music_ui.Ui_Form):  # 修改main_ui.Ui_MainWindow
+class Music_player(QtWidgets.QWidget, music_ui.Ui_Form):  # 修改main_ui.Ui_MainWindow
     def __init__(self):
         super(Music_player, self).__init__()
         self.setupUi(self)
@@ -77,7 +81,6 @@ class Music_player(QtWidgets.QMainWindow, music_ui.Ui_Form):  # 修改main_ui.Ui
         self.suspend_button.clicked.connect(self.pause_music)
         # 启动线程
         self.time_slider_thread.start()
-
 
     def update_left_label_time(self):  # 更新左侧的label
         t = self.time_slider.value()  # 注意，返回值是一个整数
@@ -118,7 +121,6 @@ class Music_player(QtWidgets.QMainWindow, music_ui.Ui_Form):  # 修改main_ui.Ui
             thread_flag1 = 1
             self.suspend_button.setText("继续")
             self.music_pause_flag = 1
-
 
     def playlist_widget(self):
         pass
