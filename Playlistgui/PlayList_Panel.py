@@ -6,12 +6,15 @@ class PlayList(QWidget, Ui_PlayList):
     def __init__(self, parent=None):
         super(PlayList, self).__init__(parent)
         self.model = QStandardItemModel(0, 5)
-        self.Headers = ['操作', '标题', '歌手', '专辑', '时间']
+        self.Headers = ['ID', '操作', '标题', '歌手', '专辑', '时间']
         self.model.setHorizontalHeaderLabels(self.Headers)
+        self.model.appendRow(QStandardItem('1'))
         self.setupUi(self)
         self.PlaylistMusicListTableView.setModel(self.model)
-        # 自适应布局
+        # 自适应布局，设置高度与宽度
         self.PlaylistMusicListTableView.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.PlaylistMusicListTableView.verticalHeader().setDefaultSectionSize(40)
+        self.PlaylistMusicListTableView.verticalHeader().setSectionResizeMode(QHeaderView.Fixed)
 
 
 if __name__ == '__main__':
