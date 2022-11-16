@@ -17,10 +17,6 @@ class LoginPanel(QWidget, Ui_login):
     def check_login(self):
         userName = self.login_username_text.text()
         passWord = self.login_password_text.text()
-        if checklogin(userName, passWord):
-            QMessageBox.about(self, 'Success', '连接成功！')
-        else:
-            QMessageBox.about(self, 'Fail', '连接失败！')
 
 
 if __name__ == '__main__':
