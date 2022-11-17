@@ -16,7 +16,7 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         super(Main_window, self).__init__()
         self.setupUi(self)
         self.music = MusicPlayer.Music_player()
-        self.playlist = PlayList_Panel.PlayList()
+        self.playlist = PlayList_Panel.PlayListPanel()
         self.ini_window()
 
     def ini_window(self):
@@ -31,6 +31,7 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     import qdarkstyle
+
     # setup stylesheet
     app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
     main_window = Main_window()
