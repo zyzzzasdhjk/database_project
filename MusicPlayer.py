@@ -1,4 +1,3 @@
-import random
 import threading
 from PyQt5 import QtWidgets
 import pygame
@@ -32,18 +31,14 @@ def get_music_time(filename):  # 获取音乐文件的时长，返回值是一�
     return int(audio.info.length)
 
 
-def start_music(filename, time=0):
+def start_music(filename):
     pygame.mixer.music.load(filename)  # 加载音乐
-    pygame.mixer.music.play(start=time)
-
-
-def set_music_volume(x=0.5):
-    pygame.mixer.music.set_volume(x)  # 设置音量大小0~1的浮点数
+    pygame.mixer.music.set_volume(0.5)  # 设置音量大小0~1的浮点数
+    pygame.mixer.music.play(start=0)
 
 
 def set_music_time(t):  # 修改音乐播放的时间
-    pygame.mixer.music.set_pos(t)
-    # pygame.mixer.music.play(start=t)
+    pygame.mixer.music.play(start=t)
     global music_time_change_flag
     music_time_change_flag = 0
 
@@ -79,7 +74,6 @@ class Music_player(QtWidgets.QWidget, music_ui.Ui_Form):  # 修改main_ui.Ui_Mai
         self.music_lst_len = 0  # 音乐列表长度
         self.music_random_lst = []  # 音乐随机播放列表
         self.music_random_lst_len = 0  # 音乐随机播放列表长度
-        self.thread_flag2 = False
 
         self.ini_window()
 
@@ -90,16 +84,15 @@ class Music_player(QtWidgets.QWidget, music_ui.Ui_Form):  # 修改main_ui.Ui_Mai
         self.music_play_manner_flag = j[1]
         global time_change
         time_change = j[2]
-        self.music_lst = j[3]
-        set_music_volume(0)
+        self.music_lst = [i for i in j[3:]]
+        # 控制音乐播放
         self.load_music()
         self.pause_music()  # 调用函数暂停音乐
-        set_music_volume()
         self.music_time = get_music_time(self.music_path)
         self.time_slider_thread = threading.Thread(target=self.update_slider)
         # 初始化进度条模块
         self.time_slider.setMinimum(0)
-        self.time_slider.setMaximum(1000)
+        self.time_slider.setMaximum(100)
         self.time_slider.setSingleStep(1)
         self.right_time_label.setText(time_format(self.music_time))
         # 根据记录初始化上次的页面
@@ -121,19 +114,14 @@ class Music_player(QtWidgets.QWidget, music_ui.Ui_Form):  # 修改main_ui.Ui_Mai
             self.left_time_label.setText(time_format(int(get_music_time(self.music_name) * (t / 100.0))))
         else:
             self.left_time_label.setText(time_format(time_change))
-            self.time_slider.setValue(int(time_change / self.music_time * 1000))
+            self.time_slider.setValue(int(time_change / self.music_time * 100))
 
     def update_slider(self):  # 根据传入的时间（秒）更新进度条
         while True:
             if thread_flag1:
                 continue
-            if self.thread_flag2:
-                break
             t = time_change + pygame.mixer.music.get_pos() / 1000
-            if abs(t - self.music_time) < 0.5:
-                self.load_next_music()
-                continue
-            self.time_slider.setValue(int(t / self.music_time * 1000))
+            self.time_slider.setValue(int(t / self.music_time * 100))
             self.left_time_label.setText(time_format(int(t)) + " ")
             if music_time_change_flag == 1:
                 set_music_time(t)
@@ -147,7 +135,9 @@ class Music_player(QtWidgets.QWidget, music_ui.Ui_Form):  # 修改main_ui.Ui_Mai
         global thread_flag1, time_change, music_time_change_flag
         thread_flag1 = 0
         music_time_change_flag = 1
-        time_change += (self.time_slider.value() - self.music_last_time) / 1000 * self.music_time
+        time_change += (self.time_slider.value() - self.music_last_time) / 100 * self.music_time
+        self.suspend_button.setText("暂停")
+        self.music_pause_flag = 0
 
     def pause_music(self):  # 控制音乐播放
         global thread_flag1
@@ -173,13 +163,13 @@ class Music_player(QtWidgets.QWidget, music_ui.Ui_Form):  # 修改main_ui.Ui_Mai
     def play_manner(self):
         if self.music_play_manner_flag == 0:
             self.music_play_manner_flag = 1
-            self.update_play_manner_button()
+            self.play_manner_button.setText("单曲循环")
         elif self.music_play_manner_flag == 1:
             self.music_play_manner_flag = 2
-            self.update_play_manner_button()
+            self.play_manner_button.setText("随机播放")
         elif self.music_play_manner_flag == 2:
             self.music_play_manner_flag = 0
-            self.update_play_manner_button()
+            self.play_manner_button.setText("列表循环")
 
     def load_music(self, flag=1):
         self.music_name = self.music_lst[self.music_num][0]
@@ -191,49 +181,35 @@ class Music_player(QtWidgets.QWidget, music_ui.Ui_Form):  # 修改main_ui.Ui_Mai
         else:
             self.name_label.setText(self.music_name)
             self.creator_label.setText(self.creator_name)
-            self.music_time = get_music_time(self.music_path)
-            start_music(self.music_path, time=time_change)
+            start_music(self.music_path)
 
     def modify_music_num_by_music_manner(self):
-        self.music_lst_len = len(self.music_lst)
-        if self.music_play_manner_flag == 0:
+        if self.music_play_manner_flag in [0, 1]:
             if self.music_num == -1:
-                self.music_num = self.music_lst_len - 1
-            elif self.music_num == self.music_lst_len:
+                self.music_num = len(self.music_lst) - 1
+            elif self.music_num == len(self.music_lst):
                 self.music_num = 0
-        elif self.music_play_manner_flag == 1:
-            self.music_num-=1
-        else:
-            self.music_num = random.randint(0, self.music_lst_len - 1)
 
     def load_next_music(self):
         global time_change
         self.music_num += 1
         self.modify_music_num_by_music_manner()
-        time_change = 0
         self.load_music()
         self.music_pause_flag = 1
         self.pause_music()
-        self.right_time_label.setText(time_format(get_music_time(self.music_path)))
+        time_change = 0
 
     def load_previous_music(self):
         global time_change
         self.music_num -= 1
         self.modify_music_num_by_music_manner()
-        time_change = 0
         self.load_music()
         self.music_pause_flag = 1
         self.pause_music()
-        self.right_time_label.setText(time_format(get_music_time(self.music_path)))
+        time_change = 0
 
     def playlist_widget(self):
         pass
-
-    def save_json(self):
-        self.thread_flag2 = 1
-        js.json_write_file("data/music_lst.json",
-                           [self.music_num, self.music_play_manner_flag,
-                            int(self.time_slider.value() / 1000 * self.music_time), self.music_lst])
 
 
 if __name__ == "__main__":
