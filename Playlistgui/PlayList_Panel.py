@@ -5,6 +5,9 @@ from PyQt5.Qt import *
 class PlayList(QWidget, Ui_PlayList):
     def __init__(self, parent=None):
         super(PlayList, self).__init__(parent)
+        self.setup_Ui()
+
+    def setup_Ui(self):
         self.model = QStandardItemModel(0, 5)
         self.Headers = ['ID', '操作', '标题', '歌手', '专辑', '时间']
         self.model.setHorizontalHeaderLabels(self.Headers)

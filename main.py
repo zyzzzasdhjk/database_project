@@ -23,6 +23,7 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
 
     def closeEvent(self, event):
         self.music.save_json()
+        print(11)
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)

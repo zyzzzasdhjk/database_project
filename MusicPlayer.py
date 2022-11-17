@@ -125,10 +125,10 @@ class Music_player(QtWidgets.QWidget, music_ui.Ui_Form):  # 修改main_ui.Ui_Mai
 
     def update_slider(self):  # 根据传入的时间（秒）更新进度条
         while True:
-            if thread_flag1:
-                continue
             if self.thread_flag2:
                 break
+            if thread_flag1:
+                continue
             t = time_change + pygame.mixer.music.get_pos() / 1000
             if abs(t - self.music_time) < 0.5:
                 self.load_next_music()

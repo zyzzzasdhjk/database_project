@@ -1,7 +1,7 @@
 import json
 
 
-def json_load_file(file_name,code = 'utf-8'):
+def json_load_file(file_name,code = 'gbk'):
     f = open(file_name, 'r',encoding=code)
     return json.load(f)
 
@@ -11,7 +11,7 @@ def json_load_str(s: str):
 
 
 def json_write_file(filename, data):
-    f = open(filename, 'w')
+    f = open(filename, 'w',encoding='gbk')
     json.dump(data, f, ensure_ascii=False)
 
 
