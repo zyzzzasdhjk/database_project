@@ -2,7 +2,7 @@ import threading
 from PyQt5 import QtWidgets
 import pygame
 import sys
-
+from lib import MyJson as js
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
 from PyQt5.QtWidgets import QLabel, QWidget, QTableView, QVBoxLayout
 from mutagen.mp3 import MP3
@@ -61,30 +61,60 @@ class Music_player(QtWidgets.QWidget, music_ui.Ui_Form):  # 修改main_ui.Ui_Mai
         self.setupUi(self)
         # 初始化变量
         self.music_last_time = 0  # 滑块拖动时的时间
-        self.music_pause_flag = 0  # 1代表被暂停
-        self.music_name = "./music/黄龄,关大洲 - 星河叹.mp3"
-        start_music(self.music_name)
-        self.music_time = get_music_time(self.music_name)
-        self.time_slider_thread = threading.Thread(target=self.update_slider)
+        self.music_pause_flag = 0  # 1代表被暂停，刚开始应该是暂停的
+        self.music_play_manner_flag = 0  # 用于控制播放方式，1为列表循环，2为单曲循环，3为随机播放
+        # 初始化要用的变量
+        self.creator_name = ''  # 歌手名字
+        self.music_name = ""  # 歌曲名字
+        self.music_time = 0  # 歌曲时间
+        self.time_slider_thread = None  # 控制进度条的线程
+        self.music_num = 0  # 当前音乐再列表的位置
+        self.music_path = None  # 音乐路径
+        self.music_lst = []  # 音乐列表
+        self.music_lst_len = 0  # 音乐列表长度
+        self.music_random_lst = []  # 音乐随机播放列表
+        self.music_random_lst_len = 0  # 音乐随机播放列表长度
+
         self.ini_window()
 
     def ini_window(self):
+        # 读取json文件
+        j = js.json_load_file("data/music_lst.json")
+        self.music_num = j[0]
+        self.music_play_manner_flag = j[1]
+        global time_change
+        time_change = j[2]
+        self.music_lst = [i for i in j[3:]]
+        # 控制音乐播放
+        self.load_music()
+        self.pause_music()  # 调用函数暂停音乐
+        self.music_time = get_music_time(self.music_path)
+        self.time_slider_thread = threading.Thread(target=self.update_slider)
         # 初始化进度条模块
         self.time_slider.setMinimum(0)
         self.time_slider.setMaximum(100)
         self.time_slider.setSingleStep(1)
+        self.right_time_label.setText(time_format(self.music_time))
+        # 根据记录初始化上次的页面
+        self.update_play_manner_button()
+        self.update_left_label_time(flag=1)
+        # 初始化控制按钮
+        self.suspend_button.clicked.connect(self.pause_music)  # 绑定暂停事件
+        self.play_manner_button.clicked.connect(self.play_manner)  # 绑定播放方式更改
         self.time_slider.sliderPressed.connect(self.f1)
         self.time_slider.sliderReleased.connect(self.f2)
-        self.right_time_label.setText(time_format(self.music_time) + " ")
-        self.left_time_label.setText("00:00:00 ")
-        # 初始化控制按钮
-        self.suspend_button.clicked.connect(self.pause_music)
+        self.next_button.clicked.connect(self.load_next_music)
+        self.previous_button.clicked.connect(self.load_previous_music)
         # 启动线程
         self.time_slider_thread.start()
 
-    def update_left_label_time(self):  # 更新左侧的label
-        t = self.time_slider.value()  # 注意，返回值是一个整数
-        self.left_time_label.setText(time_format(int(get_music_time(self.music_name) * (t / 100.0))) + " ")
+    def update_left_label_time(self, flag=0):  # 更新左侧的label
+        if flag == 0:
+            t = self.time_slider.value()  # 注意，返回值是一个整数
+            self.left_time_label.setText(time_format(int(get_music_time(self.music_name) * (t / 100.0))))
+        else:
+            self.left_time_label.setText(time_format(time_change))
+            self.time_slider.setValue(int(time_change / self.music_time * 100))
 
     def update_slider(self):  # 根据传入的时间（秒）更新进度条
         while True:
@@ -121,6 +151,62 @@ class Music_player(QtWidgets.QWidget, music_ui.Ui_Form):  # 修改main_ui.Ui_Mai
             thread_flag1 = 1
             self.suspend_button.setText("继续")
             self.music_pause_flag = 1
+
+    def update_play_manner_button(self):
+        if self.music_play_manner_flag == 0:
+            self.play_manner_button.setText("列表循环")
+        elif self.music_play_manner_flag == 1:
+            self.play_manner_button.setText("单曲循环")
+        elif self.music_play_manner_flag == 2:
+            self.play_manner_button.setText("随机播放")
+
+    def play_manner(self):
+        if self.music_play_manner_flag == 0:
+            self.music_play_manner_flag = 1
+            self.play_manner_button.setText("单曲循环")
+        elif self.music_play_manner_flag == 1:
+            self.music_play_manner_flag = 2
+            self.play_manner_button.setText("随机播放")
+        elif self.music_play_manner_flag == 2:
+            self.music_play_manner_flag = 0
+            self.play_manner_button.setText("列表循环")
+
+    def load_music(self, flag=1):
+        self.music_name = self.music_lst[self.music_num][0]
+        self.creator_name = self.music_lst[self.music_num][1]
+        self.music_path = self.music_lst[self.music_num][2]
+        if flag == 0:  # 代表无音乐
+            self.name_label.setText("无")
+            self.creator_label.setText("无")
+        else:
+            self.name_label.setText(self.music_name)
+            self.creator_label.setText(self.creator_name)
+            start_music(self.music_path)
+
+    def modify_music_num_by_music_manner(self):
+        if self.music_play_manner_flag in [0, 1]:
+            if self.music_num == -1:
+                self.music_num = len(self.music_lst) - 1
+            elif self.music_num == len(self.music_lst):
+                self.music_num = 0
+
+    def load_next_music(self):
+        global time_change
+        self.music_num += 1
+        self.modify_music_num_by_music_manner()
+        self.load_music()
+        self.music_pause_flag = 1
+        self.pause_music()
+        time_change = 0
+
+    def load_previous_music(self):
+        global time_change
+        self.music_num -= 1
+        self.modify_music_num_by_music_manner()
+        self.load_music()
+        self.music_pause_flag = 1
+        self.pause_music()
+        time_change = 0
 
     def playlist_widget(self):
         pass
