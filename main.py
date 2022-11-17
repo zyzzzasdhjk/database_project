@@ -7,6 +7,7 @@ from PyQt5.QtGui import QStandardItem, QStandardItemModel
 from PyQt5.QtWidgets import QTableView, QTableWidget
 
 import MusicPlayer
+from Playlistgui import PlayList_Panel
 from gui import main_ui  # 导入ui文件
 
 
@@ -15,18 +16,23 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         super(Main_window, self).__init__()
         self.setupUi(self)
         self.music = MusicPlayer.Music_player()
+        self.playlist = PlayList_Panel.PlayList()
         self.ini_window()
 
     def ini_window(self):
         self.bottom_layout.addWidget(self.music)
-        self.music.show()
+        self.right_layout.addWidget(self.playlist)
 
     def closeEvent(self, event):
         self.music.save_json()
         print(11)
 
+
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
+    import qdarkstyle
+    # setup stylesheet
+    app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
     main_window = Main_window()
     main_window.show()
     sys.exit(app.exec_())

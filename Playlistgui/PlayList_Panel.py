@@ -1,4 +1,4 @@
-from resource.Playlist import Ui_PlayList
+from gui.Playlist import Ui_PlayList
 from PyQt5.Qt import *
 
 

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>774</width>
-    <height>571</height>
+    <width>766</width>
+    <height>548</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -34,9 +34,25 @@
         <number>20</number>
        </property>
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_8" stretch="5,1">
+        <layout class="QVBoxLayout" name="verticalLayout_8" stretch="0,1">
          <item>
-          <widget class="QGraphicsView" name="graphicsView"/>
+          <widget class="QGraphicsView" name="graphicsView">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>10000000</width>
+             <height>10000000</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true"/>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QPushButton" name="pushButton">
