@@ -7,12 +7,13 @@ import pymssql
 # database为数据库名字
 # 可简化为conn = pymssql.connect(host='localhost', user='sa', password='123456', database='pubs')
 
-class DataBase():
-    def __init__(self, server, user, password, database, charset='cp936'):
+class DataBase:
+    def __init__(self, server, user, password, database):
         self.conn = pymssql.connect(server, user, password, database, charset='cp936')
         self.cursor = self.conn.cursor()
 
     def query_strip(self):
+        """将查询结果转换成二维列表"""
         data = self.cursor.fetchall()
         return [[j.strip() for j in i] for i in data]
 
@@ -31,6 +32,7 @@ class DataBase():
     #                         f"{table_name1}.{join_name1} = {table_name2}.{join_name2}")
 
     def register(self, account, password):
+        """注册槽函数"""
         judgestr = f"select account from AP where account = '{account}'"
         self.cursor.execute(judgestr)
         judgelist = self.query_strip()
@@ -39,9 +41,18 @@ class DataBase():
             self.cursor.execute(f"insert into AP (account,password) values ('{account}','{password}')")
             self.conn.commit()
 
+    def login(self, account, password):
+        """登录槽函数"""
+        judgestr = f"select account from AP where account = '{account}' and password = '{password}'"
+        self.cursor.execute(judgestr)
+        judgelist = self.query_strip()
+        # print(judgelist)
+        if judgelist:
+            print("True")
+
 
 if __name__ == "__main__":
     D = DataBase("127.0.0.1", "sa", "5151", "SPJ")
     # print(D.query("AP", ["account"]))
     # print(D.query("AP", ["password"]))
-    D.register("2", 2)
+    D.login("1", 2)

@@ -2,9 +2,9 @@ from gui.Playlist import Ui_PlayList
 from PyQt5.Qt import *
 
 
-class PlayList(QWidget, Ui_PlayList):
+class PlayListPanel(QWidget, Ui_PlayList):
     def __init__(self, parent=None):
-        super(PlayList, self).__init__(parent)
+        super(PlayListPanel, self).__init__(parent)
         self.setup_Ui()
 
     def setup_Ui(self):
@@ -32,7 +32,7 @@ if __name__ == '__main__':
 
     # 2. 控件的操作
     # 2.1 创建控件
-    window = PlayList()
+    window = PlayListPanel()
 
     # 2.2 设置控件
     window.setWindowTitle('')
