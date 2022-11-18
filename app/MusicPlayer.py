@@ -85,7 +85,7 @@ class Music_player(QtWidgets.QWidget, music_ui.Ui_Form):  # 修改main_ui.Ui_Mai
 
     def ini_window(self):
         # 读取json文件
-        j = js.json_load_file("data/music_lst.json")
+        j = js.json_load_file("./data/music_lst.json")
         self.music_num = j[0]
         self.music_play_manner_flag = j[1]
         global time_change
@@ -231,7 +231,7 @@ class Music_player(QtWidgets.QWidget, music_ui.Ui_Form):  # 修改main_ui.Ui_Mai
 
     def save_json(self):
         self.thread_flag2 = 1
-        js.json_write_file("data/music_lst.json",
+        js.json_write_file("./data/music_lst.json",
                            [self.music_num, self.music_play_manner_flag,
                             int(self.time_slider.value() / 1000 * self.music_time), self.music_lst])
 
