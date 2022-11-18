@@ -1,13 +1,7 @@
-import threading
 from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QLabel, QListWidget
 import sys
 
-from PyQt5.QtGui import QStandardItem, QStandardItemModel
-from PyQt5.QtWidgets import QTableView, QTableWidget
-
-from app import MusicPlayer,Sidebar,playlist_widget
-from Playlistgui import PlayList_Panel
+from app import MusicPlayer, Sidebar, playlist_widget, PlayList_Panel
 from gui import main_ui  # 导入ui文件
 
 
@@ -30,7 +24,7 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
     def closeEvent(self, event):
         self.music.save_json()
 
-    def change_widget_by_signal(self,x):
+    def change_widget_by_signal(self, x):
         if x == 2:
             self.playlist.hide()
             self.right_layout.addWidget(self.playlist_widget)
@@ -39,6 +33,7 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     import qdarkstyle
+
     # setup stylesheet
     app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
     main_window = Main_window()
