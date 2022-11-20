@@ -15,7 +15,7 @@ class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(1053, 685)
-        Form.setStyleSheet("QWidget{background-color:rgb(245, 245, 245);}")
+        Form.setStyleSheet("")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(Form)
         self.verticalLayout_2.setContentsMargins(-1, 0, 10, 0)
         self.verticalLayout_2.setSpacing(0)
@@ -27,7 +27,8 @@ class Ui_Form(object):
         sizePolicy.setHeightForWidth(self.textBrowser.sizePolicy().hasHeightForWidth())
         self.textBrowser.setSizePolicy(sizePolicy)
         self.textBrowser.setMaximumSize(QtCore.QSize(16777215, 60))
-        self.textBrowser.setStyleSheet("“background:transparent;border-width:0;border-style:outset”")
+        self.textBrowser.setStyleSheet("font: 11pt \"微软雅黑\";\n"
+"color: rgb(255, 255, 255);")
         self.textBrowser.setObjectName("textBrowser")
         self.verticalLayout_2.addWidget(self.textBrowser)
         self.tableView = QtWidgets.QTableView(Form)
@@ -45,5 +46,5 @@ class Ui_Form(object):
         self.textBrowser.setHtml(_translate("Form", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'SimSun\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:24pt; font-weight:600; color:#000000;\">播放列表</span></p></body></html>"))
+"</style></head><body style=\" font-family:\'微软雅黑\'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'SimSun\'; font-size:24pt; font-weight:600; color:#000000;\">播放列表</span></p></body></html>"))

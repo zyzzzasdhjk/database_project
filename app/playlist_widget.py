@@ -5,8 +5,8 @@ from gui import playlist_widget
 
 
 class win(QtWidgets.QWidget, playlist_widget.Ui_Form):  # 修改main_ui.Ui_MainWindow
-    def __init__(self):
-        super(win, self).__init__()
+    def __init__(self, parent=None):
+        super(win, self).__init__(parent)
         self.setupUi(self)
         self.model = QStandardItemModel(4, 7)
         self.ini()
