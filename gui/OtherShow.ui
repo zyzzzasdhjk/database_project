@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>OtherShow</class>
+ <widget class="QWidget" name="OtherShow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>908</width>
+    <height>676</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout" stretch="3,1,1,3,1,1,20">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout" stretch="5,3">
+       <item>
+        <widget class="QLabel" name="OtherShowUNameLabel">
+         <property name="styleSheet">
+          <string notr="true">font: 26pt &quot;微软雅黑&quot;;</string>
+         </property>
+         <property name="text">
+          <string>好好好好好</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_3"/>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QLabel" name="OtherShowUIsVIPLabel">
+       <property name="styleSheet">
+        <string notr="true">border-bottom-color: rgb(85, 170, 0);</string>
+       </property>
+       <property name="text">
+        <string>并不是尊贵的会员</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QLabel" name="label_3">
+         <property name="styleSheet">
+          <string notr="true">border-top-color: rgb(255, 255, 255);
+border-bottom-color: rgb(255, 255, 255);</string>
+         </property>
+         <property name="text">
+          <string>性别</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="OtherShowUSexLabel">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>个人介绍</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="OtherShowUIntroLabel">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <item>
+        <widget class="QLabel" name="label_7">
+         <property name="text">
+          <string>生日</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="OtherShowUBirthdayLabel">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_5">
+       <item>
+        <widget class="QLabel" name="label_9">
+         <property name="text">
+          <string>喜欢的歌曲风格</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="OtherShowULabelLabel">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QTableView" name="OtherShowPlayListtableView"/>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
