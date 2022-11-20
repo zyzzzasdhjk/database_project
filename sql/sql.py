@@ -50,6 +50,9 @@ class DataBase:
         if judgelist:
             print("True")
 
+    def select_music_playlist(self):
+        sql = "select pid from"
+
 
 if __name__ == "__main__":
     D = DataBase("127.0.0.1", "sa", "5151", "SPJ")

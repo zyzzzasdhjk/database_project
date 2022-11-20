@@ -1,0 +1,5 @@
+<RCC>
+  <qresource prefix="T">
+    <file>title_block.png</file>
+  </qresource>
+</RCC>
