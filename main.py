@@ -34,10 +34,11 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    import qdarkstyle
+    import qt_material
 
     # setup stylesheet
-    app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
+    qt_material.apply_stylesheet(app, theme='dark_teal.xml')
+
     main_window = Main_window()
     main_window.show()
     sys.exit(app.exec_())

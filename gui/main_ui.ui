@@ -19,7 +19,18 @@
      <number>0</number>
     </property>
     <item>
-     <layout class="QHBoxLayout" name="top_layout"/>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <layout class="QHBoxLayout" name="top_layout"/>
+      </item>
+      <item>
+       <widget class="Line" name="line">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
     <item>
      <layout class="QHBoxLayout" name="middle_layout" stretch="2,10">
@@ -35,7 +46,18 @@
      </layout>
     </item>
     <item>
-     <layout class="QVBoxLayout" name="bottom_layout"/>
+     <layout class="QVBoxLayout" name="bottom_layout2">
+      <item>
+       <widget class="Line" name="line_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="bottom_layout"/>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>

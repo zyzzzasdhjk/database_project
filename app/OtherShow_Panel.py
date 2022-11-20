@@ -6,15 +6,15 @@ class Window(QWidget, Ui_OtherShow):
     def __init__(self, parent=None):
         # 调用父类的初始化方法
         super().__init__(parent)
-        self.setPlaylist()
         self.setupUi(self)
+        self.setPlaylist()
+
 
     def setPlaylist(self):
-        self.model = QStandardItemModel(0, 5)
+        self.model = QStandardItemModel()
         self.Headers = ['ID', '操作', '标题', '创建人']
         self.model.setHorizontalHeaderLabels(self.Headers)
         self.model.appendRow(QStandardItem('1'))
-        self.setupUi(self)
         self.OtherShowPlayListtableView.setModel(self.model)
         # 自适应布局，设置高度与宽度
         self.OtherShowPlayListtableView.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
