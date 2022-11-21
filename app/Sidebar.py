@@ -4,7 +4,6 @@ from PyQt5.QtCore import Qt, pyqtSignal
 from gui import sidebar_ui
 
 
-
 class Sidebar_widget(QtWidgets.QWidget, sidebar_ui.Ui_Form):  # 修改main_ui.Ui_MainWindow
     widget_change_signal = pyqtSignal(int)
 
