@@ -28,7 +28,9 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
 
     def change_widget_by_signal(self, x):
         if x == 2:
-            self.playlist.hide()
+            deleted = self.right_layout.takeAt(0)
+            print(deleted)
+            del deleted
             self.right_layout.addWidget(self.playlist_widget)
 
 
