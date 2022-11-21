@@ -29,11 +29,17 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         self.music.save_json()
 
     def change_widget_by_signal(self, x):
+        # 删除原有页面
+        child = self.right_widget.findChild(QtWidgets.QWidget)
+        child.setParent(None)
+        print(child)
         if x == 2:
-            deleted = self.right_widget.findChild(QtWidgets.QWidget)
-            deleted.deleteLater()
             self.playlist_widget.setParent(self.right_widget)
             self.playlist_widget.show()
+        elif x == 3:
+            self.playlist.setParent(self.right_widget)
+            self.playlist.show()
+
 
 
 if __name__ == "__main__":

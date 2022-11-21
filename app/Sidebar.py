@@ -27,5 +27,4 @@ class Sidebar_widget(QtWidgets.QWidget, sidebar_ui.Ui_Form):  # 修改main_ui.Ui
 
     def change_widget(self, x):
         print(x)
-        if x == 2:
-            self.widget_change_signal.emit(x)
+        self.widget_change_signal.emit(x)
