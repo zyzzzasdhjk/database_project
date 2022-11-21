@@ -50,8 +50,9 @@ class DataBase:
         if judgelist:
             print("True")
 
-    def select_music_playlist(self):
-        sql = "select pid from"
+    def getPlaylistData(self, SID):
+        """从视图中获取歌单歌曲数据"""
+        # selectstr =
 
 
 if __name__ == "__main__":

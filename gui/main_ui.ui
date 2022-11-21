@@ -41,7 +41,11 @@
        <layout class="QVBoxLayout" name="left_layout"/>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="right_layout"/>
+       <layout class="QVBoxLayout" name="right_layout">
+        <item>
+         <widget class="QWidget" name="right_widget" native="true"/>
+        </item>
+       </layout>
       </item>
      </layout>
     </item>

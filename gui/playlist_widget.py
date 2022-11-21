@@ -20,17 +20,10 @@ class Ui_Form(object):
         self.verticalLayout_2.setContentsMargins(-1, 0, 10, 0)
         self.verticalLayout_2.setSpacing(0)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.textBrowser = QtWidgets.QTextBrowser(Form)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.textBrowser.sizePolicy().hasHeightForWidth())
-        self.textBrowser.setSizePolicy(sizePolicy)
-        self.textBrowser.setMaximumSize(QtCore.QSize(16777215, 60))
-        self.textBrowser.setStyleSheet("font: 11pt \"微软雅黑\";\n"
-"color: rgb(255, 255, 255);")
-        self.textBrowser.setObjectName("textBrowser")
-        self.verticalLayout_2.addWidget(self.textBrowser)
+        self.label = QtWidgets.QLabel(Form)
+        self.label.setStyleSheet("font: 22pt \"微软雅黑\";")
+        self.label.setObjectName("label")
+        self.verticalLayout_2.addWidget(self.label)
         self.tableView = QtWidgets.QTableView(Form)
         self.tableView.setObjectName("tableView")
         self.verticalLayout_2.addWidget(self.tableView)
@@ -43,8 +36,4 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
-        self.textBrowser.setHtml(_translate("Form", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'微软雅黑\'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'SimSun\'; font-size:24pt; font-weight:600; color:#000000;\">播放列表</span></p></body></html>"))
+        self.label.setText(_translate("Form", "播放列表"))

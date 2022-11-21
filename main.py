@@ -20,7 +20,7 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
 
     def ini_window(self):
         self.bottom_layout.addWidget(self.music)
-        self.right_layout.addWidget(self.playlist)
+        self.playlist.setParent(self.right_widget)
         self.left_layout.addWidget(self.sidebar)
         self.sidebar.widget_change_signal.connect(self.change_widget_by_signal)
         self.top_layout.addWidget(self.title_block)
@@ -30,10 +30,10 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
 
     def change_widget_by_signal(self, x):
         if x == 2:
-            deleted = self.right_layout.takeAt(0)
-            print(deleted)
-            del deleted
-            self.right_layout.addWidget(self.playlist_widget)
+            deleted = self.right_widget.findChild(QtWidgets.QWidget)
+            deleted.deleteLater()
+            self.playlist_widget.setParent(self.right_widget)
+            self.playlist_widget.show()
 
 
 if __name__ == "__main__":
