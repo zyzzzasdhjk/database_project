@@ -20,6 +20,9 @@ class PlayListPanel(QWidget, Ui_PlayList):
         self.PlaylistMusicListTableView.verticalHeader().setDefaultSectionSize(40)
         self.PlaylistMusicListTableView.verticalHeader().setSectionResizeMode(QHeaderView.Fixed)
 
+    def favorThisPlaylist(self):
+        """收藏按钮的槽函数"""
+        pass
 
 
 if __name__ == '__main__':

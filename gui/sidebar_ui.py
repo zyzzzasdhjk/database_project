@@ -20,6 +20,7 @@ class Ui_Form(object):
         self.verticalLayout.setSpacing(0)
         self.verticalLayout.setObjectName("verticalLayout")
         self.listWidget = QtWidgets.QListWidget(Form)
+        self.listWidget.setStyleSheet("font: 10pt \"微软雅黑\";")
         self.listWidget.setObjectName("listWidget")
         self.verticalLayout.addWidget(self.listWidget)
 

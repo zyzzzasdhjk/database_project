@@ -14,6 +14,7 @@ class DataBase:
 
     def query_strip(self):
         """将查询结果转换成二维列表"""
+
         data = self.cursor.fetchall()
         return [[j.strip() for j in i] for i in data]
 
@@ -33,30 +34,47 @@ class DataBase:
 
     def register(self, account, password):
         """注册槽函数"""
-        judgestr = f"select account from AP where account = '{account}'"
+
+        judgestr = f"select account from Account_Password where account = '{account}'"
         self.cursor.execute(judgestr)
         judgelist = self.query_strip()
         # print(judgelist)
         if not judgelist:
-            self.cursor.execute(f"insert into AP (account,password) values ('{account}','{password}')")
+            self.cursor.execute(f"insert into Account_Password values ('{account}','{password}')")
             self.conn.commit()
 
     def login(self, account, password):
         """登录槽函数"""
-        judgestr = f"select account from AP where account = '{account}' and password = '{password}'"
+
+        judgestr = f"select account from Account_Password where account = '{account}' and password = '{password}'"
         self.cursor.execute(judgestr)
         judgelist = self.query_strip()
         # print(judgelist)
         if judgelist:
             print("True")
 
-    def getPlaylistData(self, SID):
-        """从视图中获取歌单歌曲数据"""
-        # selectstr =
+    def getPlaylistMusicData(self, SID):
+        """从视图中获取歌单歌曲数据
+            返回二维列表"""
+
+        selectstr = f"select * from V$_getPlaylistMusicData where SID = {int(SID)}"
+        self.cursor.execute(selectstr)
+        MusicDatalist = self.query_strip()
+        return MusicDatalist
+
+    def getSearchUser(self, searchstr):
+        """搜索
+            返回模糊匹配的二维列表"""
+        pass
+
+    def getSearchMusic(self, searchstr):
+        """搜索
+            返回模糊匹配的二维列表"""
+        pass
 
 
 if __name__ == "__main__":
-    D = DataBase("127.0.0.1", "sa", "5151", "SPJ")
+    D = DataBase("127.0.0.1", "sa", "5151", "MMS")
     # print(D.query("AP", ["account"]))
     # print(D.query("AP", ["password"]))
     D.login("1", 2)

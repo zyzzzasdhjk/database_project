@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1210, 864)
+        MainWindow.resize(1202, 841)
         self.C = QtWidgets.QWidget(MainWindow)
         self.C.setObjectName("C")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.C)
@@ -59,7 +59,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.setStretch(2, 2)
         MainWindow.setCentralWidget(self.C)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1210, 22))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1202, 26))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)

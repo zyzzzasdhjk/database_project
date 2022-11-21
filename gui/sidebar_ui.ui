@@ -30,7 +30,11 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QListWidget" name="listWidget"/>
+    <widget class="QListWidget" name="listWidget">
+     <property name="styleSheet">
+      <string notr="true">font: 10pt &quot;微软雅黑&quot;;</string>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

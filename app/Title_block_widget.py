@@ -24,7 +24,9 @@ class title_widget(QtWidgets.QWidget, Title_block.Ui_Form):  # 修改main_ui.Ui_
         super(title_widget, self).__init__()
         self.setupUi(self)
         self.user_name = QLabel("6666")
+        self.user_name.setStyleSheet('font: 10pt "微软雅黑";')
         self.user_center = CLabel("个人中心")
+        self.user_center.setStyleSheet('font: 10pt "微软雅黑";')
         self.ini()
 
     def ini(self):
