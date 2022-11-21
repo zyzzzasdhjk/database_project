@@ -3,10 +3,21 @@ import threading
 from PyQt5 import QtWidgets
 import pygame
 import sys
-from lib import MyJson as js
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
 from PyQt5.QtWidgets import QLabel, QWidget, QTableView, QVBoxLayout
 from mutagen.mp3 import MP3
+import json
+
+
+def json_load_file(file_name, code='gbk'):
+    f = open(file_name, 'r', encoding=code)
+    return json.load(f)
+
+
+def json_write_file(filename, data):
+    f = open(filename, 'w', encoding='gbk')
+    json.dump(data, f, ensure_ascii=False)
+
 
 from gui import main_ui, music_ui  # 导入ui文件
 
@@ -85,7 +96,7 @@ class Music_player(QtWidgets.QWidget, music_ui.Ui_Form):  # 修改main_ui.Ui_Mai
 
     def ini_window(self):
         # 读取json文件
-        j = js.json_load_file("./data/music_lst.json")
+        j = json_load_file("./data/music_lst.json")
         self.music_num = j[0]
         self.music_play_manner_flag = j[1]
         global time_change
@@ -202,7 +213,7 @@ class Music_player(QtWidgets.QWidget, music_ui.Ui_Form):  # 修改main_ui.Ui_Mai
             elif self.music_num == self.music_lst_len:
                 self.music_num = 0
         elif self.music_play_manner_flag == 1:
-            self.music_num-=1
+            self.music_num -= 1
         else:
             self.music_num = random.randint(0, self.music_lst_len - 1)
 
@@ -231,7 +242,7 @@ class Music_player(QtWidgets.QWidget, music_ui.Ui_Form):  # 修改main_ui.Ui_Mai
 
     def save_json(self):
         self.thread_flag2 = 1
-        js.json_write_file("./data/music_lst.json",
+        json_write_file("./data/music_lst.json",
                            [self.music_num, self.music_play_manner_flag,
                             int(self.time_slider.value() / 1000 * self.music_time), self.music_lst])
 

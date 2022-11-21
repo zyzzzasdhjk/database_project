@@ -38,6 +38,7 @@ class User_info(QtWidgets.QWidget, user_info_widget.Ui_Form):  # 修改main_ui.U
     def apply_setting(self):
         pass
 
+
 class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
     def __init__(self):
         super(Main_window, self).__init__()

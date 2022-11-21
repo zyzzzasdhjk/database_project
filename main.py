@@ -1,7 +1,7 @@
 from PyQt5 import QtWidgets
 import sys
 
-from app import MusicPlayer, Sidebar, playlist_widget, PlayList_Panel,Title_block_widget
+from app import MusicPlayer, Sidebar, playlist_widget, PlayList_Panel,Title_block_widget,user_info_widget
 from gui import main_ui  # 导入ui文件
 
 
@@ -14,6 +14,8 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         self.sidebar = Sidebar.Sidebar_widget()
         self.playlist_widget = playlist_widget.win()
         self.title_block = Title_block_widget.title_widget()
+        self.user_info = user_info_widget.User_info()
+        # self.right_widget_lst = [self.user_info,self.]
         self.ini_window()
 
     def ini_window(self):
