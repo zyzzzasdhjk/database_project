@@ -1,7 +1,7 @@
 from PyQt5 import QtWidgets
 import sys
 
-from app import MusicPlayer, Sidebar, playlist_widget, PlayList_Panel,Title_block_widget,user_info_widget
+from app import MusicPlayer, Sidebar, playlist_widget, PlayList_Panel, Title_block_widget, user_info_widget
 from gui import main_ui  # 导入ui文件
 
 
@@ -20,7 +20,13 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
 
     def ini_window(self):
         self.bottom_layout.addWidget(self.music)
-        self.playlist.setParent(self.right_widget)
+
+        # 加载右边栏所有widget
+        self.right_panel = [self.playlist, self.playlist_widget]
+        for i in range(len(self.right_panel)):
+            self.right_layout.addWidget(self.right_panel[i])
+            self.right_panel[i].setVisible(False)
+
         self.left_layout.addWidget(self.sidebar)
         self.sidebar.widget_change_signal.connect(self.change_widget_by_signal)
         self.top_layout.addWidget(self.title_block)
@@ -29,17 +35,17 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         self.music.save_json()
 
     def change_widget_by_signal(self, x):
-        # 删除原有页面
-        child = self.right_widget.findChild(QtWidgets.QWidget)
-        child.setParent(None)
-        print(child)
-        if x == 2:
-            self.playlist_widget.setParent(self.right_widget)
-            self.playlist_widget.show()
-        elif x == 3:
-            self.playlist.setParent(self.right_widget)
-            self.playlist.show()
+        # 隐藏原有布局中的widget
+        for i in range(len(self.right_panel)):
+            # 获取布局中所有widget
+            deleted = self.right_layout.itemAt(i).widget()
+            deleted.setVisible(False)
+            # print(deleted)
 
+        if x == 2:
+            self.playlist_widget.setVisible(True)
+        elif x == 3:
+            self.playlist.setVisible(True)
 
 
 if __name__ == "__main__":
