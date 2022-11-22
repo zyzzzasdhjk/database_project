@@ -62,6 +62,18 @@ class DataBase:
         MusicDatalist = self.query_strip()
         return MusicDatalist
 
+    def getPlaylistSheetData(self, SID):
+        """从表与视图中获取歌单数据
+            返回一维列表"""
+
+        selectstr1 = f"select SName,SIntro,SFavor from Sheet where SID = {int(SID)}"
+        selectstr2 = f"select MusicNum from V$_getSheetMusicNum where SID = {int(SID)}"
+        self.cursor.execute(selectstr1)
+        SheetDatalist = self.query_strip()[0]
+        self.cursor.execute(selectstr2)
+        SheetDatalist = SheetDatalist + self.query_strip()[0]
+        return SheetDatalist
+
     def get_user_info(self, uid):
         sql = f'select * from UserInfo where UID={uid}'
         self.cursor.execute(sql)
