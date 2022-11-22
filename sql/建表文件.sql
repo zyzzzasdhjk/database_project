@@ -6,11 +6,11 @@ CREATE TABLE Account_Password
 
 CREATE TABLE Label
 (LID INT PRIMARY KEY IDENTITY(1,1),
- Ltext varchar(10))
+ Ltext varchar(10) UNIQUE)
 
 CREATE TABLE [UserInfo]
 ([UID] INT PRIMARY KEY,
- UName nvarchar(10),
+ UName nvarchar(10) UNIQUE,
  USex varchar(1) check(USex = 1 or USex = 2),
  UIntro nvarchar(300) ,
  UBirthday date,
@@ -23,7 +23,7 @@ CREATE TABLE [UserInfo]
 -- 音乐库
 CREATE TABLE Music
 (MID int primary key identity(1,1),
-MName nvarchar(30) not null,
+MName nvarchar(30) UNIQUE not null,
 MTime smallint,
 MDate date,
 MDir nvarchar(50) not null,
@@ -34,12 +34,12 @@ FOREIGN KEY(LID) REFERENCES Label(LID)
 -- 专辑表
 CREATE TABLE Album
 (AID int PRIMARY KEY IDENTITY(1,1),
-AName nvarchar(30) not null
+AName nvarchar(30) UNIQUE not null
 )
 -- 音乐制作人库
 CREATE TABLE MusicMaker
 (MMID int PRIMARY KEY IDENTITY(1,1),
-MMName nvarchar(30) not null
+MMName nvarchar(30) UNIQUE not null
 )
 -- 评论表
 CREATE TABLE Comment
@@ -49,7 +49,7 @@ CREATE TABLE Comment
 -- 歌单表
 CREATE TABLE Sheet
 ([SID] int primary key IDENTITY(1,1),
- SName nvarchar(30) not null,
+ SName nvarchar(30) UNIQUE not null,
  SIntro nvarchar(300),
  SFavor smallint)
 
@@ -71,7 +71,7 @@ CREATE TABLE [UID_SID_Favor]
 
 CREATE TABLE UID_CID
 (UID INT,
- CID INT,
+ CID INT UNIQUE,
  PRIMARY KEY([UID],CID),
  FOREIGN KEY([UID]) REFERENCES Account_Password([UID]),
  FOREIGN KEY([CID]) REFERENCES Comment([CID])
@@ -103,7 +103,7 @@ CREATE TABLE MID_AID
 
 CREATE TABLE MID_CID
 (MID INT,
- CID INT,
+ CID INT UNIQUE,
  PRIMARY KEY(MID,CID),
  FOREIGN KEY([MID]) REFERENCES Music([MID]),
  FOREIGN KEY([CID]) REFERENCES Comment([CID])

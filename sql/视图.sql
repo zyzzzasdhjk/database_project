@@ -3,7 +3,7 @@ as
 	select Sheet.SID,Music.MID,MName,MTime,MDate,MMName
 	from Sheet,SID_MID,Music,MID_MMID,MusicMaker
 	where Sheet.SID = SID_MID.SID and Music.MID = SID_MID.MID
-	and Music.MID = MID_MMID.MID and MusicMaker.MMID = Music.MID
+	and Music.MID = MID_MMID.MID and MusicMaker.MMID = MID_MMID.MMID
 
 
 create view V$_getMusicComment

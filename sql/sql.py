@@ -60,6 +60,8 @@ class DataBase:
         return SheetDatalist
 
     def get_all_user_label(self):
+        """获取标签
+            返回二维列表，包含标签ID以及所有标签"""
         sql = 'select * from Label'
         self.cursor.execute(sql)
         d = sorted(self.query_strip(), key=lambda x: x[0], reverse=False)
