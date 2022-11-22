@@ -15,7 +15,6 @@ class DataBase:
     def query_strip(self):
         """将查询结果转换成二维列表"""
         data = self.cursor.fetchall()
-        print(data)
         return [[j.strip() if type(j) == str else j for j in i] for i in data]
 
     # def query(self, table_name: str, name=None):
@@ -62,18 +61,6 @@ class DataBase:
         MusicDatalist = self.query_strip()
         return MusicDatalist
 
-    def getPlaylistSheetData(self, SID):
-        """从表与视图中获取歌单数据
-            返回一维列表"""
-
-        selectstr1 = f"select SName,SIntro,SFavor from Sheet where SID = {int(SID)}"
-        selectstr2 = f"select MusicNum from V$_getSheetMusicNum where SID = {int(SID)}"
-        self.cursor.execute(selectstr1)
-        SheetDatalist = self.query_strip()[0]
-        self.cursor.execute(selectstr2)
-        SheetDatalist = SheetDatalist + self.query_strip()[0]
-        return SheetDatalist
-
     def get_user_info(self, uid):
         sql = f'select * from UserInfo where UID={uid}'
         self.cursor.execute(sql)
@@ -102,3 +89,4 @@ if __name__ == "__main__":
     # print(D.query("AP", ["password"]))
     # D.login("1", 2)
     print(D.get_user_info(1))
+    print(D.get_all_user_label())
