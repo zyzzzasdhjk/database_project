@@ -33,13 +33,19 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
             self.right_panel[i].setVisible(False)
 
         self.left_layout.addWidget(self.sidebar)
-        self.sidebar.widget_change_signal.connect(self.change_widget_by_signal)
-        self.title_block.user_uid.connect(self.update_user_info)
-        self.title_block.widget_change_signal.connect(self.change_widget_by_signal)
+        self.sidebar.widget_change_signal.connect(self.change_widget_by_signal)  # 侧边栏页面切换
+        self.title_block.user_uid.connect(self.update_user_info)  # 提高个人信息
+        self.title_block.widget_change_signal.connect(self.change_widget_by_signal)  # 切换到个人信息界面
+        self.user_info.user_info_change.connect(self.update_user_info_db)
         self.top_layout.addWidget(self.title_block)
 
-    def update_user_info(self,x):
-        self.user_info.ini(self.db.get_user_info(x))
+    def update_user_info(self, x):  # 传入个人信息以加载
+        self.user_info.ini_combox(self.db.get_all_user_label()) # 先初始化combox
+        self.user_info.ini_user_info(self.db.get_user_info(x)) # 传入列表以加载
+
+    def update_user_info_db(self,lst):
+        self.db.update_user_info(lst)
+        self.user_info.ini_user_info(self.db.get_user_info(lst[0][0]))
 
     def closeEvent(self, event):
         self.music.save_json()

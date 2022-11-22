@@ -15,7 +15,6 @@ class DataBase:
     def query_strip(self):
         """将查询结果转换成二维列表"""
         data = self.cursor.fetchall()
-        print(data)
         return [[j.strip() if type(j) == str else j for j in i] for i in data]
 
     # def query(self, table_name: str, name=None):
@@ -62,7 +61,28 @@ class DataBase:
         MusicDatalist = self.query_strip()
         return MusicDatalist
 
-    def get_user_info(self, uid):
+    def get_all_user_label(self):
+        sql = 'select * from Label'
+        self.cursor.execute(sql)
+        d = sorted(self.query_strip(),key=lambda x:x[0],reverse=False)
+        return d
+
+    def update_user_info(self,lst):
+        l1 = lst[0]
+        l2 = lst[1]
+        l = [f'''update Account_Password set Account = '{l1[1]}' where UID={l1[0]}''',
+             f'''update Account_Password set Password = '{l1[2]}' where UID={l1[0]}''',
+            f'''update UserInfo set UName = '{l2[1]}' where UID={l2[0]}''',
+             f'''update UserInfo set USex = {l2[2]} where UID={l2[0]}''',
+             f'''update UserInfo set Ulntro = '{l2[3]}' where UID={l2[0]}''',
+             f'''update UserInfo set UBirthday = '{l2[4]}' where UID={l2[0]}''',
+             f'''update UserInfo set UIsVip = '{l2[5]}' where UID={l2[0]}''',
+             f'''update UserInfo set LID = {l2[6]} where UID={l2[0]}''']
+        for i in l:
+            self.cursor.execute(i)
+        self.conn.commit()
+
+    def get_user_info(self, uid):  # 根据uid查询，返回的是一个列表,[uid，账号，密码，姓名，性别，个人介绍，生日，是否是vip，标签]
         sql = f'select * from UserInfo where UID={uid}'
         self.cursor.execute(sql)
         l = self.query_strip()[0]
@@ -90,3 +110,4 @@ if __name__ == "__main__":
     # print(D.query("AP", ["password"]))
     # D.login("1", 2)
     print(D.get_user_info(1))
+    print(D.get_all_user_label())
