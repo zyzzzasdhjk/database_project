@@ -1,3 +1,4 @@
+from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QLabel
 from PyQt5 import QtWidgets, QtCore, QtGui
 from gui import Title_block
@@ -19,6 +20,8 @@ class CLabel(QtWidgets.QLabel):
 
 
 class title_widget(QtWidgets.QWidget, Title_block.Ui_Form):  # 修改main_ui.Ui_MainWindow
+    widget_change_signal = pyqtSignal(int)
+    user_uid = pyqtSignal(int)
 
     def __init__(self):
         super(title_widget, self).__init__()
@@ -30,6 +33,10 @@ class title_widget(QtWidgets.QWidget, Title_block.Ui_Form):  # 修改main_ui.Ui_
         self.ini()
 
     def ini(self):
-        self.label.setPixmap(QtGui.QPixmap("../gui/resource/title_block.png").scaled(self.label.width(), self.label.height()))
         self.Layout.addWidget(self.user_name)
         self.Layout.addWidget(self.user_center)
+        self.user_center.connect_customized_slot(self.open_user_info)
+
+    def open_user_info(self):
+        self.widget_change_signal.emit(-1)
+        self.user_uid.emit(1)

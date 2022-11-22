@@ -9,14 +9,14 @@ import pymssql
 
 class DataBase:
     def __init__(self, server, user, password, database):
-        self.conn = pymssql.connect(server, user, password, database, charset='cp936')
+        self.conn = pymssql.connect(server, user, password, database)  # , charset='cp936'
         self.cursor = self.conn.cursor()
 
     def query_strip(self):
         """将查询结果转换成二维列表"""
-
         data = self.cursor.fetchall()
-        return [[j.strip() for j in i] for i in data]
+        print(data)
+        return [[j.strip() if type(j) == str else j for j in i] for i in data]
 
     # def query(self, table_name: str, name=None):
     #     if name is None:
@@ -62,6 +62,18 @@ class DataBase:
         MusicDatalist = self.query_strip()
         return MusicDatalist
 
+    def get_user_info(self, uid):
+        sql = f'select * from UserInfo where UID={uid}'
+        self.cursor.execute(sql)
+        l = self.query_strip()[0]
+        sql1 = f'select * from Account_Password where UID={uid}'
+        self.cursor.execute(sql1)
+        return self.query_strip()[0] + l[1:]
+
+    def change_user_info(self,uid,lst):
+        sql = f"delete from UserInfo where uid = {uid}"
+
+
     def getSearchUser(self, searchstr):
         """搜索
             返回模糊匹配的二维列表"""
@@ -77,4 +89,5 @@ if __name__ == "__main__":
     D = DataBase("127.0.0.1", "sa", "5151", "MMS")
     # print(D.query("AP", ["account"]))
     # print(D.query("AP", ["password"]))
-    D.login("1", 2)
+    # D.login("1", 2)
+    print(D.get_user_info(1))

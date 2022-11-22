@@ -16,48 +16,12 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="4" column="4">
-      <widget class="QLineEdit" name="birthday_edit"/>
-     </item>
-     <item row="7" column="0">
-      <widget class="QLabel" name="label_8">
+     <item row="4" column="0">
+      <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>标签</string>
+        <string>用户ID</string>
        </property>
       </widget>
-     </item>
-     <item row="9" column="6">
-      <widget class="QPushButton" name="apply_button">
-       <property name="text">
-        <string>确认更改</string>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="0">
-      <widget class="QLabel" name="label_7">
-       <property name="text">
-        <string>个人简介</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="5" colspan="2">
-      <spacer name="horizontalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="7" column="2">
-      <widget class="QComboBox" name="user_label_combox"/>
-     </item>
-     <item row="1" column="2" colspan="2">
-      <widget class="QLineEdit" name="password_edit"/>
      </item>
      <item row="1" column="0">
       <widget class="QLabel" name="label_2">
@@ -66,7 +30,24 @@
        </property>
       </widget>
      </item>
-     <item row="8" column="2">
+     <item row="8" column="0">
+      <widget class="QLabel" name="label_8">
+       <property name="text">
+        <string>标签</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>性别</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2" colspan="2">
+      <widget class="QLineEdit" name="acount_edit"/>
+     </item>
+     <item row="9" column="2">
       <spacer name="verticalSpacer">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
@@ -79,43 +60,69 @@
        </property>
       </spacer>
      </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="label_3">
+     <item row="7" column="2" colspan="3">
+      <widget class="QPlainTextEdit" name="user_des_edit"/>
+     </item>
+     <item row="10" column="6">
+      <widget class="QPushButton" name="apply_button">
        <property name="text">
-        <string>用户ID</string>
+        <string>确认更改</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="2" colspan="2">
-      <widget class="QLineEdit" name="acount_edit"/>
+     <item row="4" column="4">
+      <widget class="QLineEdit" name="user_name_edit"/>
      </item>
-     <item row="3" column="3">
+     <item row="4" column="5" colspan="2">
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="3" column="2">
+      <spacer name="verticalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="4" column="3">
       <widget class="QLabel" name="label_4">
        <property name="text">
         <string>用户名</string>
        </property>
       </widget>
      </item>
-     <item row="3" column="4">
-      <widget class="QLineEdit" name="user_name_edit"/>
-     </item>
-     <item row="3" column="2">
-      <widget class="QLineEdit" name="uid_eidt"/>
-     </item>
-     <item row="4" column="2">
-      <widget class="QComboBox" name="gender_combox"/>
-     </item>
-     <item row="9" column="5">
+     <item row="10" column="5">
       <widget class="QPushButton" name="reset_button">
        <property name="text">
         <string>重置</string>
        </property>
       </widget>
      </item>
-     <item row="4" column="0">
-      <widget class="QLabel" name="label_5">
+     <item row="8" column="2">
+      <widget class="QComboBox" name="user_label_combox"/>
+     </item>
+     <item row="1" column="2" colspan="2">
+      <widget class="QLineEdit" name="password_edit"/>
+     </item>
+     <item row="7" column="0">
+      <widget class="QLabel" name="label_7">
        <property name="text">
-        <string>性别</string>
+        <string>个人简介</string>
        </property>
       </widget>
      </item>
@@ -126,7 +133,7 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="5" colspan="2">
+     <item row="5" column="5" colspan="2">
       <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -139,28 +146,31 @@
        </property>
       </spacer>
      </item>
-     <item row="6" column="2" colspan="3">
-      <widget class="QPlainTextEdit" name="user_des_edit"/>
+     <item row="4" column="2">
+      <widget class="QLineEdit" name="uid_eidt"/>
      </item>
-     <item row="4" column="3">
+     <item row="5" column="2">
+      <widget class="QComboBox" name="gender_combox"/>
+     </item>
+     <item row="5" column="4">
+      <widget class="QLineEdit" name="birthday_edit"/>
+     </item>
+     <item row="5" column="3">
       <widget class="QLabel" name="label_6">
        <property name="text">
         <string>生日</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="2">
-      <spacer name="verticalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_9">
+       <property name="text">
+        <string>确认密码</string>
        </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
+      </widget>
+     </item>
+     <item row="2" column="2" colspan="2">
+      <widget class="QLineEdit" name="ensure_password_edit"/>
      </item>
     </layout>
    </item>
