@@ -11,7 +11,7 @@ CREATE TABLE Label
 CREATE TABLE [UserInfo]
 ([UID] INT PRIMARY KEY,
  UName nvarchar(10),
- USex varchar(1) ,
+ USex varchar(1) check(USex = 1 or USex = 2),
  UIntro nvarchar(300) ,
  UBirthday date,
  UIsVip varchar(1),

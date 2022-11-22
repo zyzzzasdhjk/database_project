@@ -13,15 +13,15 @@ class MyButtonDelegate(QItemDelegate):
             button_read = QPushButton(
                 self.tr('播放'),
                 self.parent(),
-                clicked=self.parent().cellButtonClicked
+                clicked=self.parent().startPlay
             )
             button_write = QPushButton(
                 self.tr('收藏'),
                 self.parent(),
-                clicked=self.parent().cellButtonClicked
+                clicked=self.parent().favorThisMusic
             )
-            button_read.index = [index.row(), index.column()]
-            button_write.index = [index.row(), index.column()]
+            button_read.index = index.row()
+            button_write.index = index.row()
             h_box_layout = QHBoxLayout()
             h_box_layout.addWidget(button_read)
             h_box_layout.addWidget(button_write)
@@ -36,15 +36,60 @@ class MyButtonDelegate(QItemDelegate):
 
 
 class MyTableView(QTableView):
-    def __init__(self, parent=None):
-        super(MyTableView, self).__init__(parent)
-        self.setItemDelegateForColumn(5, MyButtonDelegate(self))
+    """创建音乐表视图"""
+    startplaysignal = pyqtSignal(str)
+    favorThisMusicsignal = pyqtSignal(int)
 
-    def cellButtonClicked(self):
-        print("Cell Button Clicked", self.sender().index)
+    def __init__(self, parent=None, lst=None):
+        super(MyTableView, self).__init__(parent)
+        self.setPlaylistTableView(lst)
+        # 设置按钮代理
+        self.setItemDelegateForColumn(6, MyButtonDelegate(self))
+        # 设置不可选中
+        self.setEditTriggers(QAbstractItemView.NoEditTriggers)
+
+    def getData(self, lst):
+        """设置tableview的模型
+            接受歌曲的六项属性二维列表"""
+
+        self.model = QStandardItemModel(0, 0)
+        self.Headers = ['ID', '标题', '歌手', '专辑', '时间', '目录', '操作']
+        self.model.setHorizontalHeaderLabels(self.Headers)
+        rowNum = len(lst)
+        for row in range(rowNum):
+            for column in range(6):
+                item = QStandardItem(f'{lst[row][column]}')
+                self.model.setItem(row, column, item)
+
+    def setPlaylistTableView(self, lst):
+        self.getData(lst)
+        self.setModel(self.model)
+        # 自适应布局，设置高度与宽度
+        self.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.verticalHeader().setDefaultSectionSize(40)
+        self.verticalHeader().setSectionResizeMode(QHeaderView.Fixed)
+
+    def startPlay(self):
+        """播放按钮的信号
+            发出：路径"""
+        index = self.model.index(self.sender().index, 5)
+        data = str(self.model.data(index))
+        print(data)
+        self.startplaysignal.emit(data)
+
+    def favorThisMusic(self):
+        """收藏按钮的信号
+            发出：MID"""
+        index = self.model.index(self.sender().index, 0)
+        data = int(self.model.data(index))
+        print(data)
+        self.favorThisMusicsignal.emit(data)
 
 
 class PlayListPanel(QWidget, Ui_PlayList):
+
+    favorThisSheetsignal = pyqtSignal(int)
+
     def __init__(self, parent=None, lst=[]):
         super(PlayListPanel, self).__init__(parent)
         self.setupUi(self)
@@ -52,37 +97,20 @@ class PlayListPanel(QWidget, Ui_PlayList):
 
     def loadPlaylistData(self, lst):
         """加载歌单数据
-            传入歌单数据列表"""
-        self.PlaylistSheetNamelabel.setText(lst[0])
-        self.PlaylistIntrolabel.setText(lst[1])
-        self.PlaylistFavorNumlabel.setText(lst[2])
-        self.PlaylistMusicNumlabel.setText(lst[3])
-
-    def getData(self, lst):
-        """设置tableview的模型
-            接受歌曲的五项属性二维列表"""
-        self.model = QStandardItemModel(0, 5)
-        self.Headers = ['ID', '标题', '歌手', '专辑', '时间', '操作']
-        self.model.setHorizontalHeaderLabels(self.Headers)
-        rowNum = len(lst)
-        for row in range(rowNum):
-            for column in range(5):
-                item = QStandardItem(f'{lst[row][column]}')
-                self.model.setItem(row, column, item)
+            传入歌单数据列表[SID, SName, SIntro, SFavor, MusicNum]"""
+        self.ID = lst[0]
+        self.PlaylistSheetNamelabel.setText(lst[1])
+        self.PlaylistIntrolabel.setText(lst[2])
+        self.PlaylistFavorNumlabel.setText(lst[3])
+        self.PlaylistMusicNumlabel.setText(lst[4])
 
     def setPlaylistTableView(self, lst):
-        self.getData(lst)
-        self.PlaylistMusicListTableView = MyTableView()
+        self.PlaylistMusicListTableView = MyTableView(lst=lst)
         self.PlaylistDownLayout.addWidget(self.PlaylistMusicListTableView)
-        self.PlaylistMusicListTableView.setModel(self.model)
-        # 自适应布局，设置高度与宽度
-        self.PlaylistMusicListTableView.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        self.PlaylistMusicListTableView.verticalHeader().setDefaultSectionSize(40)
-        self.PlaylistMusicListTableView.verticalHeader().setSectionResizeMode(QHeaderView.Fixed)
 
     def favorThisPlaylist(self):
         """收藏按钮的槽函数"""
-        pass
+        self.favorThisSheetsignal.emit(self.ID)
 
 
 if __name__ == '__main__':
@@ -97,7 +125,7 @@ if __name__ == '__main__':
 
     # 2. 控件的操作
     # 2.1 创建控件
-    window = PlayListPanel(lst=[[1, 1, 1, 1, 1]])
+    window = PlayListPanel(lst=[[1, 1, 1, 1, 1, 1]])
 
     # 2.2 设置控件
 

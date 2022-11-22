@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_PlayList(object):
     def setupUi(self, PlayList):
         PlayList.setObjectName("PlayList")
-        PlayList.resize(766, 548)
+        PlayList.resize(758, 525)
         PlayList.setStyleSheet("font: \"微软雅黑\";")
         self.verticalLayout_4 = QtWidgets.QVBoxLayout(PlayList)
         self.verticalLayout_4.setObjectName("verticalLayout_4")

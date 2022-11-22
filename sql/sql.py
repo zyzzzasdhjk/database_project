@@ -17,20 +17,6 @@ class DataBase:
         data = self.cursor.fetchall()
         return [[j.strip() if type(j) == str else j for j in i] for i in data]
 
-    # def query(self, table_name: str, name=None):
-    #     if name is None:
-    #         name = ['*']
-    #     self.cursor.execute(f"select {'.'.join(name)} from {table_name}")
-    #     return self.query_strip()
-
-    # def join_query(self, table_name1, table_name2, join_method, join_name1, join_name2=None, name=None):
-    #     if name is None:
-    #         name = ['*']
-    #     if join_name2 is None:
-    #         join_name2 = join_name1
-    #     self.cursor.execute(f"select {'.'.join(name)} from {table_name1} {join_method} {table_name2} on "
-    #                         f"{table_name1}.{join_name1} = {table_name2}.{join_name2}")
-
     def register(self, account, password):
         """注册槽函数"""
 
@@ -54,7 +40,7 @@ class DataBase:
 
     def getPlaylistMusicData(self, SID):
         """从视图中获取歌单歌曲数据
-            返回二维列表"""
+            返回二维列表[[SID, MID, MName, MTime, MDate, MMName]]"""
 
         selectstr = f"select * from V$_getPlaylistMusicData where SID = {int(SID)}"
         self.cursor.execute(selectstr)
@@ -63,9 +49,9 @@ class DataBase:
 
     def getPlaylistSheetData(self, SID):
         """从表与视图中获取歌单数据
-            返回一维列表"""
+            返回一维列表[SID, SName, SIntro, SFavor, MusicNum]"""
 
-        selectstr1 = f"select SName,SIntro,SFavor from Sheet where SID = {int(SID)}"
+        selectstr1 = f"select SID, SName,SIntro,SFavor from Sheet where SID = {int(SID)}"
         selectstr2 = f"select MusicNum from V$_getSheetMusicNum where SID = {int(SID)}"
         self.cursor.execute(selectstr1)
         SheetDatalist = self.query_strip()[0]
@@ -76,15 +62,15 @@ class DataBase:
     def get_all_user_label(self):
         sql = 'select * from Label'
         self.cursor.execute(sql)
-        d = sorted(self.query_strip(),key=lambda x:x[0],reverse=False)
+        d = sorted(self.query_strip(), key=lambda x: x[0], reverse=False)
         return d
 
-    def update_user_info(self,lst):
+    def update_user_info(self, lst):
         l1 = lst[0]
         l2 = lst[1]
         l = [f'''update Account_Password set Account = '{l1[1]}' where UID={l1[0]}''',
              f'''update Account_Password set Password = '{l1[2]}' where UID={l1[0]}''',
-            f'''update UserInfo set UName = '{l2[1]}' where UID={l2[0]}''',
+             f'''update UserInfo set UName = '{l2[1]}' where UID={l2[0]}''',
              f'''update UserInfo set USex = {l2[2]} where UID={l2[0]}''',
              f'''update UserInfo set Ulntro = '{l2[3]}' where UID={l2[0]}''',
              f'''update UserInfo set UBirthday = '{l2[4]}' where UID={l2[0]}''',
@@ -95,7 +81,8 @@ class DataBase:
         self.conn.commit()
 
     def get_user_info(self, uid):
-        """根据uid查询，返回的是一个列表,[uid，账号，密码，姓名，性别，个人介绍，生日，是否是vip，标签]"""
+        """根据uid查询
+            返回的是一个列表,[uid，账号，密码，姓名，性别，个人介绍，生日，是否是vip，标签]"""
 
         sql = f'select * from UserInfo where UID={uid}'
         self.cursor.execute(sql)

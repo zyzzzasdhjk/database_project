@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>766</width>
-    <height>548</height>
+    <width>758</width>
+    <height>525</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -245,7 +245,7 @@
      <y>182</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-252</x>
+     <x>0</x>
      <y>186</y>
     </hint>
    </hints>
@@ -253,5 +253,7 @@
  </connections>
  <slots>
   <slot>favorThisPlaylist()</slot>
+  <slot>startPlayMusic()</slot>
+  <slot>favorThisMusic()</slot>
  </slots>
 </ui>
