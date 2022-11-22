@@ -19,3 +19,10 @@ as
 	from Sheet, SID_MID, Music
 	where Sheet.SID = SID_MID.SID and Music.MID = SID_MID.MID
 	group by Sheet.SID
+
+
+create view V$_getUserInformation
+as
+    select Account_Password.UID, Account, Password, UName, USex, UIntro, UBirthday, UIsVip, Ltext
+    from Account_Password, UserInfo, Label
+    where Account_Password.UID = UserInfo.UID and UserInfo.LID = Label.LID

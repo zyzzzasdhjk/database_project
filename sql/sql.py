@@ -9,7 +9,7 @@ import pymssql
 
 class DataBase:
     def __init__(self, server, user, password, database):
-        self.conn = pymssql.connect(server, user, password, database)  # , charset='cp936'
+        self.conn = pymssql.connect(server, user, password, database)  # charset='cp936'
         self.cursor = self.conn.cursor()
 
     def query_strip(self):
@@ -86,12 +86,11 @@ class DataBase:
         """根据uid查询
             返回的是一个列表,[uid，账号，密码，姓名，性别，个人介绍，生日，是否是vip，标签]"""
 
-        sql = f'select * from UserInfo where UID={uid}'
+        sql = f'select * from V$_getUserInformation where UID={uid}'
         self.cursor.execute(sql)
-        l = self.query_strip()[0]
-        sql1 = f'select * from Account_Password where UID={uid}'
-        self.cursor.execute(sql1)
-        return self.query_strip()[0] + l[1:]
+        # data = self.cursor.fetchall()
+        l = self.query_strip()
+        return l
 
     def change_user_info(self, uid, lst):
         sql = f"delete from UserInfo where uid = {uid}"
