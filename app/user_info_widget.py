@@ -43,8 +43,8 @@ class User_info(QtWidgets.QWidget, user_info_widget.Ui_Form):  # 修改main_ui.U
         self.gender_combox.clear()
         self.user_label_combox.clear()
         # 添加性别选项
-        self.gender_combox.addItem("女")
         self.gender_combox.addItem("男")
+        self.gender_combox.addItem("女")
         for i in lst:
             self.user_label_combox.addItem(i[1])
 
