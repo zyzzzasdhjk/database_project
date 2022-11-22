@@ -70,9 +70,8 @@ class DataBase:
         self.cursor.execute(sql1)
         return self.query_strip()[0] + l[1:]
 
-    def change_user_info(self,uid,lst):
+    def change_user_info(self, uid, lst):
         sql = f"delete from UserInfo where uid = {uid}"
-
 
     def getSearchUser(self, searchstr):
         """搜索
