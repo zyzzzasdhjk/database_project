@@ -9,7 +9,7 @@ CREATE TABLE Label
  Ltext varchar(10))
 
 CREATE TABLE [UserInfo]
-([UID]INT PRIMARY KEY,
+([UID] INT PRIMARY KEY,
  UName nvarchar(10),
  USex varchar(1) ,
  Ulntro nvarchar(300) ,

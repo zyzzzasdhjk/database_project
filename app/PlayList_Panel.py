@@ -48,7 +48,15 @@ class PlayListPanel(QWidget, Ui_PlayList):
     def __init__(self, parent=None, lst=[]):
         super(PlayListPanel, self).__init__(parent)
         self.setupUi(self)
-        self.setPlaylist(lst)
+        self.setPlaylistTableView(lst)
+
+    def loadPlaylistData(self, lst):
+        """加载歌单数据
+            传入歌单数据列表"""
+        self.PlaylistSheetNamelabel.setText(lst[0])
+        self.PlaylistIntrolabel.setText(lst[1])
+        self.PlaylistFavorNumlabel.setText(lst[2])
+        self.PlaylistMusicNumlabel.setText(lst[3])
 
     def getData(self, lst):
         """设置tableview的模型
@@ -62,7 +70,7 @@ class PlayListPanel(QWidget, Ui_PlayList):
                 item = QStandardItem(f'{lst[row][column]}')
                 self.model.setItem(row, column, item)
 
-    def setPlaylist(self, lst):
+    def setPlaylistTableView(self, lst):
         self.getData(lst)
         self.PlaylistMusicListTableView = MyTableView()
         self.PlaylistDownLayout.addWidget(self.PlaylistMusicListTableView)
