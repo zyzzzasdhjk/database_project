@@ -52,11 +52,10 @@ class RegisterPanel(QWidget, Ui_register_window):
 
     def check_register(self):
         print('register')
-        if self.register_password_text == self.register_password2_text and self.register_password_text != '':
+        if self.register_password_text.text() == self.register_password2_text.text() and self.register_password_text != '':
             self.check_register_signal.emit(self.register_username_text.text(), self.register_password_text.text())
         else:
             QMessageBox.about(self, 'about', "密码输入不一致，请重试")
-
 
 
 if __name__ == '__main__':
