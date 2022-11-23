@@ -5,6 +5,7 @@ import qdarkstyle
 
 class LoginPanel(QWidget, Ui_login):
     show_registerPanel_signal = pyqtSignal()
+    checkLoginsignal = pyqtSignal(str, str)
 
     def __init__(self, parent=None):
         # 调用父类的初始化方法
@@ -15,8 +16,9 @@ class LoginPanel(QWidget, Ui_login):
         self.show_registerPanel_signal.emit()
 
     def check_login(self):
-        userName = self.login_username_text.text()
-        passWord = self.login_password_text.text()
+        self.account = self.login_username_text.text()
+        self.password = self.login_password_text.text()
+        self.checkLoginsignal.emit(self.account, self.password)
 
 
 if __name__ == '__main__':

@@ -52,7 +52,11 @@ class RegisterPanel(QWidget, Ui_register_window):
 
     def check_register(self):
         print('register')
-        self.check_register_signal.emit(self.register_username_text.text(), self.register_password_text.text())
+        if self.register_password_text == self.register_password2_text and self.register_password_text != '':
+            self.check_register_signal.emit(self.register_username_text.text(), self.register_password_text.text())
+        else:
+            QMessageBox.about(self, 'about', "密码输入不一致，请重试")
+
 
 
 if __name__ == '__main__':
@@ -73,7 +77,7 @@ if __name__ == '__main__':
     window.resize(500, 500)
 
     # 2.3 展示控件
-    window.exit_signal.connect(lambda:print('exit'))
+    window.exit_signal.connect(lambda: print('exit'))
     window.check_register_signal.connect(lambda a, p: print(a, p))
     window.show()
 

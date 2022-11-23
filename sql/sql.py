@@ -18,7 +18,9 @@ class DataBase:
         return [[j.strip() if type(j) == str else j for j in i] for i in data]
 
     def register(self, account, password):
-        """注册槽函数"""
+        """注册槽函数
+            若没有该账号，则注册成功，返回True
+            若有，则返回False"""
 
         judgestr = f"select account from Account_Password where account = '{account}'"
         self.cursor.execute(judgestr)
@@ -27,16 +29,22 @@ class DataBase:
         if not judgelist:
             self.cursor.execute(f"insert into Account_Password values ('{account}','{password}')")
             self.conn.commit()
+            return True
+        else:
+            return False
 
     def login(self, account, password):
-        """登录槽函数"""
+        """登录槽函数
+            若满足账号密码需求，则返回True"""
 
         judgestr = f"select account from Account_Password where account = '{account}' and password = '{password}'"
         self.cursor.execute(judgestr)
         judgelist = self.query_strip()
-        # print(judgelist)
+        print(judgelist)
         if judgelist:
-            print("True")
+            return True
+        else:
+            return False
 
     def getPlaylistMusicData(self, SID):
         """从视图中获取歌单歌曲数据
@@ -108,8 +116,8 @@ class DataBase:
 
 if __name__ == "__main__":
     D = DataBase("127.0.0.1", "sa", "5151", "MMS")
-    # print(D.query("AP", ["account"]))
-    # print(D.query("AP", ["password"]))
-    # D.login("1", 2)
+    print(D.register("14589845", "SDJF1234"))
     print(D.get_user_info(1))
     print(D.get_all_user_label())
+    print(D.getPlaylistSheetData(1))
+    print(D.getPlaylistMusicData(1))
