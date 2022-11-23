@@ -48,18 +48,18 @@ class DataBase:
 
     def getPlaylistMusicData(self, SID):
         """从视图中获取歌单歌曲数据
-            返回二维列表[[SID, MID, MName, MTime, MDate, MMName]]"""
+            返回二维列表[[MID,MName,MMName,MDate,MDir]]"""
 
-        selectstr = f"select * from V$_getPlaylistMusicData where SID = {int(SID)}"
+        selectstr = f"select MID,MName,MMName,MDate,MDir from V$_getPlaylistMusicData where SID = {int(SID)}"
         self.cursor.execute(selectstr)
         MusicDatalist = self.query_strip()
         return MusicDatalist
 
     def getPlaylistSheetData(self, SID):
         """从表与视图中获取歌单数据
-            返回一维列表[SID, SName, SIntro, SFavor, MusicNum]"""
+            返回一维列表[SID, SName, SIntro, SFavor,UName, MusicNum]"""
 
-        selectstr1 = f"select SID, SName,SIntro,SFavor from Sheet where SID = {int(SID)}"
+        selectstr1 = f"select * from V$_getSheetUserCreateInfo where SID = {int(SID)}"
         selectstr2 = f"select MusicNum from V$_getSheetMusicNum where SID = {int(SID)}"
         self.cursor.execute(selectstr1)
         SheetDatalist = self.query_strip()[0]
@@ -92,7 +92,7 @@ class DataBase:
 
     def get_user_info(self, uid):
         """根据uid查询
-            返回的是一个列表,[uid，账号，密码，姓名，性别，个人介绍，生日，是否是vip，标签ID]"""
+            返回的是一个列表,[uid，账号，密码，姓名，性别，个人介绍，生日，是否是vip，标签]"""
 
         sql = f'select * from V$_getUserInformation where UID={uid}' # V$_getUserInformation
         self.cursor.execute(sql)

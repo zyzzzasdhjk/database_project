@@ -42,9 +42,10 @@ class MyTableView(QTableView):
 
     def __init__(self, parent=None, lst=None):
         super(MyTableView, self).__init__(parent)
+        self.setStyleSheet('font: 10pt "微软雅黑";')
         self.setPlaylistTableView(lst)
         # 设置按钮代理
-        self.setItemDelegateForColumn(6, MyButtonDelegate(self))
+        self.setItemDelegateForColumn(5, MyButtonDelegate(self))
         # 设置不可选中
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
@@ -53,11 +54,11 @@ class MyTableView(QTableView):
             接受歌曲的六项属性二维列表"""
 
         self.model = QStandardItemModel(0, 0)
-        self.Headers = ['ID', '标题', '歌手', '专辑', '时间', '目录', '操作']
+        self.Headers = ['ID', '歌曲名', '歌手', '时间', '目录', '操作']
         self.model.setHorizontalHeaderLabels(self.Headers)
         rowNum = len(lst)
         for row in range(rowNum):
-            for column in range(6):
+            for column in range(5):
                 item = QStandardItem(f'{lst[row][column]}')
                 self.model.setItem(row, column, item)
 
@@ -97,16 +98,22 @@ class PlayListPanel(QWidget, Ui_PlayList):
 
     def loadPlaylistData(self, lst):
         """加载歌单数据
-            传入歌单数据列表[SID, SName, SIntro, SFavor, MusicNum]"""
+            传入歌单数据列表[SID, SName, SIntro, SFavor, UName, MusicNum]"""
         self.ID = lst[0]
         self.PlaylistSheetNamelabel.setText(lst[1])
-        self.PlaylistIntrolabel.setText(lst[2])
-        self.PlaylistFavorNumlabel.setText(lst[3])
-        self.PlaylistMusicNumlabel.setText(lst[4])
+        self.PlaylistIntrolabel.setPlainText(lst[2])
+        self.PlaylistFavorNumlabel.setText(str(lst[3]))
+        self.PlaylistCreatorNamelabel.setText(str(lst[4]))
+        self.PlaylistMusicNumlabel.setText(str(lst[5]))
+
 
     def setPlaylistTableView(self, lst):
         self.PlaylistMusicListTableView = MyTableView(lst=lst)
         self.PlaylistDownLayout.addWidget(self.PlaylistMusicListTableView)
+
+    def loadPlaylistTableViewModel(self, lst):
+        """接收二位列表"""
+        self.PlaylistMusicListTableView.setPlaylistTableView(lst)
 
     def favorThisPlaylist(self):
         """收藏按钮的槽函数"""

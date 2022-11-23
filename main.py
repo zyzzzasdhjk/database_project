@@ -39,11 +39,20 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         self.user_info.user_info_change.connect(self.update_user_info_db)
         self.top_layout.addWidget(self.title_block)
 
-    def update_user_info(self, x):  # 传入个人信息以加载
-        self.user_info.ini_combox(self.db.get_all_user_label()) # 先初始化combox
-        self.user_info.ini_user_info(self.db.get_user_info(x)) # 传入列表以加载
+        # 更新歌单列表
+        self.updatePlaylistInfo(1)
 
-    def update_user_info_db(self,lst):
+    def updatePlaylistInfo(self, SID):
+        """更新歌单界面
+            传入SID"""
+        self.playlist.loadPlaylistTableViewModel(self.db.getPlaylistMusicData(1))
+        self.playlist.loadPlaylistData(self.db.getPlaylistSheetData(1))
+
+    def update_user_info(self, x):  # 传入个人信息以加载
+        self.user_info.ini_combox(self.db.get_all_user_label())  # 先初始化combox
+        self.user_info.ini_user_info(self.db.get_user_info(x))  # 传入列表以加载
+
+    def update_user_info_db(self, lst):
         self.db.update_user_info(lst)
         self.user_info.ini_user_info(self.db.get_user_info(lst[0][0]))
 
