@@ -122,7 +122,10 @@
           <item>
            <widget class="QPlainTextEdit" name="PlaylistIntrolabel">
             <property name="styleSheet">
-             <string notr="true">font: 12pt &quot;Agency FB&quot;;</string>
+             <string notr="true">font: 12pt &quot;方正姚体&quot;;</string>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
             </property>
             <property name="plainText">
              <string>Introduction</string>
