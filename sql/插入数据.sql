@@ -170,3 +170,5 @@ VALUES
 (8,8),
 (9,9),
 (10,10)
+
+update Music set MDir = 'music/月亮代表我的心-邓丽君 .mp3' where MID=2

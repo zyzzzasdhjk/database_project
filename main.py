@@ -3,8 +3,32 @@ import sys
 from sql import sql
 from app import MusicPlayer, Sidebar, playlist_widget, PlayList_Panel, Title_block_widget, user_info_widget
 from gui import main_ui  # 导入ui文件
+from login_and_register.login_register_Panel import LoginRegisterPanel
+global MainProgress
 
 uid_int = 1  # 得到的uid，待完善
+
+
+def loginControl(UID):  # 登录函数
+    global uid_int
+
+    uid_int = UID
+    MainProgress.mainwindow = Main_window()
+    MainProgress.mainwindow.show()
+    MainProgress.loginregisterPanel.hide()
+    print(UID)
+
+
+class MainProgress(QtWidgets.QWidget):
+    """主进程，包含MainWindow和LoginRegisterPanel
+        当登陆成功时，UID才被赋值，MainWindow才被初始化
+        由于单开进程会被取消，所以采用主进程的方式"""
+
+    def __init__(self):
+        super().__init__()
+
+        self.loginregisterPanel = LoginRegisterPanel()
+        self.mainwindow = 0
 
 
 class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
@@ -40,7 +64,8 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         '''
         注意接口
         '''
-        self.playlist.PlaylistMusicListTableView.startplaysignal.connect(self.music.add_music_to_lst)  # 传入数组的要求 [歌曲名字，歌手名字，歌曲路径] 要求全为字符串
+        self.playlist.PlaylistMusicListTableView.startplaysignal.connect(
+            self.music.add_music_to_lst)  # 传入数组的要求 [歌曲名字，歌手名字，歌曲路径] 要求全为字符串
         self.top_layout.addWidget(self.title_block)
 
         # 更新歌单列表
@@ -78,16 +103,16 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
             self.playlist.setVisible(True)
 
 
-def login():  # 登录函数
-    pass
-
-
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     import qt_material
 
     # setup stylesheet
     qt_material.apply_stylesheet(app, theme='dark_teal.xml')
-    main_window = Main_window()
-    main_window.show()
+
+    # 启动主进程
+    MainProgress = MainProgress()
+    MainProgress.loginregisterPanel.show()
+    MainProgress.loginregisterPanel.loginPanel.checkLoginSuccesssignal.connect(loginControl)
+
     sys.exit(app.exec_())

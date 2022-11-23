@@ -1,16 +1,15 @@
 from PyQt5.Qt import *
-from resource.ui.register import Ui_register_window
+from login_and_register.resource.ui.register import Ui_register_window
 import qdarkstyle
+from sql.sql import DataBase
 
 
 class RegisterPanel(QWidget, Ui_register_window):
     exit_signal = pyqtSignal()
-    check_register_signal = pyqtSignal(str, str)
 
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setupUi(self)
-
         self.animation_targets = [self.register_about_btn, self.register_restart_btn, self.register_exit_btn]
         self.animation_targets_pos = [target.pos() for target in self.animation_targets]
 
@@ -39,7 +38,7 @@ class RegisterPanel(QWidget, Ui_register_window):
 
     def show_about(self):
         print('关于')
-        QMessageBox.about(self, 'about', 'https://github.com/Blackteaxx/PyQt5_Learning')
+        QMessageBox.about(self, 'about', 'https://github.com/zyzzzasdhjk/database_project')
 
     def restart(self):
         print('reset')
@@ -52,10 +51,19 @@ class RegisterPanel(QWidget, Ui_register_window):
 
     def check_register(self):
         print('register')
-        if self.register_password_text.text() == self.register_password2_text.text() and self.register_password_text != '':
-            self.check_register_signal.emit(self.register_username_text.text(), self.register_password_text.text())
+        self.db = DataBase("127.0.0.1", "sa", "5151", "MMS")
+        account = self.register_username_text.text()
+        password = self.register_password_text.text()
+        if password == self.register_password2_text.text() and password != '':
+            judge = self.db.register(account, password)
+            self.db.conn.close()
+            if judge:
+                QMessageBox.about(self, '成功', "注册成功")
+            else:
+                QMessageBox.about(self, '失败', "账号重复，请重新输入")
+
         else:
-            QMessageBox.about(self, 'about', "密码输入不一致，请重试")
+            QMessageBox.about(self, '错误', "密码输入不一致，请重试")
 
 
 if __name__ == '__main__':

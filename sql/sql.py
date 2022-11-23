@@ -35,19 +35,20 @@ class DataBase:
 
     def login(self, account, password):
         """登录槽函数
-            若满足账号密码需求，则返回True"""
+            若满足账号密码需求，则返回UID
+            否则返回False"""
 
-        judgestr = f"select account from Account_Password where account = '{account}' and password = '{password}'"
+        judgestr = f"select UID from Account_Password where account = '{account}' and password = '{password}'"
         self.cursor.execute(judgestr)
         judgelist = self.query_strip()
         if judgelist:
-            return judgelist
+            return judgelist[0][0]
         else:
             return False
 
     def getPlaylistMusicData(self, SID):
         """从视图中获取歌单歌曲数据
-            返回二维列表[[MID,MName,MMName,MDate,MDir]]"""
+            返回二维列表[[MID,MName,MMName,MDate,AlbumName,MDir]]"""
 
         selectstr = f"select MID,MName,MMName,MDate,MDir from V$_getPlaylistMusicData where SID = {int(SID)}"
         self.cursor.execute(selectstr)
@@ -119,7 +120,7 @@ class DataBase:
 
 if __name__ == "__main__":
     D = DataBase("127.0.0.1", "sa", "5151", "MMS")
-    print(D.register("14589845", "SDJF1234"))
+    print(D.login("14589845", "SDJF1234"))
     print(D.get_user_info(1))
     print(D.get_all_user_label())
     print(D.getPlaylistSheetData(1))

@@ -1,5 +1,5 @@
-from login_Panel import LoginPanel
-from register_Panel import RegisterPanel
+from login_and_register.login_Panel import LoginPanel
+from login_and_register.register_Panel import RegisterPanel
 from PyQt5.Qt import *
 import qdarkstyle
 
@@ -25,9 +25,6 @@ class LoginRegisterPanel(QWidget):
         print('1')
         self.registerPanel.setVisible(True)
         self.loginPanel.setVisible(False)
-
-    def check_login(self): # 登录函数
-        pass
 
     def return_loginPanel(self):
         self.registerPanel.setVisible(False)
