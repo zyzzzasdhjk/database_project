@@ -1,20 +1,20 @@
 CREATE DATABASE MMS
 CREATE TABLE Account_Password
 ([UID] INT PRIMARY KEY IDENTITY(1,1),
- Account VARCHAR(10) UNIQUE,
- [Password]  VARCHAR(10))
+ Account NVARCHAR(10) UNIQUE,
+ [Password]  NVARCHAR(10))
 
 CREATE TABLE Label
 (LID INT PRIMARY KEY IDENTITY(1,1),
- Ltext varchar(10) UNIQUE)
+ Ltext NVARCHAR(10) UNIQUE)
 
 CREATE TABLE [UserInfo]
 ([UID] INT PRIMARY KEY,
- UName nvarchar(10) UNIQUE,
- USex varchar(1) check(USex = 1 or USex = 2),
- UIntro nvarchar(300) ,
+ UName NVARCHAR(10) UNIQUE,
+ USex NVARCHAR(1) check(USex = 1 or USex = 2),
+ UIntro NVARCHAR(300) ,
  UBirthday date,
- UIsVip varchar(1),
+ UIsVip NVARCHAR(1),
  LID INT,
  FOREIGN KEY(UID) REFERENCES Account_Password(UID),
  FOREIGN KEY(LID) REFERENCES Label(LID)
@@ -23,10 +23,10 @@ CREATE TABLE [UserInfo]
 -- 音乐库
 CREATE TABLE Music
 (MID int primary key identity(1,1),
-MName nvarchar(30) UNIQUE not null,
+MName NVARCHAR(30) UNIQUE not null,
 MTime smallint,
 MDate date,
-MDir nvarchar(50) not null,
+MDir NVARCHAR(50) not null,
 LID int,
 FOREIGN KEY(LID) REFERENCES Label(LID)
 )
