@@ -37,7 +37,7 @@ class MyButtonDelegate(QItemDelegate):
 
 class MyTableView(QTableView):
     """创建音乐表视图"""
-    startplaysignal = pyqtSignal(str)
+    startplaysignal = pyqtSignal(list)
     favorThisMusicsignal = pyqtSignal(int)
 
     def __init__(self, parent=None, lst=None):
@@ -48,16 +48,19 @@ class MyTableView(QTableView):
         self.setItemDelegateForColumn(5, MyButtonDelegate(self))
         # 设置不可选中
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        # 路径列表
+        self.music_path_lst = []
 
     def getData(self, lst):
         """设置tableview的模型
             接受歌曲的六项属性二维列表"""
 
         self.model = QStandardItemModel(0, 0)
-        self.Headers = ['ID', '歌曲名', '歌手', '时间', '目录', '操作']
+        self.Headers = ['ID', '歌曲名', '歌手', '时间', '专辑', '操作']
         self.model.setHorizontalHeaderLabels(self.Headers)
         rowNum = len(lst)
         for row in range(rowNum):
+            self.music_path_lst.append([lst[row][1],lst[row][2],lst[row][5]])
             for column in range(5):
                 item = QStandardItem(f'{lst[row][column]}')
                 self.model.setItem(row, column, item)
@@ -73,10 +76,7 @@ class MyTableView(QTableView):
     def startPlay(self):
         """播放按钮的信号
             发出：歌曲路径"""
-        index = self.model.index(self.sender().index, 4)
-        data = str(self.model.data(index))
-        print(data)
-        self.startplaysignal.emit(data)
+        self.startplaysignal.emit(self.music_path_lst[self.sender().index])
 
     def favorThisMusic(self):
         """收藏按钮的信号
@@ -88,7 +88,6 @@ class MyTableView(QTableView):
 
 
 class PlayListPanel(QWidget, Ui_PlayList):
-
     favorThisSheetsignal = pyqtSignal(int)
 
     def __init__(self, parent=None, lst=[]):
@@ -105,7 +104,6 @@ class PlayListPanel(QWidget, Ui_PlayList):
         self.PlaylistFavorNumlabel.setText(str(lst[3]))
         self.PlaylistCreatorNamelabel.setText(str(lst[4]))
         self.PlaylistMusicNumlabel.setText(str(lst[5]))
-
 
     def setPlaylistTableView(self, lst):
         self.PlaylistMusicListTableView = MyTableView(lst=lst)

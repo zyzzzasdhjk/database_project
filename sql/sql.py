@@ -40,9 +40,8 @@ class DataBase:
         judgestr = f"select account from Account_Password where account = '{account}' and password = '{password}'"
         self.cursor.execute(judgestr)
         judgelist = self.query_strip()
-        print(judgelist)
         if judgelist:
-            return True
+            return judgelist
         else:
             return False
 
@@ -53,6 +52,10 @@ class DataBase:
         selectstr = f"select MID,MName,MMName,MDate,MDir from V$_getPlaylistMusicData where SID = {int(SID)}"
         self.cursor.execute(selectstr)
         MusicDatalist = self.query_strip()
+        for i in range(len(MusicDatalist)):  # 添加专辑
+            sql = f'select a.AName from MID_AID m left join Album a on m.AID=a.AID where MID={MusicDatalist[i][0]}'
+            self.cursor.execute(sql)
+            MusicDatalist[i].insert(4,self.query_strip()[0][0])
         return MusicDatalist
 
     def getPlaylistSheetData(self, SID):
