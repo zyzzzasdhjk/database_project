@@ -28,7 +28,7 @@ class User_info(QtWidgets.QWidget, user_info_widget.Ui_Form):  # 修改main_ui.U
         self.gender_combox.setCurrentIndex(0 if lst[4] == '1' else 1)  # 加载性别
         self.dateEdit.setDate(QDate(lst[6].year,lst[6].month,lst[6].day))
         self.user_des_edit.setPlainText(lst[5])  # 加载个人介绍
-        self.user_label_combox.setCurrentIndex(lst[8]-1)  # 加载用户标签
+        self.user_label_combox.setCurrentText(lst[8])  # 加载用户标签
         # 设置提示框
         # self.birthday_edit.setText("格式为:*.*，例如1.1")
         # 设置两个按钮的槽函数
@@ -36,7 +36,7 @@ class User_info(QtWidgets.QWidget, user_info_widget.Ui_Form):  # 修改main_ui.U
         self.apply_button.clicked.connect(self.apply_setting)
 
     def ini_user_info(self,lst):
-        self.user_info_lst = lst
+        self.user_info_lst = lst[0]
         self.ini(self.user_info_lst)
 
     def ini_combox(self, lst):
