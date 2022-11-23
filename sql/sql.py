@@ -86,7 +86,7 @@ class DataBase:
         """根据uid查询
             返回的是一个列表,[uid，账号，密码，姓名，性别，个人介绍，生日，是否是vip，标签]"""
 
-        sql = f'select * from V$_getUserInformation where UID={uid}'
+        sql = f'select * from V$_getUserInformation where UID={uid}' # V$_getUserInformation
         self.cursor.execute(sql)
         # data = self.cursor.fetchall()
         l = self.query_strip()
