@@ -72,8 +72,8 @@ class MyTableView(QTableView):
 
     def startPlay(self):
         """播放按钮的信号
-            发出：路径"""
-        index = self.model.index(self.sender().index, 5)
+            发出：歌曲路径"""
+        index = self.model.index(self.sender().index, 4)
         data = str(self.model.data(index))
         print(data)
         self.startplaysignal.emit(data)
