@@ -37,6 +37,10 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         self.title_block.user_uid.connect(self.update_user_info)  # 提高个人信息
         self.title_block.widget_change_signal.connect(self.change_widget_by_signal)  # 切换到个人信息界面
         self.user_info.user_info_change.connect(self.update_user_info_db)
+        '''
+        注意接口
+        '''
+        self.playlist.PlaylistMusicListTableView.startplaysignal.connect(self.music.add_music_to_lst)  # 传入数组的要求 [歌曲名字，歌手名字，歌曲路径] 要求全为字符串
         self.top_layout.addWidget(self.title_block)
 
         # 更新歌单列表
@@ -74,13 +78,16 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
             self.playlist.setVisible(True)
 
 
+def login():  # 登录函数
+    pass
+
+
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     import qt_material
 
     # setup stylesheet
     qt_material.apply_stylesheet(app, theme='dark_teal.xml')
-
     main_window = Main_window()
     main_window.show()
     sys.exit(app.exec_())

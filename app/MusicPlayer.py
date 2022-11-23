@@ -227,10 +227,27 @@ class Music_player(QtWidgets.QWidget, music_ui.Ui_Form):  # 修改main_ui.Ui_Mai
         self.pause_music()
         self.right_time_label.setText(time_format(get_music_time(self.music_path)))
 
+    def add_music_to_lst(self,lst):  # 传入数组的要求 [歌曲名字，歌手名字，歌曲路径] 要求全为字符串
+        if lst in self.music_lst:
+            self.load_music_by_num(self.music_lst.index(lst))
+        else:
+            self.music_lst.insert(self.music_num,lst)
+            self.load_music_by_num(self.music_lst.index(lst))
+        print(self.music_lst)
+
     def load_previous_music(self):
         global time_change
         self.music_num -= 1
         self.modify_music_num_by_music_manner()
+        time_change = 0
+        self.load_music()
+        self.music_pause_flag = 1
+        self.pause_music()
+        self.right_time_label.setText(time_format(get_music_time(self.music_path)))
+
+    def load_music_by_num(self,num):
+        global time_change
+        self.music_num = num
         time_change = 0
         self.load_music()
         self.music_pause_flag = 1
