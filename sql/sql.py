@@ -56,7 +56,7 @@ class DataBase:
         for i in range(len(MusicDatalist)):  # 添加专辑
             sql = f'select a.AName from MID_AID m left join Album a on m.AID=a.AID where MID={MusicDatalist[i][0]}'
             self.cursor.execute(sql)
-            MusicDatalist[i].insert(4,self.query_strip()[0][0])
+            MusicDatalist[i].insert(4, self.query_strip()[0][0])
         return MusicDatalist
 
     def getPlaylistSheetData(self, SID):
@@ -98,7 +98,7 @@ class DataBase:
         """根据uid查询
             返回的是一个列表,[uid，账号，密码，姓名，性别，个人介绍，生日，是否是vip，标签]"""
 
-        sql = f'select * from V$_getUserInformation where UID={uid}' # V$_getUserInformation
+        sql = f'select * from V$_getUserInformation where UID={uid}'  # V$_getUserInformation
         self.cursor.execute(sql)
         # data = self.cursor.fetchall()
         l = self.query_strip()
@@ -108,13 +108,19 @@ class DataBase:
         sql = f"delete from UserInfo where uid = {uid}"
 
     def getSearchUser(self, searchstr):
-        """搜索
-            返回模糊匹配的二维列表"""
-        pass
+        """搜索用户
+            返回模糊匹配的二维列表
+            [[UID, UName]]"""
+        sqlstr = f"select UID, UName from UserInfo where UName like '%{searchstr}%'"
+        self.cursor.execute(sqlstr)
+        selectresult = self.query_strip()
+        return selectresult
 
     def getSearchMusic(self, searchstr):
-        """搜索
-            返回模糊匹配的二维列表"""
+        """搜索音乐
+            返回模糊匹配的二维列表
+            [[MID,MName,MMName,MDate,AlbumName,MDir]]"""
+
         pass
 
 
@@ -125,3 +131,4 @@ if __name__ == "__main__":
     print(D.get_all_user_label())
     print(D.getPlaylistSheetData(1))
     print(D.getPlaylistMusicData(1))
+    print(D.getSearchUser("红茶honer"))

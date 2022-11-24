@@ -10,6 +10,7 @@ class Sidebar_widget(QtWidgets.QWidget, sidebar_ui.Ui_Form):  # 修改main_ui.Ui
     def __init__(self):
         super(Sidebar_widget, self).__init__()
         self.setupUi(self)
+        self.listWidget.setStyleSheet('font: 18pt "微软雅黑";')
         # 定义label
         self.playlist_lst = []
         self.load_playlist()
