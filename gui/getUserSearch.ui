@@ -47,11 +47,7 @@
       </layout>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="getUserSearchDownLayout">
-       <item>
-        <widget class="QTableView" name="getUserSearchTableView"/>
-       </item>
-      </layout>
+      <layout class="QHBoxLayout" name="getUserSearchDownLayout"/>
      </item>
     </layout>
    </item>
