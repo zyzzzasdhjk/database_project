@@ -1,4 +1,4 @@
-from gui.Playlist import Ui_PlayList
+from gui.getMusicSearch import Ui_getMusicSearch
 from PyQt5.Qt import *
 
 
@@ -45,12 +45,11 @@ class MyTableView(QTableView):
         self.setStyleSheet('font: 10pt "微软雅黑";')
         # 路径列表
         self.music_path_lst = []
-        self.setPlaylistTableView(lst)
+        self.setMusicSearchTableView(lst)
         # 设置按钮代理
         self.setItemDelegateForColumn(5, MyButtonDelegate(self))
         # 设置不可选中
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
-
 
     def getData(self, lst):
         """设置tableview的模型
@@ -61,12 +60,12 @@ class MyTableView(QTableView):
         self.model.setHorizontalHeaderLabels(self.Headers)
         rowNum = len(lst)
         for row in range(rowNum):
-            self.music_path_lst.append([lst[row][1],lst[row][2],lst[row][5]])
+            self.music_path_lst.append([lst[row][1], lst[row][2], lst[row][5]])
             for column in range(5):
                 item = QStandardItem(f'{lst[row][column]}')
                 self.model.setItem(row, column, item)
 
-    def setPlaylistTableView(self, lst):
+    def setMusicSearchTableView(self, lst):
         self.getData(lst)
         self.setModel(self.model)
         # 自适应布局，设置高度与宽度
@@ -88,31 +87,20 @@ class MyTableView(QTableView):
         self.favorThisMusicsignal.emit(data)
 
 
-class PlayListPanel(QWidget, Ui_PlayList):
-    favorThisSheetsignal = pyqtSignal(int)
+class getMusicSearchPanel(QWidget, Ui_getMusicSearch):
 
     def __init__(self, parent=None, lst=[]):
-        super(PlayListPanel, self).__init__(parent)
+        super().__init__(parent)
         self.setupUi(self)
-        self.setPlaylistTableView(lst)
+        self.setMusicSearchTableView(lst)
 
-    def loadPlaylistData(self, lst):
-        """加载歌单数据
-            传入歌单数据列表[SID, SName, SIntro, SFavor, UName, MusicNum]"""
-        self.ID = lst[0]
-        self.PlaylistSheetNamelabel.setText(lst[1])
-        self.PlaylistIntrolabel.setPlainText(lst[2])
-        self.PlaylistFavorNumlabel.setText(str(lst[3]))
-        self.PlaylistCreatorNamelabel.setText(str(lst[4]))
-        self.PlaylistMusicNumlabel.setText(str(lst[5]))
+    def setMusicSearchTableView(self, lst):
+        self.MusicSearchTableView = MyTableView(lst=lst)
+        self.getMusicSearchLayout.addWidget(self.MusicSearchTableView)
 
-    def setPlaylistTableView(self, lst):
-        self.PlaylistMusicListTableView = MyTableView(lst=lst)
-        self.PlaylistDownLayout.addWidget(self.PlaylistMusicListTableView)
-
-    def loadPlaylistTableViewModel(self, lst):
+    def loadMusicSearchTableViewModel(self, lst):
         """接收二位列表"""
-        self.PlaylistMusicListTableView.setPlaylistTableView(lst)
+        self.MusicSearchTableView.setMusicSearchTableView(lst)
 
     def favorThisPlaylist(self):
         """收藏按钮的槽函数"""
@@ -131,12 +119,16 @@ if __name__ == '__main__':
 
     # 2. 控件的操作
     # 2.1 创建控件
-    window = PlayListPanel(lst=[[1, 1, 1, 1, 1, 1]])
-
+    window = getMusicSearchPanel(lst=[[1, 1, 1, 1, 1, 1]])
+    # [[2, 2, 2, 2, 2, 2]]
     # 2.2 设置控件
 
     # 2.3 展示控件
     window.show()
+
+    button = QPushButton()
+    button.show()
+    button.clicked.connect(lambda: window.loadMusicSearchTableViewModel([[2, 2, 2, 2, 2, 2]]))
 
     # 3. 应用程序的执行，进入到消息循环
     sys.exit(app.exec_())

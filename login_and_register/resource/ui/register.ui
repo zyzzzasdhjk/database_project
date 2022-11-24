@@ -30,7 +30,7 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>51</width>
+     <width>101</width>
      <height>51</height>
     </rect>
    </property>
@@ -52,7 +52,7 @@
     <rect>
      <x>10</x>
      <y>130</y>
-     <width>51</width>
+     <width>101</width>
      <height>51</height>
     </rect>
    </property>
@@ -74,7 +74,7 @@
     <rect>
      <x>10</x>
      <y>190</y>
-     <width>51</width>
+     <width>101</width>
      <height>51</height>
     </rect>
    </property>
@@ -96,7 +96,7 @@
     <rect>
      <x>10</x>
      <y>70</y>
-     <width>51</width>
+     <width>101</width>
      <height>51</height>
     </rect>
    </property>
@@ -149,7 +149,7 @@
       <item>
        <widget class="QLineEdit" name="register_password_text">
         <property name="echoMode">
-         <enum>QLineEdit::Password</enum>
+         <enum>QLineEdit::Normal</enum>
         </property>
        </widget>
       </item>
@@ -167,7 +167,7 @@
       <item>
        <widget class="QLineEdit" name="register_password2_text">
         <property name="echoMode">
-         <enum>QLineEdit::Password</enum>
+         <enum>QLineEdit::Normal</enum>
         </property>
        </widget>
       </item>

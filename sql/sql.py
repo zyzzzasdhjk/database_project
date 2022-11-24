@@ -110,18 +110,25 @@ class DataBase:
     def getSearchUser(self, searchstr):
         """搜索用户
             返回模糊匹配的二维列表
-            [[UID, UName]]"""
-        sqlstr = f"select UID, UName from UserInfo where UName like '%{searchstr}%'"
+            [[UID, UName, USex]]"""
+        sqlstr = f"select UID, UName, USex from UserInfo where UName like '%{searchstr}%'"
         self.cursor.execute(sqlstr)
         selectresult = self.query_strip()
+        for lst in selectresult:
+            if lst[2] == '1':
+                lst[2] = '男'
+            elif lst[2] == '2':
+                lst[2] == '女'
         return selectresult
 
     def getSearchMusic(self, searchstr):
         """搜索音乐
             返回模糊匹配的二维列表
             [[MID,MName,MMName,MDate,AlbumName,MDir]]"""
-
-        pass
+        sqlstr = f"select MID,MName,MMName,MDate,AName,MDir from V$_getMusicData where MName like '%{searchstr}%'"
+        self.cursor.execute(sqlstr)
+        selectresult = self.query_strip()
+        return selectresult
 
 
 if __name__ == "__main__":
@@ -132,3 +139,4 @@ if __name__ == "__main__":
     print(D.getPlaylistSheetData(1))
     print(D.getPlaylistMusicData(1))
     print(D.getSearchUser("红茶honer"))
+    print(D.getSearchMusic("月亮"))

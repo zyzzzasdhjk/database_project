@@ -26,7 +26,7 @@ class User_info(QtWidgets.QWidget, user_info_widget.Ui_Form):  # 修改main_ui.U
         self.acount_edit.setReadOnly(True)  # uid设为只读
         self.user_name_edit.setText(lst[3])  # 加载名字
         self.gender_combox.setCurrentIndex(0 if lst[4] == '1' else 1)  # 加载性别
-        self.dateEdit.setDate(QDate(lst[6].year,lst[6].month,lst[6].day))
+        self.dateEdit.setDate(QDate(lst[6].year, lst[6].month, lst[6].day))
         self.user_des_edit.setPlainText(lst[5])  # 加载个人介绍
         self.user_label_combox.setCurrentText(lst[8])  # 加载用户标签
         # 设置提示框
@@ -35,7 +35,7 @@ class User_info(QtWidgets.QWidget, user_info_widget.Ui_Form):  # 修改main_ui.U
         self.reset_button.clicked.connect(self.reset_setting)
         self.apply_button.clicked.connect(self.apply_setting)
 
-    def ini_user_info(self,lst):
+    def ini_user_info(self, lst):
         self.user_info_lst = lst[0]
         self.ini(self.user_info_lst)
 
@@ -59,13 +59,14 @@ class User_info(QtWidgets.QWidget, user_info_widget.Ui_Form):  # 修改main_ui.U
         user_gender = self.gender_combox.currentIndex()
         user_into = self.user_des_edit.toPlainText()
         b = self.dateEdit.date().toString().split(" ")
-        m = f"0{b[1][:-1]}" if len(b[1][:-1])==1 else f"{b[1][:-1]}"
-        d = f"0{b[2]}" if len(b[2])==1 else f"{b[2]}"
+        m = f"0{b[1][:-1]}" if len(b[1][:-1]) == 1 else f"{b[1][:-1]}"
+        d = f"0{b[2]}" if len(b[2]) == 1 else f"{b[2]}"
         user_birthday = f"{b[3]}-{m}-{d}"
-        user_label_index = self.user_label_combox.currentIndex()+1
+        user_label_index = self.user_label_combox.currentIndex() + 1
         user_isVIP = self.user_info_lst[7]
-        self.user_info_change.emit([[uid,user_account,user_password],
-               [uid,user_name,user_gender,user_into,user_birthday,user_isVIP,user_label_index]])
+        self.user_info_change.emit([[uid, user_account, user_password],
+                                    [uid, user_name, user_gender, user_into, user_birthday, user_isVIP,
+                                     user_label_index]])
 
 
 class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
@@ -82,6 +83,7 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     import qdarkstyle
+
     # setup stylesheet
     app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
     main_window = Main_window()
