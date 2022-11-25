@@ -29,14 +29,15 @@ class title_widget(QtWidgets.QWidget, Title_block.Ui_Form):  # 修改main_ui.Ui_
         self.setupUi(self)
         self.user_name = QLabel("6666")
         self.user_name.setStyleSheet('font: 10pt "微软雅黑";')
-        self.user_center = CLabel("个人中心")
+        self.user_center = QtWidgets.QPushButton("个人中心")
+        self.user_center.setFlat(True)
         self.user_center.setStyleSheet('font: 10pt "微软雅黑";')
         self.ini()
 
     def ini(self):
         self.Layout.addWidget(self.user_name)
         self.Layout.addWidget(self.user_center)
-        self.user_center.connect_customized_slot(self.open_user_info)
+        self.user_center.clicked.connect(self.open_user_info)
         self.search_button.clicked.connect(self.emit_search_str)
 
     def open_user_info(self):

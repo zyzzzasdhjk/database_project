@@ -95,10 +95,10 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
             self.playlist = PlayList_Panel.PlayListPanel()
             self.playlist.PlaylistMusicListTableView.startplaysignal.connect(
                 self.music.add_music_to_lst)  # 传入数组的要求 [歌曲名字，歌手名字，歌曲路径] 要求全为字符串
-            self.updatePlaylistInfo(self.playlist, self.createSheetList[0])
+            self.getPlaylistInfo(self.playlist, self.createSheetList[0])
             self.right_layout.addWidget(self.playlist)
 
-    def updatePlaylistInfo(self, Playlist, SID):
+    def getPlaylistInfo(self, Playlist, SID):
         """更新歌单界面
             传入歌单界面对象, SID"""
         Playlist.loadPlaylistTableViewModel(self.db.getPlaylistMusicData(SID))
