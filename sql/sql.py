@@ -154,6 +154,11 @@ class DataBase:
         resultlst = self.query_strip()
         return resultlst
 
+    def createSheet(self, UID):
+        """新建一个歌单
+            无返回"""
+        insertstr = ""
+
 
 if __name__ == "__main__":
     D = DataBase("127.0.0.1", "sa", "5151", "MMS")

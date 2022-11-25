@@ -8,6 +8,7 @@ class Sidebar_widget(QtWidgets.QWidget, sidebar_ui.Ui_Form):  # 修改main_ui.Ui
     widget_change_signal = pyqtSignal(int)
     createSheetShowSignal = pyqtSignal(int)
     favorSheetShowSignal = pyqtSignal(int)
+    createSheetSignal = pyqtSignal()
 
     def __init__(self):
         super(Sidebar_widget, self).__init__()
@@ -42,6 +43,7 @@ class Sidebar_widget(QtWidgets.QWidget, sidebar_ui.Ui_Form):  # 修改main_ui.Ui
         self.NomalListWidget.clicked.connect(lambda item: self.showNormalWidget(item.row()))
         self.CreateSheetListWidget.clicked.connect(lambda item: self.showCreateSheet(item.row()))
         self.FavorSheetListWidget.clicked.connect(lambda item: self.showFavorSheet(item.row()))
+        self.pushButton_2.clicked.connect(lambda: self.createSheetSignal.emit())
 
     def showNormalWidget(self, Index):
         print(Index)
@@ -52,3 +54,4 @@ class Sidebar_widget(QtWidgets.QWidget, sidebar_ui.Ui_Form):  # 修改main_ui.Ui
 
     def showFavorSheet(self, Index):
         self.favorSheetShowSignal.emit(Index)
+

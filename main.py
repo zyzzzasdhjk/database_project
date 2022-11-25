@@ -70,9 +70,14 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         self.left_layout.addWidget(self.sidebar)  # 添加侧边栏到主页面
 
         '''信号区'''
+        # 侧边栏
+        # 侧边栏页面切换
         self.sidebar.widget_change_signal.connect(self.change_widget_by_signal)
-        self.sidebar.createSheetShowSignal.connect(self.showCreateSheet)  # 侧边栏页面切换
+        self.sidebar.createSheetShowSignal.connect(self.showCreateSheet)
         self.sidebar.favorSheetShowSignal.connect(self.showFavorSheet)
+        # 侧边栏创建歌单按钮
+        self.sidebar.createSheetShowSignal.connect(self.createSheet)
+
         self.title_block.openUserEditsiganl.connect(self.update_user_info)  # 提高个人信息
         self.title_block.widget_change_signal.connect(self.change_widget_by_signal)  # 切换到个人信息界面
         self.title_block.search_str.connect(self.update_search_str)  # 更新搜索内容
@@ -102,6 +107,10 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
             self.right_layout.addWidget(self.playlist_widget)
 
     def showCreateSheet(self, index):
+        # 删除原有布局的控件
+        deleted = self.right_layout.itemAt(0)
+        if deleted:
+            deleted.widget().deleteLater()
         # 歌单
         self.playlist = PlayList_Panel.PlayListPanel()
         self.playlist.PlaylistMusicListTableView.startplaysignal.connect(
@@ -110,6 +119,10 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         self.right_layout.addWidget(self.playlist)
 
     def showFavorSheet(self, index):
+        # 删除原有布局的控件
+        deleted = self.right_layout.itemAt(0)
+        if deleted:
+            deleted.widget().deleteLater()
         # 歌单
         self.playlist = PlayList_Panel.PlayListPanel()
         self.playlist.PlaylistMusicListTableView.startplaysignal.connect(
@@ -125,6 +138,11 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
             传入歌单界面对象, SID"""
         Playlist.loadPlaylistTableViewModel(self.db.getPlaylistMusicData(SID))
         Playlist.loadPlaylistData(self.db.getPlaylistSheetData(SID))
+
+    def createSheet(self):
+        """新建歌单
+            侧边栏新建歌单按钮的槽函数"""
+        self
 
     def update_user_info(self):  # 传入个人信息以加载
         self.user_info.ini_combox(self.db.get_all_user_label())  # 先初始化combox
