@@ -15,14 +15,23 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <layout class="QHBoxLayout" name="Layout">
+    <layout class="QHBoxLayout" name="Layout" stretch="1,5,1,20">
      <item>
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string/>
+      <widget class="QComboBox" name="label_combox"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="search_edit"/>
+     </item>
+     <item>
+      <widget class="QPushButton" name="search_button">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
-       <property name="pixmap">
-        <pixmap resource="resource/title_block.qrc">:/T/title_block.png</pixmap>
+       <property name="text">
+        <string>搜索</string>
        </property>
       </widget>
      </item>

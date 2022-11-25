@@ -22,6 +22,7 @@ class CLabel(QtWidgets.QLabel):
 class title_widget(QtWidgets.QWidget, Title_block.Ui_Form):  # 修改main_ui.Ui_MainWindow
     widget_change_signal = pyqtSignal(int)
     user_uid = pyqtSignal(int)
+    search_str = pyqtSignal(str)
 
     def __init__(self):
         super(title_widget, self).__init__()
@@ -36,7 +37,24 @@ class title_widget(QtWidgets.QWidget, Title_block.Ui_Form):  # 修改main_ui.Ui_
         self.Layout.addWidget(self.user_name)
         self.Layout.addWidget(self.user_center)
         self.user_center.connect_customized_slot(self.open_user_info)
+        self.search_button.clicked.connect(self.emit_search_str)
 
     def open_user_info(self):
         self.widget_change_signal.emit(-1)
         self.user_uid.emit(1)
+
+    def update_label_combox(self,lst):
+        self.label_combox.clear()
+        self.label_combox.addItem("全部")
+        for i in lst:
+            self.label_combox.addItem(i[1])
+
+    def update_name(self,name):
+        self.user_name.setText(name)
+
+    def emit_search_str(self):
+        t = self.search_edit.text()
+        if t=='':
+            return
+        else:
+            self.search_str.emit(t)
