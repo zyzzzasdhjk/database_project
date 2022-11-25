@@ -9,13 +9,13 @@ from mutagen.mp3 import MP3
 import json
 
 
-def json_load_file(file_name, code='gbk'):
+def json_load_file(file_name, code='utf-8'):
     f = open(file_name, 'r', encoding=code)
     return json.load(f)
 
 
 def json_write_file(filename, data):
-    f = open(filename, 'w', encoding='gbk')
+    f = open(filename, 'w', encoding='utf-8')
     json.dump(data, f, ensure_ascii=False)
 
 

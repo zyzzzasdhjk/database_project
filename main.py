@@ -41,15 +41,13 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         self.search_type = ''  # 搜索类别
         # 初始化数据库连接
         self.db = sql.DataBase("127.0.0.1", "sa", "5151", "MMS")
+
+        # 初始化界面
         self.music = MusicPlayer.Music_player()
-        self.playlist = PlayList_Panel.PlayListPanel()
         self.sidebar = Sidebar.Sidebar_widget()
-        self.playlist_widget = playlist_widget.win()
         self.title_block = Title_block_widget.title_widget()
         self.user_info = user_info_widget.User_info()
-        self.music_recommend_widget = PlayList_Panel.PlayListPanel()
-        self.search_widget = Music_search.Search()
-        # self.right_widget_lst = [self.user_info,self.music_recommend_widget,]o`
+
         self.ini_window()
 
     def ini_window(self):
@@ -58,25 +56,43 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         self.title_block.update_label_combox(self.db.get_all_user_label())
         # 加载音乐播放界面
         self.bottom_layout.addWidget(self.music)
-        # 加载右边栏所有widget
-        self.right_panel = [self.playlist, self.playlist_widget, self.user_info,self.search_widget]
-        for i in range(len(self.right_panel)):
-            self.right_layout.addWidget(self.right_panel[i])
-            self.right_panel[i].setVisible(False)
+
         self.top_layout.addWidget(self.title_block)  # 添加顶部栏到主页面
         self.left_layout.addWidget(self.sidebar)  # 添加侧边栏到主页面
         '''信号区'''
         self.sidebar.widget_change_signal.connect(self.change_widget_by_signal)  # 侧边栏页面切换
         self.title_block.user_uid.connect(self.update_user_info)  # 提高个人信息
         self.title_block.widget_change_signal.connect(self.change_widget_by_signal)  # 切换到个人信息界面
-        self.user_info.user_info_change.connect(self.update_user_info_db)
-        self.playlist.PlaylistMusicListTableView.startplaysignal.connect(
-            self.music.add_music_to_lst)  # 传入数组的要求 [歌曲名字，歌手名字，歌曲路径] 要求全为字符串
-        self.search_widget.search_type.connect(self.update_search_type)  # 更新搜索的类型
         self.title_block.search_str.connect(self.update_search_str)  # 更新搜索内容
 
-        # 更新歌单列表
-        self.updatePlaylistInfo(1)
+
+    def change_widget_by_signal(self, x):
+        # 删除原有布局的控件
+        deleted = self.right_layout.itemAt(0)
+        if deleted:
+            deleted.widget().deleteLater()
+        # self.music_recommend_widget = PlayList_Panel.PlayListPanel()
+        if x == -1:
+            # 用户个人信息设置界面
+            self.user_info = user_info_widget.User_info()
+            self.right_layout.addWidget(self.user_info)
+            self.user_info.user_info_change.connect(self.update_user_info_db)
+        elif x == 2:
+            self.search_widget = Music_search.Search()
+            self.search_widget.search_type.connect(self.update_search_type)
+            self.right_layout.addWidget(self.search_widget)
+        #     # self.search_widget.setVisible(True)
+        elif x == 3:
+            # 播放列表
+            self.playlist_widget = playlist_widget.win()
+            self.right_layout.addWidget(self.playlist_widget)
+        elif x == 4:
+            # 歌单
+            self.playlist = PlayList_Panel.PlayListPanel()
+            self.playlist.PlaylistMusicListTableView.startplaysignal.connect(
+                self.music.add_music_to_lst) # 传入数组的要求 [歌曲名字，歌手名字，歌曲路径] 要求全为字符串
+            self.updatePlaylistInfo(1)
+            self.right_layout.addWidget(self.playlist)
 
     def updatePlaylistInfo(self, SID):
         """更新歌单界面
@@ -95,26 +111,11 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
     def closeEvent(self, event):
         self.music.save_json()
 
-    def change_widget_by_signal(self, x):
-        # 隐藏原有布局中的widget
-        for i in range(len(self.right_panel)):
-            # 获取布局中所有widget
-            deleted = self.right_layout.itemAt(i).widget()
-            deleted.setVisible(False)
-            # print(deleted)
-        if x == -1:
-            self.user_info.setVisible(True)
-        elif x == 2:
-            self.search_widget.setVisible(True)
-        elif x == 3:
-            self.playlist_widget.setVisible(True)
-        elif x == 4:
-            self.playlist.setVisible(True)
-
     def update_search_str(self, s):
         data = self.db.getSearchMusic(s)
         self.search_widget.update_tableView_music(data)
         self.change_widget_by_signal(2)
+
     def update_search_type(self, s):
         self.search_type = s
 
