@@ -21,7 +21,8 @@ class Sidebar_widget(QtWidgets.QWidget, sidebar_ui.Ui_Form):  # 修改main_ui.Ui
 
     def ini(self):
         self.listWidget.addItem("歌曲推荐")
-        self.listWidget.addItem("各地推荐")
+        self.listWidget.addItem("歌单推荐")
+        self.listWidget.addItem("搜索界面")
         self.listWidget.addItem("播放列表")
         self.listWidget.addItem("我的歌单")
         self.listWidget.clicked.connect(lambda item: self.change_widget(item.row()))
