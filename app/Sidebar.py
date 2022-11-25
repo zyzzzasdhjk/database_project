@@ -6,27 +6,47 @@ from gui import sidebar_ui
 
 class Sidebar_widget(QtWidgets.QWidget, sidebar_ui.Ui_Form):  # 修改main_ui.Ui_MainWindow
     widget_change_signal = pyqtSignal(int)
+    createSheetShowSignal = pyqtSignal(int)
+    favorSheetShowSignal = pyqtSignal(int)
 
     def __init__(self):
         super(Sidebar_widget, self).__init__()
         self.setupUi(self)
-        self.listWidget.setStyleSheet('font: 18pt "微软雅黑";')
         # 定义label
-        self.playlist_lst = []
-        self.load_playlist()
         self.ini()
 
-    def load_playlist(self):
-        pass
+    def iniCreateSheet(self, lst):
+        """接受用户创建的歌单列表
+            二维列表
+            [[SID, SName]]"""
+        if lst:
+            for Sheet in lst:
+                self.CreateSheetListWidget.addItem(Sheet[1])
+
+    def iniFavorSheet(self, lst):
+        """接受用户收藏的歌单列表
+            二维列表
+            [[SID, SName]]"""
+        if lst:
+            for Sheet in lst:
+                self.FavorSheetListWidget.addItem(Sheet[1])
 
     def ini(self):
-        self.listWidget.addItem("歌曲推荐")
-        self.listWidget.addItem("歌单推荐")
-        self.listWidget.addItem("搜索界面")
-        self.listWidget.addItem("播放列表")
-        self.listWidget.addItem("我的歌单")
-        self.listWidget.clicked.connect(lambda item: self.change_widget(item.row()))
+        self.NomalListWidget.setStyleSheet('font: 18pt "微软雅黑";')
+        self.NomalListWidget.addItem("歌曲推荐")
+        self.NomalListWidget.addItem("歌单推荐")
+        self.NomalListWidget.addItem("搜索界面")
+        self.NomalListWidget.addItem("播放列表")
+        self.NomalListWidget.clicked.connect(lambda item: self.showNormalWidget(item.row()))
+        self.CreateSheetListWidget.clicked.connect(lambda item: self.showCreateSheet(item.row()))
+        self.FavorSheetListWidget.clicked.connect(lambda item: self.showFavorSheet(item.row()))
 
-    def change_widget(self, x):
-        print(x)
-        self.widget_change_signal.emit(x)
+    def showNormalWidget(self, Index):
+        print(Index)
+        self.widget_change_signal.emit(Index)
+
+    def showCreateSheet(self, Index):
+        self.createSheetShowSignal.emit(Index)
+
+    def showFavorSheet(self, Index):
+        self.favorSheetShowSignal.emit(Index)

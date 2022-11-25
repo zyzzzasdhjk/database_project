@@ -21,7 +21,7 @@ class CLabel(QtWidgets.QLabel):
 
 class title_widget(QtWidgets.QWidget, Title_block.Ui_Form):  # 修改main_ui.Ui_MainWindow
     widget_change_signal = pyqtSignal(int)
-    user_uid = pyqtSignal(int)
+    openUserEditsiganl = pyqtSignal()
     search_str = pyqtSignal(str)
 
     def __init__(self):
@@ -42,7 +42,7 @@ class title_widget(QtWidgets.QWidget, Title_block.Ui_Form):  # 修改main_ui.Ui_
 
     def open_user_info(self):
         self.widget_change_signal.emit(-1)
-        self.user_uid.emit(1)
+        self.openUserEditsiganl.emit()
 
     def update_label_combox(self,lst):
         self.label_combox.clear()

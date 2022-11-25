@@ -41,3 +41,17 @@ as
 	from Music,MID_MMID,MusicMaker,MID_AID,Album
 	where Music.MID = MID_MMID.MID and MID_MMID.MMID = MusicMaker.MMID
 	and Music.MID = MID_AID.AID and Album.AID = MID_AID.AID
+
+
+create view V$_getUserAllCreateSheet
+as
+	select Sheet.SID, Sheet.SName,UserInfo.UID
+	from Sheet, UID_SID_Create, UserInfo
+	where Sheet.SID = UID_SID_Create.SID and UserInfo.UID = UID_SID_Create.UID
+
+
+create view V$_getUserAllFavorSheet
+as
+	select Sheet.SID, Sheet.SName,UserInfo.UID
+	from Sheet, UID_SID_Favor, UserInfo
+	where Sheet.SID = UID_SID_Favor.SID and UserInfo.UID = UID_SID_Favor.UID

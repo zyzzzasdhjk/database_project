@@ -136,28 +136,22 @@ class DataBase:
 
     def getUserAllCreateSheet(self, UID):
         """用户创建所有歌单数据
-            返回一个一维列表
-            [SID]"""
+            返回一个二维列表
+            [[SID, SName]]"""
 
-        selectstr = f"select SID from UID_SID_Create where UID = '{UID}'"
+        selectstr = f"select SID, SName from V$_getUserAllCreateSheet where UID = '{UID}'"
         self.cursor.execute(selectstr)
-        temp = self.query_strip()
-        resultlst = []
-        for lst in temp:
-            resultlst.append(lst[0])
+        resultlst = self.query_strip()
         return resultlst
 
     def getUserAllFavorSheet(self, UID):
         """用户收藏所有歌单数据
-            返回一个一维列表
-            [SID]"""
+            返回一个二维列表
+            [[SID, SName]]"""
 
-        selectstr = f"select SID from UID_SID_Favor where UID = '{UID}'"
+        selectstr = f"select SID, SName from V$_getUserAllFavorSheet where UID = '{UID}'"
         self.cursor.execute(selectstr)
-        temp = self.query_strip()
-        resultlst = []
-        for lst in temp:
-            resultlst.append(lst[0])
+        resultlst = self.query_strip()
         return resultlst
 
 
@@ -170,4 +164,4 @@ if __name__ == "__main__":
     print(D.getPlaylistMusicData(1))
     print(D.getSearchUser("红茶honer"))
     print(D.getSearchMusic("月亮"))
-    print(D.getUserAllFavorSheet(2))
+    print(D.getUserAllCreateSheet(2))
