@@ -35,6 +35,7 @@ class MainProgress(QtWidgets.QWidget):
 
 
 class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
+    # ************初始化载入模块*******************start
     def __init__(self):
         super(Main_window, self).__init__()
         self.setupUi(self)
@@ -70,12 +71,15 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
 
         '''信号区'''
         self.sidebar.widget_change_signal.connect(self.change_widget_by_signal)
-        self.sidebar.createSheetShowSignal.connect(self.showCreateSheet)# 侧边栏页面切换
+        self.sidebar.createSheetShowSignal.connect(self.showCreateSheet)  # 侧边栏页面切换
         self.sidebar.favorSheetShowSignal.connect(self.showFavorSheet)
         self.title_block.openUserEditsiganl.connect(self.update_user_info)  # 提高个人信息
         self.title_block.widget_change_signal.connect(self.change_widget_by_signal)  # 切换到个人信息界面
         self.title_block.search_str.connect(self.update_search_str)  # 更新搜索内容
 
+    # ************初始化载入模块*******************end
+
+    # ************切换界面模块*******************start
     def change_widget_by_signal(self, index):
         # 删除原有布局的控件
         deleted = self.right_layout.itemAt(0)
@@ -113,6 +117,9 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         self.getPlaylistInfo(self.playlist, self.favorSheetList[index][0])
         self.right_layout.addWidget(self.playlist)
 
+    # ************切换界面模块*******************end
+
+    # ************连接数据模块*******************start
     def getPlaylistInfo(self, Playlist, SID):
         """更新歌单界面
             传入歌单界面对象, SID"""
@@ -137,6 +144,7 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
 
     def update_search_type(self, s):
         self.search_type = s
+    # ************连接数据模块*******************end
 
 
 if __name__ == "__main__":

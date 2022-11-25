@@ -32,7 +32,9 @@ class Sidebar_widget(QtWidgets.QWidget, sidebar_ui.Ui_Form):  # 修改main_ui.Ui
                 self.FavorSheetListWidget.addItem(Sheet[1])
 
     def ini(self):
-        self.NomalListWidget.setStyleSheet('font: 18pt "微软雅黑";')
+        self.NomalListWidget.setStyleSheet('font: 12pt "微软雅黑";')
+        self.CreateSheetListWidget.setStyleSheet('font: 10pt "微软雅黑";')
+        self.FavorSheetListWidget.setStyleSheet('font: 10pt "微软雅黑";')
         self.NomalListWidget.addItem("歌曲推荐")
         self.NomalListWidget.addItem("歌单推荐")
         self.NomalListWidget.addItem("搜索界面")

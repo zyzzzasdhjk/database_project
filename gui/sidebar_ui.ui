@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>282</width>
-    <height>590</height>
+    <width>586</width>
+    <height>965</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -31,6 +31,12 @@
    </property>
    <item>
     <widget class="QScrollArea" name="scrollArea">
+     <property name="verticalScrollBarPolicy">
+      <enum>Qt::ScrollBarAlwaysOn</enum>
+     </property>
+     <property name="sizeAdjustPolicy">
+      <enum>QAbstractScrollArea::AdjustToContents</enum>
+     </property>
      <property name="widgetResizable">
       <bool>true</bool>
      </property>
@@ -39,8 +45,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>280</width>
-        <height>588</height>
+        <width>563</width>
+        <height>963</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -60,14 +66,24 @@
         <number>0</number>
        </property>
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1,1,0,1,0">
+        <layout class="QVBoxLayout" name="verticalLayout_2" stretch="2,0,5,0,3">
          <item>
-          <widget class="QListWidget" name="NomalListWidget"/>
+          <widget class="QListWidget" name="NomalListWidget">
+           <property name="sizeAdjustPolicy">
+            <enum>QAbstractScrollArea::AdjustToContents</enum>
+           </property>
+           <property name="verticalScrollMode">
+            <enum>QAbstractItemView::ScrollPerItem</enum>
+           </property>
+          </widget>
          </item>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout">
            <item>
             <widget class="QPushButton" name="pushButton">
+             <property name="styleSheet">
+              <string notr="true">font: 10pt &quot;华文细黑&quot;;</string>
+             </property>
              <property name="text">
               <string>创建的歌单</string>
              </property>
@@ -102,12 +118,19 @@
           </layout>
          </item>
          <item>
-          <widget class="QListWidget" name="CreateSheetListWidget"/>
+          <widget class="QListWidget" name="CreateSheetListWidget">
+           <property name="sizeAdjustPolicy">
+            <enum>QAbstractScrollArea::AdjustToContents</enum>
+           </property>
+          </widget>
          </item>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_2">
            <item>
             <widget class="QPushButton" name="pushButton_3">
+             <property name="styleSheet">
+              <string notr="true">font: 10pt &quot;华文细黑&quot;;</string>
+             </property>
              <property name="text">
               <string>收藏的歌单</string>
              </property>
@@ -132,7 +155,11 @@
           </layout>
          </item>
          <item>
-          <widget class="QListWidget" name="FavorSheetListWidget"/>
+          <widget class="QListWidget" name="FavorSheetListWidget">
+           <property name="sizeAdjustPolicy">
+            <enum>QAbstractScrollArea::AdjustToContents</enum>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>

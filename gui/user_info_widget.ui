@@ -18,6 +18,9 @@
     <layout class="QGridLayout" name="gridLayout">
      <item row="7" column="0">
       <widget class="QLabel" name="label_8">
+       <property name="styleSheet">
+        <string notr="true">font: 12pt &quot;微软雅黑&quot;;</string>
+       </property>
        <property name="text">
         <string>标签</string>
        </property>
@@ -38,6 +41,9 @@
      </item>
      <item row="3" column="0">
       <widget class="QLabel" name="label_3">
+       <property name="styleSheet">
+        <string notr="true">font: 12pt &quot;微软雅黑&quot;;</string>
+       </property>
        <property name="text">
         <string>用户ID</string>
        </property>
@@ -45,20 +51,20 @@
      </item>
      <item row="3" column="3">
       <widget class="QLabel" name="label_4">
+       <property name="styleSheet">
+        <string notr="true">font: 12pt &quot;微软雅黑&quot;;</string>
+       </property>
        <property name="text">
         <string>用户名</string>
        </property>
       </widget>
      </item>
-     <item row="9" column="5">
-      <widget class="QPushButton" name="reset_button">
-       <property name="text">
-        <string>重置</string>
+     <item row="6" column="2" colspan="3">
+      <widget class="QPlainTextEdit" name="user_des_edit">
+       <property name="styleSheet">
+        <string notr="true">font: 10pt &quot;华文细黑&quot;;</string>
        </property>
       </widget>
-     </item>
-     <item row="6" column="2" colspan="3">
-      <widget class="QPlainTextEdit" name="user_des_edit"/>
      </item>
      <item row="3" column="5" colspan="2">
       <spacer name="horizontalSpacer_2">
@@ -87,17 +93,28 @@
       </spacer>
      </item>
      <item row="4" column="2">
-      <widget class="QComboBox" name="gender_combox"/>
+      <widget class="QComboBox" name="gender_combox">
+       <property name="styleSheet">
+        <string notr="true">font: 10pt &quot;华文细黑&quot;;</string>
+       </property>
+      </widget>
      </item>
      <item row="1" column="0">
       <widget class="QLabel" name="label_2">
+       <property name="styleSheet">
+        <string notr="true">font: 12pt &quot;微软雅黑&quot;;</string>
+       </property>
        <property name="text">
         <string>密码</string>
        </property>
       </widget>
      </item>
      <item row="7" column="2">
-      <widget class="QComboBox" name="user_label_combox"/>
+      <widget class="QComboBox" name="user_label_combox">
+       <property name="styleSheet">
+        <string notr="true">font: 10pt &quot;华文细黑&quot;;</string>
+       </property>
+      </widget>
      </item>
      <item row="2" column="2">
       <spacer name="verticalSpacer_2">
@@ -114,51 +131,102 @@
      </item>
      <item row="4" column="3">
       <widget class="QLabel" name="label_6">
+       <property name="styleSheet">
+        <string notr="true">font: 12pt &quot;微软雅黑&quot;;</string>
+       </property>
        <property name="text">
         <string>生日</string>
        </property>
       </widget>
      </item>
      <item row="4" column="4">
-      <widget class="QDateEdit" name="dateEdit"/>
+      <widget class="QDateEdit" name="dateEdit">
+       <property name="styleSheet">
+        <string notr="true">font: 10pt &quot;华文细黑&quot;;</string>
+       </property>
+      </widget>
      </item>
      <item row="1" column="2" colspan="2">
-      <widget class="QLineEdit" name="password_edit"/>
+      <widget class="QLineEdit" name="password_edit">
+       <property name="styleSheet">
+        <string notr="true">font: 10pt &quot;华文细黑&quot;;</string>
+       </property>
+      </widget>
      </item>
      <item row="4" column="0">
       <widget class="QLabel" name="label_5">
+       <property name="styleSheet">
+        <string notr="true">font: 12pt &quot;微软雅黑&quot;;</string>
+       </property>
        <property name="text">
         <string>性别</string>
        </property>
       </widget>
      </item>
      <item row="3" column="4">
-      <widget class="QLineEdit" name="user_name_edit"/>
+      <widget class="QLineEdit" name="user_name_edit">
+       <property name="styleSheet">
+        <string notr="true">font: 10pt &quot;华文细黑&quot;;</string>
+       </property>
+      </widget>
      </item>
      <item row="3" column="2">
-      <widget class="QLineEdit" name="uid_eidt"/>
+      <widget class="QLineEdit" name="uid_eidt">
+       <property name="styleSheet">
+        <string notr="true">font: 10pt &quot;华文细黑&quot;;</string>
+       </property>
+      </widget>
      </item>
      <item row="0" column="0">
       <widget class="QLabel" name="label">
+       <property name="styleSheet">
+        <string notr="true">font: 12pt &quot;微软雅黑&quot;;</string>
+       </property>
        <property name="text">
         <string>账号</string>
        </property>
       </widget>
      </item>
-     <item row="9" column="6">
-      <widget class="QPushButton" name="apply_button">
-       <property name="text">
-        <string>确认更改</string>
+     <item row="0" column="2" colspan="2">
+      <widget class="QLineEdit" name="acount_edit">
+       <property name="styleSheet">
+        <string notr="true">font: 10pt &quot;华文细黑&quot;;</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="2" colspan="2">
-      <widget class="QLineEdit" name="acount_edit"/>
-     </item>
      <item row="6" column="0">
       <widget class="QLabel" name="label_7">
+       <property name="styleSheet">
+        <string notr="true">font: 12pt &quot;微软雅黑&quot;;</string>
+       </property>
        <property name="text">
         <string>个人简介</string>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="2">
+      <widget class="QPushButton" name="reset_button">
+       <property name="styleSheet">
+        <string notr="true">font: 12pt &quot;微软雅黑&quot;;</string>
+       </property>
+       <property name="text">
+        <string>重置</string>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="4">
+      <widget class="QPushButton" name="apply_button">
+       <property name="styleSheet">
+        <string notr="true">font: 12pt &quot;微软雅黑&quot;;</string>
+       </property>
+       <property name="text">
+        <string>确认更改</string>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
