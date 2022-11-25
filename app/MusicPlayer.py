@@ -227,11 +227,11 @@ class Music_player(QtWidgets.QWidget, music_ui.Ui_Form):  # 修改main_ui.Ui_Mai
         self.pause_music()
         self.right_time_label.setText(time_format(get_music_time(self.music_path)))
 
-    def add_music_to_lst(self,lst):  # 传入数组的要求 [歌曲名字，歌手名字，歌曲路径] 要求全为字符串
+    def add_music_to_lst(self, lst):  # 传入数组的要求 [歌曲名字，歌手名字，歌曲路径] 要求全为字符串
         if lst in self.music_lst:
             self.load_music_by_num(self.music_lst.index(lst))
         else:
-            self.music_lst.insert(self.music_num,lst)
+            self.music_lst.insert(self.music_num, lst)
             self.load_music_by_num(self.music_lst.index(lst))
         print(self.music_lst)
 
@@ -245,7 +245,7 @@ class Music_player(QtWidgets.QWidget, music_ui.Ui_Form):  # 修改main_ui.Ui_Mai
         self.pause_music()
         self.right_time_label.setText(time_format(get_music_time(self.music_path)))
 
-    def load_music_by_num(self,num):
+    def load_music_by_num(self, num):
         global time_change
         self.music_num = num
         time_change = 0
@@ -260,8 +260,8 @@ class Music_player(QtWidgets.QWidget, music_ui.Ui_Form):  # 修改main_ui.Ui_Mai
     def save_json(self):
         self.thread_flag2 = 1
         json_write_file("./data/music_lst.json",
-                           [self.music_num, self.music_play_manner_flag,
-                            int(self.time_slider.value() / 1000 * self.music_time), self.music_lst])
+                        [self.music_num, self.music_play_manner_flag,
+                         int(self.time_slider.value() / 1000 * self.music_time), self.music_lst])
 
 
 if __name__ == "__main__":

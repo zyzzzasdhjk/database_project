@@ -14,6 +14,7 @@ class DataBase:
 
     def query_strip(self):
         """将查询结果转换成二维列表"""
+
         data = self.cursor.fetchall()
         return [[j.strip() if type(j) == str else j for j in i] for i in data]
 
@@ -74,6 +75,7 @@ class DataBase:
     def get_all_user_label(self):
         """获取标签
             返回二维列表，包含标签ID以及所有标签"""
+
         sql = 'select * from Label'
         self.cursor.execute(sql)
         d = sorted(self.query_strip(), key=lambda x: x[0], reverse=False)
@@ -111,6 +113,7 @@ class DataBase:
         """搜索用户
             返回模糊匹配的二维列表
             [[UID, UName, USex]]"""
+
         sqlstr = f"select UID, UName, USex from UserInfo where UName like '%{searchstr}%'"
         self.cursor.execute(sqlstr)
         selectresult = self.query_strip()
@@ -125,10 +128,37 @@ class DataBase:
         """搜索音乐
             返回模糊匹配的二维列表
             [[MID,MName,MMName,MDate,AlbumName,MDir]]"""
+
         sqlstr = f"select MID,MName,MMName,MDate,AName,MDir from V$_getMusicData where MName like '%{searchstr}%'"
         self.cursor.execute(sqlstr)
         selectresult = self.query_strip()
         return selectresult
+
+    def getUserAllCreateSheet(self, UID):
+        """用户创建所有歌单数据
+            返回一个一维列表
+            [SID]"""
+
+        selectstr = f"select SID from UID_SID_Create where UID = '{UID}'"
+        self.cursor.execute(selectstr)
+        temp = self.query_strip()
+        resultlst = []
+        for lst in temp:
+            resultlst.append(lst[0])
+        return resultlst
+
+    def getUserAllFavorSheet(self, UID):
+        """用户收藏所有歌单数据
+            返回一个一维列表
+            [SID]"""
+
+        selectstr = f"select SID from UID_SID_Favor where UID = '{UID}'"
+        self.cursor.execute(selectstr)
+        temp = self.query_strip()
+        resultlst = []
+        for lst in temp:
+            resultlst.append(lst[0])
+        return resultlst
 
 
 if __name__ == "__main__":
@@ -140,3 +170,4 @@ if __name__ == "__main__":
     print(D.getPlaylistMusicData(1))
     print(D.getSearchUser("红茶honer"))
     print(D.getSearchMusic("月亮"))
+    print(D.getUserAllFavorSheet(2))

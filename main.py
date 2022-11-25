@@ -8,7 +8,8 @@ from login_and_register.login_register_Panel import LoginRegisterPanel
 
 global MainProgress
 
-uid_int = 1  # 得到的uid，待完善
+global uid_int  # 得到的uid，待完善
+uid_int = 1
 
 
 def loginControl(UID):  # 登录函数
@@ -50,6 +51,10 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
 
         self.ini_window()
 
+        # 获取歌单数据
+        self.createSheetList = self.db.getUserAllCreateSheet(uid_int)
+        self.favorSheetList = self.db.getUserAllFavorSheet(uid_int)
+
     def ini_window(self):
         # 加载顶部栏标签和用户名字
         self.title_block.update_name(self.db.get_user_info(uid_int)[0][3])
@@ -64,7 +69,6 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         self.title_block.user_uid.connect(self.update_user_info)  # 提高个人信息
         self.title_block.widget_change_signal.connect(self.change_widget_by_signal)  # 切换到个人信息界面
         self.title_block.search_str.connect(self.update_search_str)  # 更新搜索内容
-
 
     def change_widget_by_signal(self, x):
         # 删除原有布局的控件
@@ -90,15 +94,15 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
             # 歌单
             self.playlist = PlayList_Panel.PlayListPanel()
             self.playlist.PlaylistMusicListTableView.startplaysignal.connect(
-                self.music.add_music_to_lst) # 传入数组的要求 [歌曲名字，歌手名字，歌曲路径] 要求全为字符串
-            self.updatePlaylistInfo(1)
+                self.music.add_music_to_lst)  # 传入数组的要求 [歌曲名字，歌手名字，歌曲路径] 要求全为字符串
+            self.updatePlaylistInfo(self.playlist, self.createSheetList[0])
             self.right_layout.addWidget(self.playlist)
 
-    def updatePlaylistInfo(self, SID):
+    def updatePlaylistInfo(self, Playlist, SID):
         """更新歌单界面
-            传入SID"""
-        self.playlist.loadPlaylistTableViewModel(self.db.getPlaylistMusicData(1))
-        self.playlist.loadPlaylistData(self.db.getPlaylistSheetData(1))
+            传入歌单界面对象, SID"""
+        Playlist.loadPlaylistTableViewModel(self.db.getPlaylistMusicData(SID))
+        Playlist.loadPlaylistData(self.db.getPlaylistSheetData(SID))
 
     def update_user_info(self, x):  # 传入个人信息以加载
         self.user_info.ini_combox(self.db.get_all_user_label())  # 先初始化combox
