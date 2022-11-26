@@ -4,6 +4,22 @@ from PyQt5.QtWidgets import QLabel, QItemDelegate, QPushButton, QHBoxLayout, QWi
     QTableView
 from PyQt5 import QtWidgets, QtCore, QtGui
 from gui import music_search
+from mutagen.mp3 import MP3
+
+
+def num_format(n):  # 将两位数及以下的数字转化为两位数的字符串
+    return '0{}'.format(n) if 0 <= n < 10 else "{}".format(n)
+
+
+def time_format(t):  # 获取一个以秒单位的时长，转化为**:**:**的格式
+    s = t % 60
+    m = t % 3600 // 60
+    return f"{num_format(m)}:{num_format(s)}"
+
+
+def get_music_time(filename):  # 获取音乐文件的时长，返回值是一个整数，单位为秒
+    audio = MP3(filename)
+    return int(audio.info.length)
 
 
 class MyButtonDelegate(QItemDelegate):
@@ -81,7 +97,7 @@ class MyTableView(QTableView):
         self.music_path_lst = []
         self.setPlaylistTableView(lst)
         # 设置按钮代理
-        self.setItemDelegateForColumn(4, MyButtonDelegate(self))
+        self.setItemDelegateForColumn(5, MyButtonDelegate(self))
         # 设置不可选中
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
@@ -89,14 +105,15 @@ class MyTableView(QTableView):
         """设置tableview的模型
             接受歌曲的六项属性二维列表"""
         self.model = QStandardItemModel(0, 0)
-        self.Headers = ['歌名', '歌手', '时长', '专辑', '操作']
+        self.Headers = ['歌名', '歌手', '创建时间', '专辑', '时长', '操作']
         self.model.setHorizontalHeaderLabels(self.Headers)
         rowNum = len(lst)
         for row in range(rowNum):
             self.music_path_lst.append([lst[row][1], lst[row][2], lst[row][5]])
-            for column in range(1,5):
+            for column in range(1, 5):
                 item = QStandardItem(f'{lst[row][column]}')
-                self.model.setItem(row, column-1, item)
+                self.model.setItem(row, column - 1, item)
+            self.model.setItem(row,4,QStandardItem(time_format(get_music_time(lst[row][-1]))))
 
     def setPlaylistTableView(self, lst):
         self.getData(lst)
@@ -162,4 +179,3 @@ class Search(QtWidgets.QWidget, music_search.Ui_Form):  # 修改main_ui.Ui_MainW
         """接收二位列表"""
         self.tabel = MyTableView(lst=lst)
         self.tabel_layout.addWidget(self.tabel)
-

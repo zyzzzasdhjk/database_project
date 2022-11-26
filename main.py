@@ -2,7 +2,7 @@ from PyQt5 import QtWidgets
 import sys
 from sql import sql
 from app import MusicPlayer, Sidebar, playlist_widget, PlayList_Panel, Title_block_widget, user_info_widget, \
-    Music_search
+    Music_search, MyPlaylist
 from gui import main_ui  # 导入ui文件
 from login_and_register.login_register_Panel import LoginRegisterPanel
 
@@ -54,6 +54,7 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         self.title_block = Title_block_widget.title_widget()
         self.user_info = user_info_widget.User_info()
 
+
         self.ini_window()
 
     def ini_window(self):
@@ -78,9 +79,11 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         # 侧边栏创建歌单按钮
         self.sidebar.createSheetSignal.connect(self.createSheet)
 
+        self.sidebar.createSheetShowSignal.connect(self.createSheet)
         self.title_block.openUserEditsiganl.connect(self.update_user_info)  # 提高个人信息
         self.title_block.widget_change_signal.connect(self.change_widget_by_signal)  # 切换到个人信息界面
         self.title_block.search_str.connect(self.update_search_str)  # 更新搜索内容
+        # self.music.music_lst_s.connect(self.my_playlist.update_tableView_music)
 
     # ************初始化载入模块*******************end
 
@@ -103,8 +106,11 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         #     # self.search_widget.setVisible(True)
         elif index == 3:
             # 播放列表
-            self.playlist_widget = playlist_widget.win()
-            self.right_layout.addWidget(self.playlist_widget)
+            self.my_playlist = MyPlaylist.My_playlist()
+            self.my_playlist.update_tableView_music(self.music.music_lst)
+            self.right_layout.addWidget(self.my_playlist)
+            self.my_playlist.tabel.startplaysignal.connect(self.music.add_music_to_lst)
+            self.my_playlist.tabel.deleteThisMusicsignal.connect(self.music.delete_music)
 
     def showCreateSheet(self, index):
         # 删除原有布局的控件
@@ -164,8 +170,8 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
 
     def update_search_str(self, s):
         data = self.db.getSearchMusic(s)
-        self.search_widget.update_tableView_music(data)
         self.change_widget_by_signal(2)
+        self.search_widget.update_tableView_music(data)
 
     def update_search_type(self, s):
         self.search_type = s

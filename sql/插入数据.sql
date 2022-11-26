@@ -45,6 +45,7 @@ VALUES('倔强',261,'2004-11-05','0',1),
 ('逝去的歌',294,'2015-10-04','0',1),
 ('路过人间',288,'2021-10-22','0',1)
 
+
 INSERT INTO MUSICMAKER
 VALUES('五月天'),
 ('邓丽君'),
@@ -185,6 +186,15 @@ VALUES
 (10,10)
 
 update Music set MDir = 'music/月亮代表我的心-邓丽君 .mp3' where MID=2
+update Music set MDir = 'music/倔强.mp3' where MName = '倔强'
+update Music set MDir = 'music/如果当时.mp3' where MName = '如果当时'
+update Music set MDir = 'music/安静的美好.mp3' where MName = '安静的美好'
+update Music set MDir = 'music/曲率飞行.mp3' where MName = '曲率飞行'
+update Music set MDir = 'music/玫瑰往事.mp3' where MName = '玫瑰往事'
+update Music set MDir = 'music/白兰鸽巡游记.mp3' where MName = '白兰鸽巡游记'
+update Music set MDir = 'music/路过人间.mp3' where MName = '路过人间'
+update Music set MDir = 'music/逝去的歌.mp3' where MName = '逝去的歌'
+update Music set MDir = 'music/郊眠寺.mp3' where MName = '郊眠寺'
 update Music set MDir = 'music/倔强.mp3' where MName = '倔强'
 update Music set MDir = 'music/如果当时.mp3' where MName = '如果当时'
 update Music set MDir = 'music/安静的美好.mp3' where MName = '安静的美好'
