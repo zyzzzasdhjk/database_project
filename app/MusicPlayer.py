@@ -1,6 +1,6 @@
 import random
 import threading
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtCore
 import pygame
 import sys
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
@@ -72,6 +72,7 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
 
 
 class Music_player(QtWidgets.QWidget, music_ui.Ui_Form):  # 修改main_ui.Ui_MainWindow
+    music_lst_s = QtCore.pyqtSignal(list)
     def __init__(self):
         super(Music_player, self).__init__()
         self.setupUi(self)
@@ -233,6 +234,7 @@ class Music_player(QtWidgets.QWidget, music_ui.Ui_Form):  # 修改main_ui.Ui_Mai
         else:
             self.music_lst.insert(self.music_num, lst)
             self.load_music_by_num(self.music_lst.index(lst))
+        self.music_lst_s.emit(self.music_lst)
         print(self.music_lst)
 
     def load_previous_music(self):
@@ -244,6 +246,15 @@ class Music_player(QtWidgets.QWidget, music_ui.Ui_Form):  # 修改main_ui.Ui_Mai
         self.music_pause_flag = 1
         self.pause_music()
         self.right_time_label.setText(time_format(get_music_time(self.music_path)))
+
+    def delete_music(self,num):
+        if self.music_num == num:
+            self.music_num+=1
+            self.modify_music_num_by_music_manner()
+            self.load_music_by_num(self.music_num)
+            self.music_lst.pop(num)
+        else:
+            self.music_lst.pop(num)
 
     def load_music_by_num(self, num):
         global time_change
