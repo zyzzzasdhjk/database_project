@@ -76,7 +76,7 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         self.sidebar.createSheetShowSignal.connect(self.showCreateSheet)
         self.sidebar.favorSheetShowSignal.connect(self.showFavorSheet)
         # 侧边栏创建歌单按钮
-        self.sidebar.createSheetShowSignal.connect(self.createSheet)
+        self.sidebar.createSheetSignal.connect(self.createSheet)
 
         self.title_block.openUserEditsiganl.connect(self.update_user_info)  # 提高个人信息
         self.title_block.widget_change_signal.connect(self.change_widget_by_signal)  # 切换到个人信息界面
@@ -142,7 +142,14 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
     def createSheet(self):
         """新建歌单
             侧边栏新建歌单按钮的槽函数"""
-        self
+        result = self.db.createSheet(uid_int)
+        print(result)
+        if result:
+            QtWidgets.QMessageBox.about(self,"成功","创建成功")
+        else:
+            QtWidgets.QMessageBox.about(self, "失败", "创建失败，歌单超过限制数目")
+        self.createSheetList = self.db.getUserAllCreateSheet(uid_int)
+        self.sidebar.iniCreateSheet(self.createSheetList)
 
     def update_user_info(self):  # 传入个人信息以加载
         self.user_info.ini_combox(self.db.get_all_user_label())  # 先初始化combox

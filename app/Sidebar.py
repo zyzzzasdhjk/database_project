@@ -20,6 +20,8 @@ class Sidebar_widget(QtWidgets.QWidget, sidebar_ui.Ui_Form):  # 修改main_ui.Ui
         """接受用户创建的歌单列表
             二维列表
             [[SID, SName]]"""
+        while self.CreateSheetListWidget.takeItem(0):
+            pass
         if lst:
             for Sheet in lst:
                 self.CreateSheetListWidget.addItem(Sheet[1])
@@ -28,6 +30,8 @@ class Sidebar_widget(QtWidgets.QWidget, sidebar_ui.Ui_Form):  # 修改main_ui.Ui
         """接受用户收藏的歌单列表
             二维列表
             [[SID, SName]]"""
+        while self.CreateSheetListWidget.takeItem(0):
+            pass
         if lst:
             for Sheet in lst:
                 self.FavorSheetListWidget.addItem(Sheet[1])

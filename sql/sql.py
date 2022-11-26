@@ -69,7 +69,12 @@ class DataBase:
         self.cursor.execute(selectstr1)
         SheetDatalist = self.query_strip()[0]
         self.cursor.execute(selectstr2)
-        SheetDatalist = SheetDatalist + self.query_strip()[0]
+        musicnumresult = self.query_strip()
+        if musicnumresult:
+            musicnumresult = musicnumresult[0]
+        else:
+            musicnumresult = [0]
+        SheetDatalist = SheetDatalist + musicnumresult
         return SheetDatalist
 
     def get_all_user_label(self):
@@ -156,8 +161,60 @@ class DataBase:
 
     def createSheet(self, UID):
         """新建一个歌单
-            无返回"""
-        insertstr = ""
+            返回成功与否"""
+
+        # 获取用户名称
+        selectstr = f"select UName from UserInfo where UID = {UID}"
+        self.cursor.execute(selectstr)
+        UName = self.query_strip()[0][0]
+        print(UName)
+
+        # 获取歌单所有名称
+        allSheetSelect = f"select SID, SName from V$_getUserAllCreateSheet where UID = '{UID}'"
+        self.cursor.execute(allSheetSelect)
+        allSheet = self.query_strip()
+        sheetNameList = []
+        for sheet in allSheet:
+            sheetNameList.append(sheet[1])
+        print(sheetNameList)
+
+        # 判断歌单数量是否超过限制
+        if len(sheetNameList) > 9:
+            return False
+        else:
+            # 若小于10 则创建一个新歌单
+            if len(sheetNameList) > 0:
+                for i in range(len(sheetNameList)):
+                    if f"{UName}的歌单{i}" not in sheetNameList:
+                        insertstr = f"insert into Sheet values ('{UName}的歌单{i}','{UName}创建的的歌单{i}',0)"
+                        self.cursor.execute(insertstr)
+                        self.conn.commit()
+
+                        selectstr = f"select SID from Sheet where SName = '{UName}的歌单{i}'"
+                        self.cursor.execute(selectstr)
+                        SID = self.query_strip()[0][0]
+                        # print(SID)
+
+                        insertstr2 = f"insert into UID_SID_Create values ({UID},{SID})"
+                        self.cursor.execute(insertstr2)
+                        self.conn.commit()
+            # 无歌单时创建一个厉害的歌单
+            elif len(sheetNameList) == 0:
+                insertstr = f"insert into Sheet values ('我的歌单','{UName}的歌单',0)"
+                self.cursor.execute(insertstr)
+                self.conn.commit()
+
+                selectstr = f"select SID from Sheet where SName = '我的歌单'"
+                self.cursor.execute(selectstr)
+                SID = self.query_strip()[0][0]
+                # print(SID)
+
+                insertstr2 = f"insert into UID_SID_Create values ({UID},{SID})"
+                self.cursor.execute(insertstr2)
+                self.conn.commit()
+
+            return True
+
 
 
 if __name__ == "__main__":
@@ -170,3 +227,4 @@ if __name__ == "__main__":
     print(D.getSearchUser("红茶honer"))
     print(D.getSearchMusic("月亮"))
     print(D.getUserAllCreateSheet(2))
+    print(D.createSheet(11))
