@@ -2,7 +2,7 @@ from PyQt5 import QtWidgets
 import sys
 from sql import sql
 from app import MusicPlayer, Sidebar, playlist_widget, PlayList_Panel, Title_block_widget, user_info_widget, \
-    Music_search, MyPlaylist
+    Music_search, MyPlaylist, otherPlaylist_Panel
 from gui import main_ui  # 导入ui文件
 from login_and_register.login_register_Panel import LoginRegisterPanel
 
@@ -54,7 +54,6 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         self.title_block = Title_block_widget.title_widget()
         self.user_info = user_info_widget.User_info()
 
-
         self.ini_window()
 
     def ini_window(self):
@@ -79,7 +78,6 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         # 侧边栏创建歌单按钮
         self.sidebar.createSheetSignal.connect(self.createSheet)
 
-        self.sidebar.createSheetShowSignal.connect(self.createSheet)
         self.title_block.openUserEditsiganl.connect(self.update_user_info)  # 提高个人信息
         self.title_block.widget_change_signal.connect(self.change_widget_by_signal)  # 切换到个人信息界面
         self.title_block.search_str.connect(self.update_search_str)  # 更新搜索内容
@@ -119,6 +117,8 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
             deleted.widget().deleteLater()
         # 歌单
         self.playlist = PlayList_Panel.PlayListPanel()
+        self.playlist.updateThisSheetsignal.connect(self.updateSheetInfo)
+        self.playlist.deleteThisSheetsignal.connect(self.deleteSheet)
         self.playlist.PlaylistMusicListTableView.startplaysignal.connect(
             self.music.add_music_to_lst)  # 传入数组的要求 [歌曲名字，歌手名字，歌曲路径] 要求全为字符串
         self.getPlaylistInfo(self.playlist, self.createSheetList[index][0])
@@ -130,7 +130,8 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         if deleted:
             deleted.widget().deleteLater()
         # 歌单
-        self.playlist = PlayList_Panel.PlayListPanel()
+        self.playlist = otherPlaylist_Panel.otherPlayListPanel()
+        self.playlist.deleteThisFavorSheetsignal.connect(self.unfavorThisSheet)
         self.playlist.PlaylistMusicListTableView.startplaysignal.connect(
             self.music.add_music_to_lst)  # 传入数组的要求 [歌曲名字，歌手名字，歌曲路径] 要求全为字符串
         self.getPlaylistInfo(self.playlist, self.favorSheetList[index][0])
@@ -151,11 +152,42 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         result = self.db.createSheet(uid_int)
         print(result)
         if result:
-            QtWidgets.QMessageBox.about(self,"成功","创建成功")
+            QtWidgets.QMessageBox.about(self, "成功", "创建成功")
         else:
             QtWidgets.QMessageBox.about(self, "失败", "创建失败，歌单超过限制数目")
         self.createSheetList = self.db.getUserAllCreateSheet(uid_int)
         self.sidebar.iniCreateSheet(self.createSheetList)
+
+    def updateSheetInfo(self, SID, SIntro):
+        """更新歌单数据
+            myPlaylistPanel更新数据按钮的槽函数"""
+        self.db.updateSheetInfo(SID, SIntro)
+        QtWidgets.QMessageBox.about(self, '成功', '更新成功')
+        list = [item[0] for item in self.createSheetList]
+        index = list.index(SID)
+        self.showCreateSheet(index)
+
+    def deleteSheet(self, SID):
+        """删除该歌单
+            myPlaylistPanel删除按钮的槽函数"""
+        deleted = self.right_layout.itemAt(0)
+        if deleted:
+            deleted.widget().deleteLater()
+        self.db.deleteSheet(SID)
+        QtWidgets.QMessageBox.about(self, '成功', '删除成功')
+        self.createSheetList = self.db.getUserAllCreateSheet(uid_int)
+        self.sidebar.iniCreateSheet(self.createSheetList)
+
+    def unfavorThisSheet(self, SID):
+        """取消收藏改歌单
+            otherPlaylistPanel删除按钮的槽函数"""
+        deleted = self.right_layout.itemAt(0)
+        if deleted:
+            deleted.widget().deleteLater()
+        self.db.unFavorSheet(uid_int, SID)
+        QtWidgets.QMessageBox.about(self, '成功', '取消收藏成功')
+        self.favorSheetList = self.db.getUserAllFavorSheet(uid_int)
+        self.sidebar.iniFavorSheet(self.favorSheetList)
 
     def update_user_info(self):  # 传入个人信息以加载
         self.user_info.ini_combox(self.db.get_all_user_label())  # 先初始化combox

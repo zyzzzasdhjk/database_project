@@ -1,4 +1,4 @@
-from gui.Playlist import Ui_PlayList
+from gui.otherPlaylist import Ui_PlayList
 from PyQt5.Qt import *
 
 
@@ -16,9 +16,9 @@ class MyButtonDelegate(QItemDelegate):
                 clicked=self.parent().startPlay
             )
             button_write = QPushButton(
-                self.tr('删除'),
+                self.tr('收藏'),
                 self.parent(),
-                clicked=self.parent().deleteThisMusic
+                clicked=self.parent().favorThisMusic
             )
             button_read.index = index.row()
             button_write.index = index.row()
@@ -38,7 +38,7 @@ class MyButtonDelegate(QItemDelegate):
 class MyTableView(QTableView):
     """创建音乐表视图"""
     startplaysignal = pyqtSignal(list)
-    deleteThisMusicsignal = pyqtSignal(int)
+    favorThisMusicsignal = pyqtSignal(int)
 
     def __init__(self, parent=None, lst=None):
         super(MyTableView, self).__init__(parent)
@@ -51,6 +51,7 @@ class MyTableView(QTableView):
         # 设置不可选中
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
+
     def getData(self, lst):
         """设置tableview的模型
             接受歌曲的六项属性二维列表"""
@@ -60,7 +61,7 @@ class MyTableView(QTableView):
         self.model.setHorizontalHeaderLabels(self.Headers)
         rowNum = len(lst)
         for row in range(rowNum):
-            self.music_path_lst.append([lst[row][1], lst[row][2], lst[row][5]])
+            self.music_path_lst.append([lst[row][1],lst[row][2],lst[row][5]])
             for column in range(5):
                 item = QStandardItem(f'{lst[row][column]}')
                 self.model.setItem(row, column, item)
@@ -74,28 +75,25 @@ class MyTableView(QTableView):
         self.verticalHeader().setSectionResizeMode(QHeaderView.Fixed)
 
     def startPlay(self):
-        """播放音乐按钮的信号
+        """播放按钮的信号
             发出：歌曲路径"""
         self.startplaysignal.emit(self.music_path_lst[self.sender().index])
 
-    def deleteThisMusic(self):
-        """删除音乐按钮的信号
+    def favorThisMusic(self):
+        """收藏按钮的信号
             发出：MID"""
         index = self.model.index(self.sender().index, 0)
         data = int(self.model.data(index))
         print(data)
-        self.deleteThisMusicsignal.emit(data)
+        self.favorThisMusicsignal.emit(data)
 
 
-class PlayListPanel(QWidget, Ui_PlayList):
-    deleteThisSheetsignal = pyqtSignal(int)
-    updateThisSheetsignal = pyqtSignal(int, str)
+class otherPlayListPanel(QWidget, Ui_PlayList):
+    deleteThisFavorSheetsignal = pyqtSignal(int)
 
     def __init__(self, parent=None, lst=[]):
-        super(PlayListPanel, self).__init__(parent)
+        super(otherPlayListPanel, self).__init__(parent)
         self.setupUi(self)
-        self.PlaylistdeletepushButton.clicked.connect(self.deleteThisSheet)
-        self.PlaylistupdatepushButton.clicked.connect(self.updateThisSheet)
         self.setPlaylistTableView(lst)
 
     def loadPlaylistData(self, lst):
@@ -116,17 +114,9 @@ class PlayListPanel(QWidget, Ui_PlayList):
         """接收二位列表"""
         self.PlaylistMusicListTableView.setPlaylistTableView(lst)
 
-    def deleteThisSheet(self):
-        """删除按钮的槽函数
-            传出歌单ID"""
-        self.deleteThisSheetsignal.emit(self.ID)
-
-    def updateThisSheet(self):
-        """更新信息按钮的槽函数
-            传出SID,SIntro"""
-        SheetIntro = self.PlaylistIntrolabel.toPlainText()
-        print(SheetIntro)
-        self.updateThisSheetsignal.emit(self.ID, SheetIntro)
+    def favorThisPlaylist(self):
+        """收藏按钮的槽函数"""
+        self.deleteThisFavorSheetsignal.emit(self.ID)
 
 
 if __name__ == '__main__':
@@ -141,7 +131,7 @@ if __name__ == '__main__':
 
     # 2. 控件的操作
     # 2.1 创建控件
-    window = PlayListPanel(lst=[[1, 1, 1, 1, 1, 1]])
+    window = otherPlayListPanel(lst=[[1, 1, 1, 1, 1, 1]])
 
     # 2.2 设置控件
 

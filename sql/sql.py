@@ -195,27 +195,43 @@ class DataBase:
                         SID = self.query_strip()[0][0]
                         # print(SID)
 
-                        insertstr2 = f"insert into UID_SID_Create values ({UID},{SID})"
-                        self.cursor.execute(insertstr2)
+                        # 调用存储过程
+                        self.cursor.callproc('Insert_USC', (UID, SID))
                         self.conn.commit()
             # 无歌单时创建一个厉害的歌单
             elif len(sheetNameList) == 0:
-                insertstr = f"insert into Sheet values ('我的歌单','{UName}的歌单',0)"
+                insertstr = f"insert into Sheet values ('{UName}的主歌单','{UName}的歌单',0)"
                 self.cursor.execute(insertstr)
                 self.conn.commit()
 
-                selectstr = f"select SID from Sheet where SName = '我的歌单'"
+                selectstr = f"select SID from Sheet where SName = '{UName}的主歌单'"
                 self.cursor.execute(selectstr)
                 SID = self.query_strip()[0][0]
                 # print(SID)
 
-                insertstr2 = f"insert into UID_SID_Create values ({UID},{SID})"
-                self.cursor.execute(insertstr2)
+                # 调用存储过程
+                self.cursor.callproc('Insert_USC', (UID, SID))
                 self.conn.commit()
 
             return True
 
+    def updateSheetInfo(self, SID, SIntro):
+        """更新歌单数据"""
+        updatestr = f"update Sheet set SIntro = '{SIntro}'  where SID = {SID}"
+        self.cursor.execute(updatestr)
+        self.conn.commit()
 
+    def deleteSheet(self, SID):
+        """删除歌单"""
+        deletestr = f'delete from Sheet where SID = {SID}'
+        self.cursor.execute(deletestr)
+        self.conn.commit()
+
+    def unFavorSheet(self, UID, SID):
+        """删除收藏歌单"""
+        deletestr = f"delete from UID_SID_Favor where UID = {UID} and SID = {SID}"
+        self.cursor.execute(deletestr)
+        self.conn.commit()
 
 if __name__ == "__main__":
     D = DataBase("127.0.0.1", "sa", "5151", "MMS")
@@ -227,4 +243,5 @@ if __name__ == "__main__":
     print(D.getSearchUser("红茶honer"))
     print(D.getSearchMusic("月亮"))
     print(D.getUserAllCreateSheet(2))
-    print(D.createSheet(11))
+    # print(D.createSheet(11))
+    print(D.updateSheetInfo(1, 'test'))

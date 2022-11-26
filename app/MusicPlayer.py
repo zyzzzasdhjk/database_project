@@ -73,6 +73,7 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
 
 class Music_player(QtWidgets.QWidget, music_ui.Ui_Form):  # 修改main_ui.Ui_MainWindow
     music_lst_s = QtCore.pyqtSignal(list)
+
     def __init__(self):
         super(Music_player, self).__init__()
         self.setupUi(self)
@@ -247,9 +248,9 @@ class Music_player(QtWidgets.QWidget, music_ui.Ui_Form):  # 修改main_ui.Ui_Mai
         self.pause_music()
         self.right_time_label.setText(time_format(get_music_time(self.music_path)))
 
-    def delete_music(self,num):
+    def delete_music(self, num):
         if self.music_num == num:
-            self.music_num+=1
+            self.music_num += 1
             self.modify_music_num_by_music_manner()
             self.load_music_by_num(self.music_num)
             self.music_lst.pop(num)

@@ -59,22 +59,14 @@
            </widget>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_2">
-            <item>
-             <widget class="QPushButton" name="PlaylistdeletepushButton">
-              <property name="text">
-               <string>删除</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="PlaylistupdatepushButton">
-              <property name="text">
-               <string>更新信息</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
+           <widget class="QPushButton" name="PlaylistFavorpushButton">
+            <property name="styleSheet">
+             <string notr="true">font: 10pt &quot;微软雅黑&quot;;</string>
+            </property>
+            <property name="text">
+             <string>删除</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
@@ -87,9 +79,6 @@
             </property>
             <property name="text">
              <string>歌单名字</string>
-            </property>
-            <property name="textInteractionFlags">
-             <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse|Qt::TextBrowserInteraction|Qt::TextEditable|Qt::TextSelectableByMouse</set>
             </property>
            </widget>
           </item>
@@ -136,7 +125,7 @@
              <string notr="true">font: 12pt &quot;方正姚体&quot;;</string>
             </property>
             <property name="readOnly">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
             <property name="plainText">
              <string>Introduction</string>
@@ -247,7 +236,24 @@
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>PlaylistFavorpushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>PlayList</receiver>
+   <slot>favorThisPlaylist()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>144</x>
+     <y>182</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>186</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
  <slots>
   <slot>favorThisPlaylist()</slot>
   <slot>startPlayMusic()</slot>

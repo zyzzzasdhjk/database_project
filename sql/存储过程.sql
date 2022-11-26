@@ -1,0 +1,19 @@
+Create  PROCEDURE Insert_USC
+@UID int,
+@SID int
+AS
+    INSERT INTO UID_SID_Create
+    VALUES(@UID,@SID)
+GO
+
+
+Create  PROCEDURE Insert_UCMC
+@UID int,
+@CID int,
+@MID int
+AS
+    INSERT INTO UID_CID
+    VALUES(@UID,@CID)
+	INSERT INTO MID_CID
+    VALUES(@MID,@CID)
+GO
