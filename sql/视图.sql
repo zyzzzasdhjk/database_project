@@ -55,3 +55,11 @@ as
 	select Sheet.SID, Sheet.SName,UserInfo.UID
 	from Sheet, UID_SID_Favor, UserInfo
 	where Sheet.SID = UID_SID_Favor.SID and UserInfo.UID = UID_SID_Favor.UID
+
+
+create view V$_getSheetMusicLabel
+as
+	select Sheet.SID, Music.MID, Label.Ltext
+	from Sheet,Music,SID_MID,Label
+	where Sheet.SID = SID_MID.SID and Music.MID = SID_MID.MID
+	and Music.LID = Label.LID

@@ -2,7 +2,7 @@ from PyQt5 import QtWidgets
 import sys
 from sql import sql
 from app import MusicPlayer, Sidebar, playlist_widget, PlayList_Panel, Title_block_widget, user_info_widget, \
-    Music_search, MyPlaylist, otherPlaylist_Panel
+    Music_search, MyPlaylist, otherPlaylist_Panel, RecommendSheet
 from gui import main_ui  # 导入ui文件
 from login_and_register.login_register_Panel import LoginRegisterPanel
 
@@ -47,6 +47,7 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         # 获取歌单数据
         self.createSheetList = self.db.getUserAllCreateSheet(uid_int)
         self.favorSheetList = self.db.getUserAllFavorSheet(uid_int)
+        self.recommendSheetList = self.db.getUserRecommendSheet(uid_int)
 
         # 初始化界面
         self.music = MusicPlayer.Music_player()
@@ -97,6 +98,12 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
             self.user_info = user_info_widget.User_info()
             self.right_layout.addWidget(self.user_info)
             self.user_info.user_info_change.connect(self.update_user_info_db)
+        elif index == 1:
+            # 推荐歌单界面
+            self.recommendSheetPanel = RecommendSheet.RecommendSheet()
+            self.recommendSheetPanel.loadSheet([item[1] for item in self.recommendSheetList])
+            self.recommendSheetPanel.getSheetsignal.connect(lambda index: self.ShowNewSheet(self.recommendSheetList[index][0]))
+            self.right_layout.addWidget(self.recommendSheetPanel)
         elif index == 2:
             self.search_widget = Music_search.Search()
             self.search_widget.search_type.connect(self.update_search_type)
@@ -135,6 +142,20 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         self.playlist.PlaylistMusicListTableView.startplaysignal.connect(
             self.music.add_music_to_lst)  # 传入数组的要求 [歌曲名字，歌手名字，歌曲路径] 要求全为字符串
         self.getPlaylistInfo(self.playlist, self.favorSheetList[index][0])
+        self.right_layout.addWidget(self.playlist)
+
+    def ShowNewSheet(self, SID):
+        """他人歌单显示函数"""
+        # 删除原有布局的控件
+        deleted = self.right_layout.itemAt(0)
+        if deleted:
+            deleted.widget().deleteLater()
+        self.playlist = otherPlaylist_Panel.otherPlayListPanel()
+        self.playlist.PlaylistFavorpushButton.setText("收藏")
+        self.playlist.deleteThisFavorSheetsignal.connect(self.favorThisSheet)
+        self.playlist.PlaylistMusicListTableView.startplaysignal.connect(
+            self.music.add_music_to_lst)  # 传入数组的要求 [歌曲名字，歌手名字，歌曲路径] 要求全为字符串
+        self.getPlaylistInfo(self.playlist, SID)
         self.right_layout.addWidget(self.playlist)
 
     # ************切换界面模块*******************end
@@ -177,6 +198,14 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         QtWidgets.QMessageBox.about(self, '成功', '删除成功')
         self.createSheetList = self.db.getUserAllCreateSheet(uid_int)
         self.sidebar.iniCreateSheet(self.createSheetList)
+
+    def favorThisSheet(self, SID):
+        """收藏此歌单"""
+        if self.db.favorThisSheet(uid_int, SID):
+            QtWidgets.QMessageBox.about(self, "成功", "收藏成功")
+            self.favorSheetList = self.db.getUserAllFavorSheet(uid_int)
+            self.sidebar.iniFavorSheet(self.favorSheetList)
+
 
     def unfavorThisSheet(self, SID):
         """取消收藏改歌单
