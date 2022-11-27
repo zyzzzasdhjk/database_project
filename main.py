@@ -2,7 +2,7 @@ from PyQt5 import QtWidgets
 import sys
 from sql import sql
 from app import MusicPlayer, Sidebar, playlist_widget, PlayList_Panel, Title_block_widget, user_info_widget, \
-    Music_search, MyPlaylist, otherPlaylist_Panel
+    Music_search, MyPlaylist, otherPlaylist_Panel, music_recommendation, addMenu
 from gui import main_ui  # 导入ui文件
 from login_and_register.login_register_Panel import LoginRegisterPanel
 
@@ -53,7 +53,7 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         self.sidebar = Sidebar.Sidebar_widget()
         self.title_block = Title_block_widget.title_widget()
         self.user_info = user_info_widget.User_info()
-
+        self.addM = addMenu.add_menu()
         self.ini_window()
 
     def ini_window(self):
@@ -62,8 +62,9 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         self.title_block.update_label_combox(self.db.get_all_user_label())
         self.top_layout.addWidget(self.title_block)  # 添加顶部栏到主页面
         # 加载音乐播放界面
+        self.music.playlist_button.clicked.connect(lambda: self.change_widget_by_signal(3))
+        self.music.favor_button.clicked.connect(lambda :self.startAddMenu(self.db.getMidByMname(self.music.music_lst[self.music.music_num][0])))
         self.bottom_layout.addWidget(self.music)
-
         # 加载侧边栏
         self.sidebar.iniCreateSheet(self.createSheetList)
         self.sidebar.iniFavorSheet(self.favorSheetList)
@@ -97,6 +98,13 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
             self.user_info = user_info_widget.User_info()
             self.right_layout.addWidget(self.user_info)
             self.user_info.user_info_change.connect(self.update_user_info_db)
+        elif index == 0:
+            self.music_r = music_recommendation.Music_r()
+            self.music_r.update_tableView_music(self.db.getMusicR())
+            self.right_layout.addWidget(self.music_r)
+            self.music_r.table.startNextPlaySignal.connect(self.music.insert_music_to_lst)
+            self.music_r.table.addMenuSignal.connect(self.startAddMenu)
+
         elif index == 2:
             self.search_widget = Music_search.Search()
             self.search_widget.search_type.connect(self.update_search_type)
@@ -109,6 +117,12 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
             self.right_layout.addWidget(self.my_playlist)
             self.my_playlist.tabel.startplaysignal.connect(self.music.add_music_to_lst)
             self.my_playlist.tabel.deleteThisMusicsignal.connect(self.music.delete_music)
+
+    def startAddMenu(self, n):
+        self.addM.update_tableView_music(self.db.getUserAllCreateSheet(uid_int))
+        self.addM.show()
+        self.addM.getMid(n)
+        self.addM.table.addMenuSignal.connect(self.db.insert_music_to_FavorSheet)
 
     def showCreateSheet(self, index):
         # 删除原有布局的控件

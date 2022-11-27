@@ -149,6 +149,25 @@ class DataBase:
         resultlst = self.query_strip()
         return resultlst
 
+    def insert_music_to_FavorSheet(self, mid, sid):
+        try:
+            sql = f'insert into SID_MID values({sid},{mid})'
+            print(sql)
+            self.cursor.execute(sql)
+            self.conn.commit()
+        except pymssql._pymssql.IntegrityError:
+            return
+
+    def getMidByMname(self, x):
+        sql = f"select MID from Music where MName = '{x}'"
+        self.cursor.execute(sql)
+        return self.query_strip()[0][0]
+
+    def getAllSheetByMusic(self, mid):
+        sql = f'select SID from SID_MID where MID = {mid}'
+        self.cursor.execute(sql)
+        return self.query_strip()
+
     def getUserAllFavorSheet(self, UID):
         """用户收藏所有歌单数据
             返回一个二维列表
@@ -158,6 +177,13 @@ class DataBase:
         self.cursor.execute(selectstr)
         resultlst = self.query_strip()
         return resultlst
+
+    def getMusicR(self):
+        """获得音乐收藏排序"""
+        sql = 'select * from V$_getMusicData A left join  (select MID,count(*) n from SID_MID group by MID) as B on ' \
+              'A.MID = B.MID order by n desc '
+        self.cursor.execute(sql)
+        return [i[:-2] for i in self.query_strip()]
 
     def createSheet(self, UID):
         """新建一个歌单
@@ -233,6 +259,7 @@ class DataBase:
         self.cursor.execute(deletestr)
         self.conn.commit()
 
+
 if __name__ == "__main__":
     D = DataBase("127.0.0.1", "sa", "5151", "MMS")
     print(D.login("14589845", "SDJF1234"))
@@ -245,3 +272,4 @@ if __name__ == "__main__":
     print(D.getUserAllCreateSheet(2))
     # print(D.createSheet(11))
     print(D.updateSheetInfo(1, 'test'))
+    print(D.getMusicR())

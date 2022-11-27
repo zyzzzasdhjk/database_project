@@ -9,13 +9,13 @@ from mutagen.mp3 import MP3
 import json
 
 
-def json_load_file(file_name, code='utf-8'):
+def json_load_file(file_name, code='gb2312'):
     f = open(file_name, 'r', encoding=code)
     return json.load(f)
 
 
 def json_write_file(filename, data):
-    f = open(filename, 'w', encoding='utf-8')
+    f = open(filename, 'w', encoding='gb2312')
     json.dump(data, f, ensure_ascii=False)
 
 
@@ -238,6 +238,13 @@ class Music_player(QtWidgets.QWidget, music_ui.Ui_Form):  # 修改main_ui.Ui_Mai
         self.music_lst_s.emit(self.music_lst)
         print(self.music_lst)
 
+    def insert_music_to_lst(self, lst):
+        if lst in self.music_lst:
+            self.delete_music(self.music_lst.index(lst))
+            self.music_lst.insert(self.music_num + 1, lst)
+        else:
+            self.music_lst.insert(self.music_num + 1, lst)
+
     def load_previous_music(self):
         global time_change
         self.music_num -= 1
@@ -255,7 +262,11 @@ class Music_player(QtWidgets.QWidget, music_ui.Ui_Form):  # 修改main_ui.Ui_Mai
             self.load_music_by_num(self.music_num)
             self.music_lst.pop(num)
         else:
-            self.music_lst.pop(num)
+            if self.music_num > num:
+                self.music_lst.pop(num)
+                self.music_num -= 1
+            else:
+                self.music_lst.pop(num)
 
     def load_music_by_num(self, num):
         global time_change
