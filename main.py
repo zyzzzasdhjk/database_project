@@ -205,6 +205,8 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
             QtWidgets.QMessageBox.about(self, "成功", "收藏成功")
             self.favorSheetList = self.db.getUserAllFavorSheet(uid_int)
             self.sidebar.iniFavorSheet(self.favorSheetList)
+        else:
+            QtWidgets.QMessageBox.about(self, "失败", "已经收藏过了")
 
 
     def unfavorThisSheet(self, SID):

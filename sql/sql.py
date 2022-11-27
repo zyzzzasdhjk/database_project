@@ -261,10 +261,13 @@ class DataBase:
     def favorThisSheet(self, UID, SID):
         """收藏歌单
             成功返回True"""
-        insertsql = f"insert into UID_SID_Favor values({UID}, {SID})"
-        self.cursor.execute(insertsql)
-        self.conn.commit()
-        return True
+        try:
+            insertsql = f"insert into UID_SID_Favor values({UID}, {SID})"
+            self.cursor.execute(insertsql)
+            self.conn.commit()
+            return True
+        except Exception:
+            return False
 
 
 if __name__ == "__main__":
