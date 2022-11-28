@@ -31,35 +31,27 @@ class MyButtonDelegate(QItemDelegate):
     def paint(self, painter, option, index):
         if not self.parent().indexWidget(index):
             button_read = QPushButton(
-                self.tr('播放'),
+                self.tr('*'),
                 self.parent(),
                 clicked=self.parent().startPlay
             )
             button_next = QPushButton(
-                self.tr('下一首播放'),
+                self.tr('+'),
                 self.parent(),
-                clicked=self.parent().favorThisMusic
-            )
-            button_write = QPushButton(
-                self.tr('收藏'),
-                self.parent(),
-                clicked=self.parent().favorThisMusic
+                clicked=self.parent().startNextPlay
             )
             button_add = QPushButton(
-                self.tr('添加到歌单'),
+                self.tr('add'),
                 self.parent(),
-                clicked=self.parent().favorThisMusic
+                clicked=self.parent().addMenu
             )
             button_read.index = index.row()
-            button_write.index = index.row()
             button_add.index = index.row()
             button_next.index = index.row()
             h_box_layout = QHBoxLayout()
             h_box_layout.addWidget(button_read)
             h_box_layout.addWidget(button_next)
-            h_box_layout.addWidget(button_write)
             h_box_layout.addWidget(button_add)
-
             h_box_layout.setContentsMargins(0, 0, 0, 0)
             h_box_layout.setAlignment(Qt.AlignCenter)
             widget = QWidget()
@@ -87,14 +79,16 @@ class CLabel(QtWidgets.QLabel):
 
 class MyTableView(QTableView):
     """创建音乐表视图"""
+    addMenuSignal = pyqtSignal(int)
     startplaysignal = pyqtSignal(list)
-    favorThisMusicsignal = pyqtSignal(int)
+    startNextPlaySignal = pyqtSignal(list)
 
     def __init__(self, parent=None, lst=None):
         super(MyTableView, self).__init__(parent)
         self.setStyleSheet('font: 10pt "微软雅黑";')
+        self.lst = lst
+        self.music_lst = [[i[1],i[2],i[-1]] for i in lst]
         # 路径列表
-        self.music_path_lst = []
         self.setPlaylistTableView(lst)
         # 设置按钮代理
         self.setItemDelegateForColumn(5, MyButtonDelegate(self))
@@ -109,11 +103,10 @@ class MyTableView(QTableView):
         self.model.setHorizontalHeaderLabels(self.Headers)
         rowNum = len(lst)
         for row in range(rowNum):
-            self.music_path_lst.append([lst[row][1], lst[row][2], lst[row][5]])
-            for column in range(1, 5):
-                item = QStandardItem(f'{lst[row][column]}')
-                self.model.setItem(row, column - 1, item)
-            self.model.setItem(row,4,QStandardItem(time_format(get_music_time(lst[row][-1]))))
+            for column in range(5):
+                item = QStandardItem(f'{lst[row][column+1]}')
+                self.model.setItem(row, column, item)
+            self.model.setItem(row, 4, QStandardItem(time_format(get_music_time(lst[row][-1]))))
 
     def setPlaylistTableView(self, lst):
         self.getData(lst)
@@ -126,16 +119,14 @@ class MyTableView(QTableView):
     def startPlay(self):
         """播放按钮的信号
             发出：歌曲路径"""
-        print(self.sender().index)
-        # self.startplaysignal.emit(self.music_path_lst[self.sender().index])
+        self.startplaysignal.emit(self.music_lst[self.sender().index])
 
-    def favorThisMusic(self):
-        """收藏按钮的信号
-            发出：MID"""
-        index = self.model.index(self.sender().index, 0)
-        data = int(self.model.data(index))
-        print(data)
-        self.favorThisMusicsignal.emit(data)
+    def startNextPlay(self):
+        self.startNextPlaySignal.emit(self.music_lst[self.sender().index])
+
+    def addMenu(self):
+        print(self.lst[self.sender().index][0])
+        self.addMenuSignal.emit(self.lst[self.sender().index][0])
 
 
 class Search(QtWidgets.QWidget, music_search.Ui_Form):  # 修改main_ui.Ui_MainWindow

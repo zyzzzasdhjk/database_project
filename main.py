@@ -1,5 +1,11 @@
+import time
+from threading import Thread
+
 from PyQt5 import QtWidgets
 import sys
+
+from PyQt5.QtCore import QThread, pyqtSignal
+
 from sql import sql
 from app import MusicPlayer, Sidebar, playlist_widget, PlayList_Panel, Title_block_widget, user_info_widget, \
     Music_search, MyPlaylist, otherPlaylist_Panel, music_recommendation, addMenu, RecommendSheet
@@ -10,6 +16,20 @@ global MainProgress
 
 global uid_int  # 得到的uid，待完善
 uid_int = 1
+
+
+class WorkThread(QThread):
+    # 自定义信号对象。参数str就代表这个信号可以传一个字符串
+    def __int__(self,parent):
+        # 初始化函数
+        super(WorkThread, self).__init__()
+        self.parent = parent
+
+    def run(self):
+        self.parent().my_playlist.update_tableView_music(self.parent().music.music_lst)
+        self.parent().right_layout.addWidget(self.parent().my_playlist)
+        self.parent().my_playlist.tabel.startplaysignal.connect(self.parent().music.add_music_to_lst)
+        self.parent().my_playlist.tabel.deleteThisMusicsignal.connect(self.parent().music.delete_music)
 
 
 def loginControl(UID):  # 登录函数
@@ -41,6 +61,7 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         self.setupUi(self)
         self.search_str = ''  # 搜索内容
         self.search_type = ''  # 搜索类别
+        self.MyPlaylistThread = WorkThread(self)
         # 初始化数据库连接
         self.db = sql.DataBase("127.0.0.1", "sa", "5151", "MMS")
 
@@ -106,7 +127,6 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
             self.right_layout.addWidget(self.music_r)
             self.music_r.table.startNextPlaySignal.connect(self.music.insert_music_to_lst)
             self.music_r.table.addMenuSignal.connect(self.startAddMenu)
-
         elif index == 1:
             # 推荐歌单界面
             self.recommendSheetPanel = RecommendSheet.RecommendSheet()
@@ -250,6 +270,8 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         data = self.db.getSearchMusic(s)
         self.change_widget_by_signal(2)
         self.search_widget.update_tableView_music(data)
+        self.search_widget.tabel.startNextPlaySignal.connect(self.music.insert_music_to_lst)
+        self.search_widget.tabel.addMenuSignal.connect(self.startAddMenu)
 
     def update_search_type(self, s):
         self.search_type = s

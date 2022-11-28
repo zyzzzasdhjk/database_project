@@ -1,4 +1,7 @@
+import time
+
 from PyQt5.QtCore import pyqtSignal, Qt
+from PyQt5.QtCore import QThread
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
 from PyQt5.QtWidgets import QLabel, QItemDelegate, QPushButton, QHBoxLayout, QWidget, QAbstractItemView, QHeaderView, \
     QTableView
@@ -53,6 +56,7 @@ class MyButtonDelegate(QItemDelegate):
                 index,
                 widget
             )
+        print(1)
 
 
 class CLabel(QtWidgets.QLabel):
