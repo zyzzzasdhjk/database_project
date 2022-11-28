@@ -131,7 +131,7 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         self.addM.update_tableView_music(self.db.getUserAllCreateSheet(uid_int))
         self.addM.show()
         self.addM.getMid(n)
-        self.addM.table.addMenuSignal.connect(self.db.insert_music_to_FavorSheet)
+        self.addM.table.addMenuSignal.connect(self.favorMusic)
 
     def showCreateSheet(self, index):
         # 删除原有布局的控件
@@ -144,6 +144,7 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         self.playlist.deleteThisSheetsignal.connect(self.deleteSheet)
         self.playlist.PlaylistMusicListTableView.startplaysignal.connect(
             self.music.add_music_to_lst)  # 传入数组的要求 [歌曲名字，歌手名字，歌曲路径] 要求全为字符串
+        self.playlist.PlaylistMusicListTableView.deleteThisMusicsignal.connect(self.deleteMusic)
         self.getPlaylistInfo(self.playlist, self.createSheetList[index][0])
         self.right_layout.addWidget(self.playlist)
 
@@ -234,6 +235,24 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         QtWidgets.QMessageBox.about(self, '成功', '取消收藏成功')
         self.favorSheetList = self.db.getUserAllFavorSheet(uid_int)
         self.sidebar.iniFavorSheet(self.favorSheetList)
+
+    def favorMusic(self, MID, SID):
+        """收藏歌曲"""
+        if self.db.insert_music_to_FavorSheet(MID, SID):
+            QtWidgets.QMessageBox.about(self, "成功", "收藏成功")
+        else:
+            QtWidgets.QMessageBox.about(self, "失败", "收藏失败，歌单中已存在该音乐")
+
+    def deleteMusic(self, MID):
+        """删除歌曲"""
+        SID = self.playlist.ID
+        if self.db.deleteMusic(SID, MID):
+            QtWidgets.QMessageBox.about(self, "成功", "删除成功")
+            SIDlst = [item[0] for item in self.createSheetList]
+            index = SIDlst.index(SID)
+            self.showCreateSheet(index)
+        else:
+            QtWidgets.QMessageBox.about(self, "失败", "删除失败")
 
     def update_user_info(self):  # 传入个人信息以加载
         self.user_info.ini_combox(self.db.get_all_user_label())  # 先初始化combox

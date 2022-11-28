@@ -180,8 +180,9 @@ class DataBase:
             print(sql)
             self.cursor.execute(sql)
             self.conn.commit()
+            return True
         except pymssql._pymssql.IntegrityError:
-            return
+            return False
 
     def getMidByMname(self, x):
         sql = f"select MID from Music where MName = '{x}'"
@@ -228,43 +229,31 @@ class DataBase:
         for sheet in allSheet:
             sheetNameList.append(sheet[1])
         print(sheetNameList)
-
+        print(len(sheetNameList))
         # 判断歌单数量是否超过限制
         if len(sheetNameList) > 9:
             return False
         else:
             # 若小于10 则创建一个新歌单
-            if len(sheetNameList) > 0:
-                for i in range(len(sheetNameList)):
-                    if f"{UName}的歌单{i}" not in sheetNameList:
-                        insertstr = f"insert into Sheet values ('{UName}的歌单{i}','{UName}创建的的歌单{i}',0)"
-                        self.cursor.execute(insertstr)
-                        self.conn.commit()
+            i = 0
+            while True:
+                try:
+                    insertstr = f"insert into Sheet values ('{UName}的歌单{i}','{UName}创建的的歌单{i}',0)"
+                    self.cursor.execute(insertstr)
+                    self.conn.commit()
 
-                        selectstr = f"select SID from Sheet where SName = '{UName}的歌单{i}'"
-                        self.cursor.execute(selectstr)
-                        SID = self.query_strip()[0][0]
-                        # print(SID)
+                    selectstr = f"select SID from Sheet where SName = '{UName}的歌单{i}'"
+                    self.cursor.execute(selectstr)
+                    SID = self.query_strip()[0][0]
+                    print(SID)
 
-                        # 调用存储过程
-                        self.cursor.callproc('Insert_USC', (UID, SID))
-                        self.conn.commit()
-            # 无歌单时创建一个厉害的歌单
-            elif len(sheetNameList) == 0:
-                insertstr = f"insert into Sheet values ('{UName}的主歌单','{UName}的歌单',0)"
-                self.cursor.execute(insertstr)
-                self.conn.commit()
+                    # 调用存储过程
+                    self.cursor.callproc('Insert_USC', (UID, SID))
+                    self.conn.commit()
 
-                selectstr = f"select SID from Sheet where SName = '{UName}的主歌单'"
-                self.cursor.execute(selectstr)
-                SID = self.query_strip()[0][0]
-                # print(SID)
-
-                # 调用存储过程
-                self.cursor.callproc('Insert_USC', (UID, SID))
-                self.conn.commit()
-
-            return True
+                    return True
+                except Exception:
+                    i = i + 1
 
     def updateSheetInfo(self, SID, SIntro):
         """更新歌单数据"""
@@ -320,6 +309,16 @@ class DataBase:
         except Exception:
             return False
 
+    def deleteMusic(self, SID, MID):
+        """删除音乐
+            成功返回True"""
+        deletestr = f"delete SID_MID where SID = {SID} and MID = {MID}"
+        try:
+            self.cursor.execute(deletestr)
+            self.conn.commit()
+            return True
+        except Exception:
+            return False
 
 if __name__ == "__main__":
     D = DataBase("127.0.0.1", "sa", "5151", "MMS")
@@ -342,6 +341,6 @@ if __name__ == "__main__":
     # print(D.getSearchUser("红茶honer"))
     # print(D.getSearchMusic("月亮"))
     # print(D.getUserAllCreateSheet(2))
-    # # print(D.createSheet(11))
+    print(D.createSheet(11))
     # print(D.updateSheetInfo(1, 'test'))
-    print(D.getUserRecommendSheet(1))
+    # print(D.getUserRecommendSheet(1))

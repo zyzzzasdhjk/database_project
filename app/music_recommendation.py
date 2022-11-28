@@ -41,7 +41,7 @@ class MyButtonDelegate(QItemDelegate):
                 clicked=self.parent().startNextPlay
             )
             button_add = QPushButton(
-                self.tr('add'),
+                self.tr('收藏'),
                 self.parent(),
                 clicked=self.parent().addMenu
             )
