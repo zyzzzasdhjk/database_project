@@ -259,8 +259,12 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         self.user_info.ini_user_info(self.db.get_user_info(uid_int))  # 传入列表以加载
 
     def update_user_info_db(self, lst):
-        self.db.update_user_info(lst)
+        if self.db.update_user_info(lst):
+            QtWidgets.QMessageBox.about(self, '成功修改', '修改个人资料成功')
+        else:
+            QtWidgets.QMessageBox.about(self, '失败修改', '修改个人资料失败')
         self.user_info.ini_user_info(self.db.get_user_info(lst[0][0]))
+        self.recommendSheetList = self.db.getUserRecommendSheet(uid_int)
 
     def closeEvent(self, event):
         self.music.save_json()

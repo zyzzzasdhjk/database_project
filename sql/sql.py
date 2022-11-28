@@ -112,19 +112,27 @@ class DataBase:
         return SIDLst
 
     def update_user_info(self, lst):
-        l1 = lst[0]
-        l2 = lst[1]
-        l = [f'''update Account_Password set Account = '{l1[1]}' where UID={l1[0]}''',
-             f'''update Account_Password set Password = '{l1[2]}' where UID={l1[0]}''',
-             f'''update UserInfo set UName = '{l2[1]}' where UID={l2[0]}''',
-             f'''update UserInfo set USex = {l2[2]} where UID={l2[0]}''',
-             f'''update UserInfo set Ulntro = '{l2[3]}' where UID={l2[0]}''',
-             f'''update UserInfo set UBirthday = '{l2[4]}' where UID={l2[0]}''',
-             f'''update UserInfo set UIsVip = '{l2[5]}' where UID={l2[0]}''',
-             f'''update UserInfo set LID = {l2[6]} where UID={l2[0]}''']
-        for i in l:
-            self.cursor.execute(i)
-        self.conn.commit()
+        try:
+            l1 = lst[0]
+            l2 = lst[1]
+            if l2[2] == '男':
+                l2[2] = 1
+            else:
+                l2[2] = 2
+            l = [f'''update Account_Password set Account = '{l1[1]}' where UID={l1[0]}''',
+                 f'''update Account_Password set Password = '{l1[2]}' where UID={l1[0]}''',
+                 f'''update UserInfo set UName = '{l2[1]}' where UID={l2[0]}''',
+                 f'''update UserInfo set USex = {l2[2]} where UID={l2[0]}''',
+                 f'''update UserInfo set UIntro = '{l2[3]}' where UID={l2[0]}''',
+                 f'''update UserInfo set UBirthday = '{l2[4]}' where UID={l2[0]}''',
+                 f'''update UserInfo set UIsVip = '{l2[5]}' where UID={l2[0]}''',
+                 f'''update UserInfo set LID = {l2[6]} where UID={l2[0]}''']
+            for i in l:
+                self.cursor.execute(i)
+            self.conn.commit()
+            return True
+        except Exception:
+            return False
 
     def get_user_info(self, uid):
         """根据uid查询
@@ -319,6 +327,7 @@ class DataBase:
             return True
         except Exception:
             return False
+
 
 if __name__ == "__main__":
     D = DataBase("127.0.0.1", "sa", "5151", "MMS")
