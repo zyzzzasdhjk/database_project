@@ -259,6 +259,42 @@ class DataBase:
         self.cursor.execute(deletestr)
         self.conn.commit()
 
+    def getUserRecommendSheet(self, UID):
+        """根据用户标签获取最多六个推荐歌单
+            返回二维列表
+            [[SID, SName]]"""
+        # 获取用户标签
+        sql = f'select LText from V$_getUserInformation where UID={UID}'
+        self.cursor.execute(sql)
+        LText = self.query_strip()[0][0]
+
+        # 根据用户标签获取推荐歌单SID（推荐算法待商榷）
+        sql = f"select top 6 SID from V$_getSheetMusicLabel where LText = '{LText}' group by SID order by count(*)"
+        self.cursor.execute(sql)
+        SIDLst = self.query_strip()
+        print(SIDLst)
+
+        # 根据SID搞到SName
+        for i in range(len(SIDLst)):
+            SID = SIDLst[i][0]
+            sql = f"select SName from Sheet where SID = {SID}"
+            self.cursor.execute(sql)
+            SName = self.query_strip()[0][0]
+            SIDLst[i].append(SName)
+
+        return SIDLst
+
+    def favorThisSheet(self, UID, SID):
+        """收藏歌单
+            成功返回True"""
+        try:
+            insertsql = f"insert into UID_SID_Favor values({UID}, {SID})"
+            self.cursor.execute(insertsql)
+            self.conn.commit()
+            return True
+        except Exception:
+            return False
+
 
 if __name__ == "__main__":
     D = DataBase("127.0.0.1", "sa", "5151", "MMS")

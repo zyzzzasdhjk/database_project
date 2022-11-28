@@ -64,7 +64,8 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         self.top_layout.addWidget(self.title_block)  # 添加顶部栏到主页面
         # 加载音乐播放界面
         self.music.playlist_button.clicked.connect(lambda: self.change_widget_by_signal(3))
-        self.music.favor_button.clicked.connect(lambda :self.startAddMenu(self.db.getMidByMname(self.music.music_lst[self.music.music_num][0])))
+        self.music.favor_button.clicked.connect(
+            lambda: self.startAddMenu(self.db.getMidByMname(self.music.music_lst[self.music.music_num][0])))
         self.bottom_layout.addWidget(self.music)
         # 加载侧边栏
         self.sidebar.iniCreateSheet(self.createSheetList)
@@ -110,7 +111,8 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
             # 推荐歌单界面
             self.recommendSheetPanel = RecommendSheet.RecommendSheet()
             self.recommendSheetPanel.loadSheet([item[1] for item in self.recommendSheetList])
-            self.recommendSheetPanel.getSheetsignal.connect(lambda index: self.ShowNewSheet(self.recommendSheetList[index][0]))
+            self.recommendSheetPanel.getSheetsignal.connect(
+                lambda index: self.ShowNewSheet(self.recommendSheetList[index][0]))
             self.right_layout.addWidget(self.recommendSheetPanel)
         elif index == 2:
             self.search_widget = Music_search.Search()
@@ -221,7 +223,6 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
             self.sidebar.iniFavorSheet(self.favorSheetList)
         else:
             QtWidgets.QMessageBox.about(self, "失败", "已经收藏过了")
-
 
     def unfavorThisSheet(self, SID):
         """取消收藏改歌单
