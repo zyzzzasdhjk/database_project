@@ -8,7 +8,7 @@ VALUES('14589845','SDJF1234'),
 ('97589845','098QWER'),
 ('91854645','Q9Q9WE7'),
 ('47589845','FD5FFDSF'),
-('55589845','V1V44V4')
+('55589845','V1V44V4'),
 ('1','1')
 
 INSERT INTO LABEL
@@ -30,7 +30,7 @@ VALUES(1,'红茶honer','1','这个人很懒，什么也没留下。','2000-09-09
 (7,'whoooooaa','1','凌郡请与我交往','1974-05-24','0',5),
 (8,'十三的三十三','1','想吃火锅','2007-06-07','1',7),
 (9,'一个兔叽','2','走夜路请放声歌唱。','2002-03-23','1',4),
-(10,'我真的不熬夜了','1','这个人很神秘，什么也没留下。','2000-09-30','1',6)
+(10,'我真的不熬夜了','1','这个人很神秘，什么也没留下。','2000-09-30','1',6),
 (11,'用户已注销','1','该用户已注销','2022-11-24','1',1)
 
 INSERT INTO MUSIC
@@ -185,16 +185,7 @@ VALUES
 (9,9),
 (10,10)
 
-update Music set MDir = 'music/月亮代表我的心-邓丽君 .mp3' where MID=2
-update Music set MDir = 'music/倔强.mp3' where MName = '倔强'
-update Music set MDir = 'music/如果当时.mp3' where MName = '如果当时'
-update Music set MDir = 'music/安静的美好.mp3' where MName = '安静的美好'
-update Music set MDir = 'music/曲率飞行.mp3' where MName = '曲率飞行'
-update Music set MDir = 'music/玫瑰往事.mp3' where MName = '玫瑰往事'
-update Music set MDir = 'music/白兰鸽巡游记.mp3' where MName = '白兰鸽巡游记'
-update Music set MDir = 'music/路过人间.mp3' where MName = '路过人间'
-update Music set MDir = 'music/逝去的歌.mp3' where MName = '逝去的歌'
-update Music set MDir = 'music/郊眠寺.mp3' where MName = '郊眠寺'
+update Music set MDir = 'music/月亮代表我的心-邓丽君 .mp3' where MName = '月亮代表我的心'
 update Music set MDir = 'music/倔强.mp3' where MName = '倔强'
 update Music set MDir = 'music/如果当时.mp3' where MName = '如果当时'
 update Music set MDir = 'music/安静的美好.mp3' where MName = '安静的美好'
