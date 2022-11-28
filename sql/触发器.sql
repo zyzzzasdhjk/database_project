@@ -118,7 +118,7 @@ as
 	select @Identity = ORIGINAL_LOGIN()
 	select @SID = SID from inserted
 
-	IF((10 >= all(select count(UID) from V$_getUserAllCreateSheet group by UID)) or @Identity = 'MVip')
+	IF((10 <= all(select count(UID) from V$_getUserAllCreateSheet group by UID)) and @Identity = 'MUser')
 	BEGIN
 		delete Sheet where SID = @SID
 	END
