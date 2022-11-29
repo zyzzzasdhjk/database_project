@@ -111,7 +111,6 @@ class DataBase:
 
         return SIDLst
 
-
     def update_user_info(self, lst):
         try:
             l1 = lst[0]
@@ -145,6 +144,17 @@ class DataBase:
         l = self.query_strip()
         return l
 
+    def get_user_info2(self, UID):
+        """根据uid查询
+            返回的是一个列表
+            [UID, UName, USex, UIntro, UBirthday, UIsVip, LText]"""
+
+        sql = f'select UID,UName,USex,UIntro,UBirthday,UIsVip,LText from V$_getUserInformation where UID={UID}'  # V$_getUserInformation
+        self.cursor.execute(sql)
+        # data = self.cursor.fetchall()
+        l = self.query_strip()[0]
+        return l
+
     def change_user_info(self, uid, lst):
         sql = f"delete from UserInfo where uid = {uid}"
 
@@ -163,7 +173,6 @@ class DataBase:
                 lst[2] == '女'
         return selectresult
 
-
     def getSearchMusic(self, searchstr):
         """搜索音乐
             返回模糊匹配的二维列表
@@ -174,14 +183,14 @@ class DataBase:
         selectresult = self.query_strip()
         return selectresult
 
-    def getSearchMusician(self,name):
+    def getSearchMusician(self, name):
         sqlstr = f"select MID,MName,MMName,MDate,AName,MDir from V$_getMusicData where MMName like '%{name}%'"
         self.cursor.execute(sqlstr)
         selectresult = self.query_strip()
         print(selectresult)
         return selectresult
 
-    def getSearchPerson(self,n):
+    def getSearchPerson(self, n):
         if n.isdigit():
             sqlstr = f"select UID, UName, UIntro from UserInfo where UName like '%{n}%' or UID = {n}"
         else:
@@ -382,20 +391,38 @@ class DataBase:
         except:
             return False
 
+    def getOtherUserSheetInfo(self, UID):
+        """获取二维列表
+            [[SID,SName,MusicNum]]"""
+
+        selectstr1 = f"select SID, SName from V$_getUserAllCreateSheet where UID = {UID}"
+        self.cursor.execute(selectstr1)
+        templst = self.query_strip()
+
+        selectstr2 = f"select SID, MusicNum from V$_getSheetMusicNum"
+        self.cursor.execute(selectstr2)
+        templst2 = self.query_strip()
+
+        for Sheet in templst:
+            for Sheet2 in templst2:
+                if Sheet[0] == Sheet2[0]:
+                    Sheet.append(Sheet2[1])
+
+        return templst
 
 if __name__ == "__main__":
     D = DataBase("127.0.0.1", "sa", "5151", "MMS")
     print(D.login("14589845", "SDJF1234"))
     print(D.get_user_info(1))
-    print(D.get_all_user_label())
-    print(D.getPlaylistSheetData(1))
-    print(D.getPlaylistMusicData(1))
-    print(D.getSearchUser("红茶honer"))
-    print(D.getSearchMusic("月亮"))
-    print(D.getUserAllCreateSheet(2))
+    # print(D.get_all_user_label())
+    # print(D.getPlaylistSheetData(1))
+    # print(D.getPlaylistMusicData(1))
+    # print(D.getSearchUser("红茶honer"))
+    # print(D.getSearchMusic("月亮"))
+    # print(D.getUserAllCreateSheet(2))
     # print(D.createSheet(11))
-    print(D.updateSheetInfo(1, 'test'))
-    print(D.getMusicR())
+    # print(D.updateSheetInfo(1, 'test'))
+    # print(D.getMusicR())
     # print(D.login("14589845", "SDJF1234"))
     # print(D.get_user_info(1))
     # print(D.get_all_user_label())
@@ -404,9 +431,10 @@ if __name__ == "__main__":
     # print(D.getSearchUser("红茶honer"))
     # print(D.getSearchMusic("月亮"))
     # print(D.getUserAllCreateSheet(2))
-    print(D.createSheet(11))
+    # print(D.createSheet(11))
     # print(D.updateSheetInfo(1, 'test'))
     # print(D.getUserRecommendSheet(1))
-    print(D.getMusicName(1))
-    print(D.getMusicComment(1))
-    print(D.commitComment(1,1,'111'))
+    # print(D.getMusicName(1))
+    # print(D.getMusicComment(1))
+    # print(D.commitComment(1,1,'111'))
+    print(D.getOtherUserSheetInfo(1))

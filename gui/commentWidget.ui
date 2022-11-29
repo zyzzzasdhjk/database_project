@@ -35,6 +35,9 @@
      </item>
      <item>
       <widget class="QPlainTextEdit" name="commentTextLabel">
+       <property name="styleSheet">
+        <string notr="true">font: 12pt &quot;微软雅黑&quot;;</string>
+       </property>
        <property name="readOnly">
         <bool>true</bool>
        </property>

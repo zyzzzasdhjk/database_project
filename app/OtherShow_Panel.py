@@ -90,9 +90,13 @@ class OtherShowPanel(QWidget, Ui_OtherShow):
             [UID, UName, USex, UIntro, UBirthday, UIsVip, LText]"""
         self.ID = lst[0]
         self.OtherShowUNameLabel.setText(lst[1])
-        self.OtherShowUSexLabel.setText(lst[2])
+        if lst[2] == '1':
+            self.OtherShowUSexLabel.setText("男")
+        else:
+            self.OtherShowUSexLabel.setText("女")
         self.OtherShowUIntroLabel.setPlainText(lst[3])
-        self.OtherShowUBirthdayLabel.setText(lst[4])
+        Birthday = str(lst[4].year) + '-' + str(lst[4].month) + '-' + str(lst[4].day)
+        self.OtherShowUBirthdayLabel.setText(Birthday)
         if lst[5] == '1':
             self.OtherShowUIsVIPLabel.setText(lst[5])
         self.OtherShowULabelLabel.setText(lst[6])

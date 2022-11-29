@@ -29,6 +29,7 @@ class Ui_CommentWidget(object):
         self.commentUserLabel.setObjectName("commentUserLabel")
         self.verticalLayout.addWidget(self.commentUserLabel)
         self.commentTextLabel = QtWidgets.QPlainTextEdit(CommentWidget)
+        self.commentTextLabel.setStyleSheet("font: 12pt \"微软雅黑\";")
         self.commentTextLabel.setReadOnly(True)
         self.commentTextLabel.setObjectName("commentTextLabel")
         self.verticalLayout.addWidget(self.commentTextLabel)

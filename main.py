@@ -3,7 +3,8 @@ import sys
 from PyQt5.QtCore import QThread, pyqtSignal
 from sql import sql
 from app import MusicPlayer, Sidebar, playlist_widget, PlayList_Panel, Title_block_widget, user_info_widget, \
-    Music_search, MyPlaylist, otherPlaylist_Panel, music_recommendation, addMenu, RecommendSheet, commentShow
+    Music_search, MyPlaylist, otherPlaylist_Panel, music_recommendation, addMenu, RecommendSheet, commentShow, \
+    OtherShow_Panel
 from gui import main_ui  # 导入ui文件
 from login_and_register.login_register_Panel import LoginRegisterPanel
 
@@ -219,6 +220,26 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         self.Comment.loadMusicInfo(MName)
         self.right_layout.addWidget(self.Comment)
 
+    def userW(self, UID):
+        """传入uid，打开用户界面"""
+        print(UID)
+
+        deleted = self.right_layout.itemAt(0)
+        if deleted:
+            deleted.widget().deleteLater()
+
+        userinfo = self.db.get_user_info2(UID)
+        sheetinfo = self.db.getOtherUserSheetInfo(UID)
+
+        self.otherUserWidget =  OtherShow_Panel.OtherShowPanel()
+        self.otherUserWidget.loadOtherInfo(userinfo)
+        self.otherUserWidget.loadOtherShowTableViewModel(sheetinfo)
+
+        self.otherUserWidget.OtherShowTableView.enterSheetsignal.connect(self.ShowNewSheet)
+        self.right_layout.addWidget(self.otherUserWidget)
+
+
+
     # ************切换界面模块*******************end
 
     # ************连接数据模块*******************start
@@ -329,10 +350,6 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         else:
             self.search_widget.update_tableView_person(data)
             self.search_widget.tabel.visitOther.connect(self.userW)
-
-    def userW(self,uid):
-        """传入uid，打开用户界面"""
-        print(uid)
 
     def update_search_type(self, s):
         self.search_type = s
