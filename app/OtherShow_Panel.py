@@ -98,7 +98,9 @@ class OtherShowPanel(QWidget, Ui_OtherShow):
         Birthday = str(lst[4].year) + '-' + str(lst[4].month) + '-' + str(lst[4].day)
         self.OtherShowUBirthdayLabel.setText(Birthday)
         if lst[5] == '1':
-            self.OtherShowUIsVIPLabel.setText(lst[5])
+            self.OtherShowUIsVIPLabel.setText("尊贵的会员")
+        else:
+            self.OtherShowUIsVIPLabel.setText("普通的用户")
         self.OtherShowULabelLabel.setText(lst[6])
 
     def setOtherShowTableView(self, lst):
