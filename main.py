@@ -8,7 +8,7 @@ from PyQt5.QtCore import QThread, pyqtSignal
 
 from sql import sql
 from app import MusicPlayer, Sidebar, playlist_widget, PlayList_Panel, Title_block_widget, user_info_widget, \
-    Music_search, MyPlaylist, otherPlaylist_Panel, music_recommendation, addMenu, RecommendSheet
+    Music_search, MyPlaylist, otherPlaylist_Panel, music_recommendation, addMenu, RecommendSheet, commentShow
 from gui import main_ui  # 导入ui文件
 from login_and_register.login_register_Panel import LoginRegisterPanel
 
@@ -20,7 +20,7 @@ uid_int = 1
 
 class WorkThread(QThread):
     # 自定义信号对象。参数str就代表这个信号可以传一个字符串
-    def __int__(self,parent):
+    def __int__(self, parent):
         # 初始化函数
         super(WorkThread, self).__init__()
         self.parent = parent
@@ -160,11 +160,14 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
             deleted.widget().deleteLater()
         # 歌单
         self.playlist = PlayList_Panel.PlayListPanel()
+
         self.playlist.updateThisSheetsignal.connect(self.updateSheetInfo)
         self.playlist.deleteThisSheetsignal.connect(self.deleteSheet)
         self.playlist.PlaylistMusicListTableView.startplaysignal.connect(
             self.music.add_music_to_lst)  # 传入数组的要求 [歌曲名字，歌手名字，歌曲路径] 要求全为字符串
         self.playlist.PlaylistMusicListTableView.deleteThisMusicsignal.connect(self.deleteMusic)
+        self.playlist.PlaylistMusicListTableView.showCommentsignal.connect(self.ShowComment)
+
         self.getPlaylistInfo(self.playlist, self.createSheetList[index][0])
         self.right_layout.addWidget(self.playlist)
 
@@ -175,11 +178,15 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
             deleted.widget().deleteLater()
         # 歌单
         self.playlist = otherPlaylist_Panel.otherPlayListPanel()
+
         self.playlist.deleteThisFavorSheetsignal.connect(self.unfavorThisSheet)
         self.playlist.PlaylistMusicListTableView.startplaysignal.connect(
             self.music.add_music_to_lst)  # 传入数组的要求 [歌曲名字，歌手名字，歌曲路径] 要求全为字符串
         self.playlist.PlaylistMusicListTableView.addMenuSignal.connect(self.startAddMenu)
+        self.playlist.PlaylistMusicListTableView.showCommentsignal.connect(self.ShowComment)
+
         self.getPlaylistInfo(self.playlist, self.favorSheetList[index][0])
+
         self.right_layout.addWidget(self.playlist)
 
     def ShowNewSheet(self, SID):
@@ -190,12 +197,32 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
             deleted.widget().deleteLater()
         self.playlist = otherPlaylist_Panel.otherPlayListPanel()
         self.playlist.PlaylistFavorpushButton.setText("收藏")
+
         self.playlist.deleteThisFavorSheetsignal.connect(self.favorThisSheet)
         self.playlist.PlaylistMusicListTableView.startplaysignal.connect(
             self.music.add_music_to_lst)  # 传入数组的要求 [歌曲名字，歌手名字，歌曲路径] 要求全为字符串
         self.playlist.PlaylistMusicListTableView.addMenuSignal.connect(self.startAddMenu)
+        self.playlist.PlaylistMusicListTableView.showCommentsignal.connect(self.ShowComment)
+
         self.getPlaylistInfo(self.playlist, SID)
+
         self.right_layout.addWidget(self.playlist)
+
+    def ShowComment(self, MID):
+        """展示评论的槽函数
+            接收MID，刷新展示评论界面"""
+        MName = self.db.getMusicName(MID)
+        MCommentlst = self.db.getMusicComment(MID)
+
+        deleted = self.right_layout.itemAt(0)
+        if deleted:
+            deleted.widget().deleteLater()
+
+        self.Comment = commentShow.commentShowPanel(MID=MID)
+        self.Comment.commitCommentsignal.connect(self.commitComment)
+        self.Comment.loadComment(MCommentlst)
+        self.Comment.loadMusicInfo(MName)
+        self.right_layout.addWidget(self.Comment)
 
     # ************切换界面模块*******************end
 
@@ -300,6 +327,16 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
 
     def update_search_type(self, s):
         self.search_type = s
+
+    def commitComment(self, MID, CContent):
+        """上传评论，并加载"""
+        if self.db.commitComment(uid_int, MID, CContent):
+            QtWidgets.QMessageBox.about(self, "成功", "上传成功")
+        else:
+            QtWidgets.QMessageBox.about(self, "失败", "上传失败，请重试")
+
+        self.ShowComment(MID)
+
     # ************连接数据模块*******************end
 
 

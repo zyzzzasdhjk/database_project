@@ -20,11 +20,18 @@ class MyButtonDelegate(QItemDelegate):
                 self.parent(),
                 clicked=self.parent().addMenu
             )
+            button_see = QPushButton(
+                self.tr('查看评论'),
+                self.parent(),
+                clicked=self.parent().showComment
+            )
             button_read.index = index.row()
             button_write.index = index.row()
+            button_see.index = index.row()
             h_box_layout = QHBoxLayout()
             h_box_layout.addWidget(button_read)
             h_box_layout.addWidget(button_write)
+            h_box_layout.addWidget(button_see)
             h_box_layout.setContentsMargins(0, 0, 0, 0)
             h_box_layout.setAlignment(Qt.AlignCenter)
             widget = QWidget()
@@ -38,6 +45,7 @@ class MyButtonDelegate(QItemDelegate):
 class MyTableView(QTableView):
     """创建音乐表视图"""
     addMenuSignal = pyqtSignal(int)
+    showCommentsignal = pyqtSignal(int)
     startplaysignal = pyqtSignal(list)
     favorThisMusicsignal = pyqtSignal(int)
 
@@ -93,6 +101,12 @@ class MyTableView(QTableView):
             发出：MID"""
         print(self.lst[self.sender().index][0])
         self.addMenuSignal.emit(self.lst[self.sender().index][0])
+
+    def showComment(self):
+        """查看评论的信号
+            发出 ：MID"""
+        print(self.lst[self.sender().index][0])
+        self.showCommentsignal.emit(self.lst[self.sender().index][0])
 
 
 class otherPlayListPanel(QWidget, Ui_PlayList):

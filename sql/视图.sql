@@ -8,9 +8,10 @@ as
 
 create view V$_getMusicComment
 as
-	select Music.MID,CContent
-	from Music,MID_CID,Comment
+	select Music.MID,CContent,Comment.CID, UserInfo.UID,UserInfo.UName
+	from Music,MID_CID,Comment,UID_CID,UserInfo
 	where Music.MID = MID_CID.MID and Comment.CID = MID_CID.CID
+	and UserInfo.UID = UID_CID.UID and Comment.CID = UID_CID.CID
 
 
 create view V$_getSheetMusicNum

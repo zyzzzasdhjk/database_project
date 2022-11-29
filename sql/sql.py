@@ -328,6 +328,41 @@ class DataBase:
         except Exception:
             return False
 
+    def getMusicName(self, MID):
+        """寻找音乐名称
+            返回音乐名称"""
+        selectstr = f"select MName from Music where MID = {MID}"
+        self.cursor.execute(selectstr)
+        MName = self.query_strip()[0][0]
+        return MName
+
+    def getMusicComment(self, MID):
+        """寻找音乐评论
+            返回二维列表
+            [[UName,CContent]]"""
+
+        selectstr = f"select UName, CContent from V$_getMusicComment where MID = {MID}"
+        self.cursor.execute(selectstr)
+        resultlst = self.query_strip()
+        return resultlst
+
+    def commitComment(self, UID, MID, CContent):
+        try:
+            insertstr = f"insert into Comment values('{CContent}')"
+            self.cursor.execute(insertstr)
+            self.conn.commit()
+
+            selectstr = f"select CID from Comment where CContent = '{CContent}'"
+            self.cursor.execute(selectstr)
+            CID = self.query_strip()[0][0]
+
+            self.cursor.callproc('Insert_UCMC', (UID, CID, MID))
+            self.conn.commit()
+
+            return True
+        except:
+            return False
+
 
 if __name__ == "__main__":
     D = DataBase("127.0.0.1", "sa", "5151", "MMS")
@@ -353,3 +388,6 @@ if __name__ == "__main__":
     print(D.createSheet(11))
     # print(D.updateSheetInfo(1, 'test'))
     # print(D.getUserRecommendSheet(1))
+    print(D.getMusicName(1))
+    print(D.getMusicComment(1))
+    print(D.commitComment(1,1,'111'))
