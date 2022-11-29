@@ -355,10 +355,8 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
             self.search_widget.tabel.visitOther.connect(self.userW)
         else:
             self.search_widget.update_tableView_playlist(data)
-            self.search_widget.tabel.visitOther.connect(self.playlistW)
+            self.search_widget.tabel.visitOther.connect(self.ShowNewSheet)
 
-    def playlistW(self,uid):
-        print(uid)
 
     def update_search_type(self, s):
         self.search_type = s
