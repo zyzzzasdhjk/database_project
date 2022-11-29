@@ -83,6 +83,9 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         self.music.playlist_button.clicked.connect(lambda: self.change_widget_by_signal(3))
         self.music.favor_button.clicked.connect(
             lambda: self.startAddMenu(self.db.getMidByMname(self.music.music_lst[self.music.music_num][0])))
+        self.music.commennt_button.clicked.connect(
+            lambda: self.ShowComment(self.db.getMidByMname(self.music.music_lst[self.music.music_num][0]))
+        )
         self.bottom_layout.addWidget(self.music)
         # 加载侧边栏
         self.sidebar.iniCreateSheet(self.createSheetList)
@@ -97,7 +100,6 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         self.sidebar.favorSheetShowSignal.connect(self.showFavorSheet)
         # 侧边栏创建歌单按钮
         self.sidebar.createSheetSignal.connect(self.createSheet)
-
         self.title_block.openUserEditsiganl.connect(self.update_user_info)  # 刷新个人信息
         self.title_block.widget_change_signal.connect(self.change_widget_by_signal)  # 切换到个人信息界面
         self.title_block.search_str.connect(self.update_search_str)  # 更新搜索内容
@@ -231,14 +233,12 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         userinfo = self.db.get_user_info2(UID)
         sheetinfo = self.db.getOtherUserSheetInfo(UID)
 
-        self.otherUserWidget =  OtherShow_Panel.OtherShowPanel()
+        self.otherUserWidget = OtherShow_Panel.OtherShowPanel()
         self.otherUserWidget.loadOtherInfo(userinfo)
         self.otherUserWidget.loadOtherShowTableViewModel(sheetinfo)
 
         self.otherUserWidget.OtherShowTableView.enterSheetsignal.connect(self.ShowNewSheet)
         self.right_layout.addWidget(self.otherUserWidget)
-
-
 
     # ************切换界面模块*******************end
 
@@ -357,7 +357,7 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
             self.search_widget.update_tableView_playlist(data)
             self.search_widget.tabel.visitOther.connect(self.playlistW)
 
-    def playlistW(self,uid):
+    def playlistW(self, uid):
         print(uid)
 
     def update_search_type(self, s):
