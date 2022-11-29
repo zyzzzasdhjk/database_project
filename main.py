@@ -178,6 +178,7 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         self.playlist.deleteThisFavorSheetsignal.connect(self.unfavorThisSheet)
         self.playlist.PlaylistMusicListTableView.startplaysignal.connect(
             self.music.add_music_to_lst)  # 传入数组的要求 [歌曲名字，歌手名字，歌曲路径] 要求全为字符串
+        self.playlist.PlaylistMusicListTableView.addMenuSignal.connect(self.startAddMenu)
         self.getPlaylistInfo(self.playlist, self.favorSheetList[index][0])
         self.right_layout.addWidget(self.playlist)
 
@@ -192,6 +193,7 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         self.playlist.deleteThisFavorSheetsignal.connect(self.favorThisSheet)
         self.playlist.PlaylistMusicListTableView.startplaysignal.connect(
             self.music.add_music_to_lst)  # 传入数组的要求 [歌曲名字，歌手名字，歌曲路径] 要求全为字符串
+        self.playlist.PlaylistMusicListTableView.addMenuSignal.connect(self.startAddMenu)
         self.getPlaylistInfo(self.playlist, SID)
         self.right_layout.addWidget(self.playlist)
 

@@ -18,7 +18,7 @@ class MyButtonDelegate(QItemDelegate):
             button_write = QPushButton(
                 self.tr('收藏'),
                 self.parent(),
-                clicked=self.parent().favorThisMusic
+                clicked=self.parent().addMenu
             )
             button_read.index = index.row()
             button_write.index = index.row()
@@ -37,6 +37,7 @@ class MyButtonDelegate(QItemDelegate):
 
 class MyTableView(QTableView):
     """创建音乐表视图"""
+    addMenuSignal = pyqtSignal(int)
     startplaysignal = pyqtSignal(list)
     favorThisMusicsignal = pyqtSignal(int)
 
@@ -44,6 +45,7 @@ class MyTableView(QTableView):
         super(MyTableView, self).__init__(parent)
         self.setStyleSheet('font: 10pt "微软雅黑";')
         # 路径列表
+        self.lst = lst
         self.music_path_lst = []
         self.setPlaylistTableView(lst)
         # 设置按钮代理
@@ -51,17 +53,16 @@ class MyTableView(QTableView):
         # 设置不可选中
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
-
     def getData(self, lst):
         """设置tableview的模型
             接受歌曲的六项属性二维列表"""
-
+        self.lst = lst
         self.model = QStandardItemModel(0, 0)
         self.Headers = ['ID', '歌曲名', '歌手', '时间', '专辑', '操作']
         self.model.setHorizontalHeaderLabels(self.Headers)
         rowNum = len(lst)
         for row in range(rowNum):
-            self.music_path_lst.append([lst[row][1],lst[row][2],lst[row][5]])
+            self.music_path_lst.append([lst[row][1], lst[row][2], lst[row][5]])
             for column in range(5):
                 item = QStandardItem(f'{lst[row][column]}')
                 self.model.setItem(row, column, item)
@@ -79,13 +80,19 @@ class MyTableView(QTableView):
             发出：歌曲路径"""
         self.startplaysignal.emit(self.music_path_lst[self.sender().index])
 
-    def favorThisMusic(self):
+    # def favorThisMusic(self):
+    #     """收藏按钮的信号
+    #         发出：MID"""
+    #     index = self.model.index(self.sender().index, 0)
+    #     data = int(self.model.data(index))
+    #     print(data)
+    #     self.favorThisMusicsignal.emit(data)
+
+    def addMenu(self):
         """收藏按钮的信号
             发出：MID"""
-        index = self.model.index(self.sender().index, 0)
-        data = int(self.model.data(index))
-        print(data)
-        self.favorThisMusicsignal.emit(data)
+        print(self.lst[self.sender().index][0])
+        self.addMenuSignal.emit(self.lst[self.sender().index][0])
 
 
 class otherPlayListPanel(QWidget, Ui_PlayList):
