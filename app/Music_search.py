@@ -174,12 +174,51 @@ class PersonTableView(QTableView):
         """设置tableview的模型
             接受歌曲的六项属性二维列表"""
         self.model = QStandardItemModel(0, 0)
-        self.Headers = ['用户uid', '用户名', '用户简介','操作']
+        self.Headers = ['用户uid', '用户名', '用户简介', '操作']
         self.model.setHorizontalHeaderLabels(self.Headers)
         rowNum = len(lst)
         for row in range(rowNum):
             for column in range(3):
                 item = QStandardItem(f'{lst[row][column]}')
+                self.model.setItem(row, column, item)
+
+    def setPlaylistTableView(self, lst):
+        self.getData(lst)
+        self.setModel(self.model)
+        # 自适应布局，设置高度与宽度
+        self.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.verticalHeader().setDefaultSectionSize(40)
+        self.verticalHeader().setSectionResizeMode(QHeaderView.Fixed)
+
+    def emit_user_uid(self):
+        self.visitOther.emit(self.lst[self.sender().index][0])
+
+
+class PlaylistTableView(QTableView):
+    """创建音乐表视图"""
+    visitOther = pyqtSignal(int)
+
+    def __init__(self, parent=None, lst=None):
+        super(PlaylistTableView, self).__init__(parent)
+        self.setStyleSheet('font: 10pt "微软雅黑";')
+        self.lst = lst
+        # 路径列表
+        self.setPlaylistTableView(lst)
+        # 设置按钮代理
+        self.setItemDelegateForColumn(3, PersonButton(self))
+        # 设置不可选中
+        self.setEditTriggers(QAbstractItemView.NoEditTriggers)
+
+    def getData(self, lst):
+        """设置tableview的模型
+            接受歌曲的六项属性二维列表"""
+        self.model = QStandardItemModel(0, 0)
+        self.Headers = ['歌单名', '创建者', '歌单收藏量', '操作']
+        self.model.setHorizontalHeaderLabels(self.Headers)
+        rowNum = len(lst)
+        for row in range(rowNum):
+            for column in range(3):
+                item = QStandardItem(f'{lst[row][column + 1]}')
                 self.model.setItem(row, column, item)
 
     def setPlaylistTableView(self, lst):
@@ -245,4 +284,8 @@ class Search(QtWidgets.QWidget, music_search.Ui_Form):  # 修改main_ui.Ui_MainW
 
     def update_tableView_person(self, lst):
         self.tabel = PersonTableView(lst=lst)
+        self.tabel_layout.addWidget(self.tabel)
+
+    def update_tableView_playlist(self, lst):
+        self.tabel = PlaylistTableView(lst=lst)
         self.tabel_layout.addWidget(self.tabel)
