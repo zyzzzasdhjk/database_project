@@ -111,6 +111,7 @@ class DataBase:
 
         return SIDLst
 
+
     def update_user_info(self, lst):
         try:
             l1 = lst[0]
@@ -162,6 +163,7 @@ class DataBase:
                 lst[2] == '女'
         return selectresult
 
+
     def getSearchMusic(self, searchstr):
         """搜索音乐
             返回模糊匹配的二维列表
@@ -170,6 +172,23 @@ class DataBase:
         sqlstr = f"select MID,MName,MMName,MDate,AName,MDir from V$_getMusicData where MName like '%{searchstr}%'"
         self.cursor.execute(sqlstr)
         selectresult = self.query_strip()
+        return selectresult
+
+    def getSearchMusician(self,name):
+        sqlstr = f"select MID,MName,MMName,MDate,AName,MDir from V$_getMusicData where MMName like '%{name}%'"
+        self.cursor.execute(sqlstr)
+        selectresult = self.query_strip()
+        print(selectresult)
+        return selectresult
+
+    def getSearchPerson(self,n):
+        if n.isdigit():
+            sqlstr = f"select UID, UName, UIntro from UserInfo where UName like '%{n}%' or UID = {n}"
+        else:
+            sqlstr = f"select UID, UName, UIntro from UserInfo where UName like '%{n}%'"
+        self.cursor.execute(sqlstr)
+        selectresult = self.query_strip()
+        print(selectresult)
         return selectresult
 
     def getUserAllCreateSheet(self, UID):

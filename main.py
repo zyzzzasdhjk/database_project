@@ -1,11 +1,6 @@
-import time
-from threading import Thread
-
 from PyQt5 import QtWidgets
 import sys
-
 from PyQt5.QtCore import QThread, pyqtSignal
-
 from sql import sql
 from app import MusicPlayer, Sidebar, playlist_widget, PlayList_Panel, Title_block_widget, user_info_widget, \
     Music_search, MyPlaylist, otherPlaylist_Panel, music_recommendation, addMenu, RecommendSheet, commentShow
@@ -60,7 +55,7 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         super(Main_window, self).__init__()
         self.setupUi(self)
         self.search_str = ''  # 搜索内容
-        self.search_type = ''  # 搜索类别
+        self.search_type = '歌手'  # 搜索类别
         self.MyPlaylistThread = WorkThread(self)
         # 初始化数据库连接
         self.db = sql.DataBase("127.0.0.1", "sa", "5151", "MMS")
@@ -96,13 +91,13 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         '''信号区'''
         # 侧边栏
         # 侧边栏页面切换
-        self.sidebar.widget_change_signal.connect(self.change_widget_by_signal)
+        self.sidebar.widget_change_signal.connect(self.change_widget_by_signal)  # 页面切换信号
         self.sidebar.createSheetShowSignal.connect(self.showCreateSheet)
         self.sidebar.favorSheetShowSignal.connect(self.showFavorSheet)
         # 侧边栏创建歌单按钮
         self.sidebar.createSheetSignal.connect(self.createSheet)
 
-        self.title_block.openUserEditsiganl.connect(self.update_user_info)  # 提高个人信息
+        self.title_block.openUserEditsiganl.connect(self.update_user_info)  # 刷新个人信息
         self.title_block.widget_change_signal.connect(self.change_widget_by_signal)  # 切换到个人信息界面
         self.title_block.search_str.connect(self.update_search_str)  # 更新搜索内容
         # self.music.music_lst_s.connect(self.my_playlist.update_tableView_music)
@@ -319,14 +314,29 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         self.music.save_json()
 
     def update_search_str(self, s):
-        data = self.db.getSearchMusic(s)
+        self.search_str = s
+        if self.search_type == '歌曲':
+            data = self.db.getSearchMusic(s)
+        elif self.search_type == '歌手':
+            data = self.db.getSearchMusician(s)
+        elif self.search_type == '用户':
+            data = self.db.getSearchPerson(s)
         self.change_widget_by_signal(2)
-        self.search_widget.update_tableView_music(data)
-        self.search_widget.tabel.startNextPlaySignal.connect(self.music.insert_music_to_lst)
-        self.search_widget.tabel.addMenuSignal.connect(self.startAddMenu)
+        if self.search_type != '用户':
+            self.search_widget.update_tableView_music(data)
+            self.search_widget.tabel.startNextPlaySignal.connect(self.music.insert_music_to_lst)
+            self.search_widget.tabel.addMenuSignal.connect(self.startAddMenu)
+        else:
+            self.search_widget.update_tableView_person(data)
+            self.search_widget.tabel.visitOther.connect(self.userW)
+
+    def userW(self,uid):
+        """传入uid，打开用户界面"""
+        print(uid)
 
     def update_search_type(self, s):
         self.search_type = s
+        self.update_search_str(self.search_str)
 
     def commitComment(self, MID, CContent):
         """上传评论，并加载"""
