@@ -55,7 +55,7 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
         super(Main_window, self).__init__()
         self.setupUi(self)
         self.search_str = ''  # 搜索内容
-        self.search_type = '歌手'  # 搜索类别
+        self.search_type = '歌曲'  # 搜索类别
         self.MyPlaylistThread = WorkThread(self)
         # 初始化数据库连接
         self.db = sql.DataBase("127.0.0.1", "sa", "5151", "MMS")
@@ -315,23 +315,32 @@ class Main_window(QtWidgets.QMainWindow, main_ui.Ui_MainWindow):
 
     def update_search_str(self, s):
         self.search_str = s
+        print(self.search_type)
         if self.search_type == '歌曲':
             data = self.db.getSearchMusic(s)
         elif self.search_type == '歌手':
             data = self.db.getSearchMusician(s)
         elif self.search_type == '用户':
             data = self.db.getSearchPerson(s)
+        elif self.search_type == '歌单':
+            data = self.db.getSearchPlaylist(s)
         self.change_widget_by_signal(2)
-        if self.search_type != '用户':
+        if self.search_type == '歌曲' or self.search_type == '歌手':
             self.search_widget.update_tableView_music(data)
             self.search_widget.tabel.startNextPlaySignal.connect(self.music.insert_music_to_lst)
             self.search_widget.tabel.addMenuSignal.connect(self.startAddMenu)
-        else:
+        elif self.search_type == '用户':
             self.search_widget.update_tableView_person(data)
             self.search_widget.tabel.visitOther.connect(self.userW)
+        else:
+            self.search_widget.update_tableView_playlist(data)
+            self.search_widget.tabel.visitOther.connect(self.playlistW)
 
     def userW(self,uid):
         """传入uid，打开用户界面"""
+        print(uid)
+
+    def playlistW(self,uid):
         print(uid)
 
     def update_search_type(self, s):

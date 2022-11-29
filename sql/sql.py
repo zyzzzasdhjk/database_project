@@ -191,6 +191,12 @@ class DataBase:
         print(selectresult)
         return selectresult
 
+    def getSearchPlaylist(self,name):
+        sqlstr = f"select SID,SName,UName,SFavor from V$_getSheetUserCreateInfo where SName like '%{name}%'"
+        self.cursor.execute(sqlstr)
+        selectresult = self.query_strip()
+        return selectresult
+
     def getUserAllCreateSheet(self, UID):
         """用户创建所有歌单数据
             返回一个二维列表
