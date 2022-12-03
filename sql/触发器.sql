@@ -56,19 +56,6 @@ BEGIN
 END
 GO
 
-
-create trigger T$_deleteMID_CID
-on MID_CID
-after delete
-as
-	begin
-	declare @CID int;
-	select @CID =CID from deleted
-	delete from UID_CID where CID = @CID
-	delete from Comment where CID = @CID
-	end
-GO
-
 create trigger T$_deleteComment
 on Comment
 instead of delete
@@ -86,15 +73,19 @@ create TRIGGER T$_deleteMusic
     ON Music
     instead of delete
 AS
-BEGIN
-    DECLARE @MID int
+BEGIN 
+    DECLARE @MID int 
+	DECLARE @CID int
+
     SELECT @MID = MID FROM deleted
+	SELECT @CID = CID FROM MID_CID where MID = @MID
 
     DELETE MID_AID where MID = @MID
 	DELETE MID_MMID where MID = @MID
-	DELETE MID_CID where MID = @MID
+	DELETE COMMENT where CID = @CID
+	DELETE SID_MID where MID = @MID
     DELETE Music where MID = @MID
-END
+END 
 GO
 
 
@@ -117,8 +108,17 @@ as
 	Declare @Identity nvarchar(10)
 	select @Identity = ORIGINAL_LOGIN()
 	select @SID = SID from inserted
+	
 
-	IF((10 <= all(select count(UID) from V$_getUserAllCreateSheet group by UID)) and @Identity = 'MUser')
+
+	IF((10 <= all(	
+		select SheetNum
+		from
+			(select UID, count(UID) as SheetNum from V$_getUserAllCreateSheet group by UID) as S1,
+				UserInfo
+			where S1.UID = UserInfo.UID and UserInfo.UIsVip = '0') 
+		and 
+			@Identity = 'MUser'))
 	BEGIN
 		delete Sheet where SID = @SID
 	END
