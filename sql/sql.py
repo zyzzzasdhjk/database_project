@@ -200,7 +200,7 @@ class DataBase:
         print(selectresult)
         return selectresult
 
-    def getSearchPlaylist(self,name):
+    def getSearchPlaylist(self, name):
         sqlstr = f"select SID,SName,UName,SFavor from V$_getSheetUserCreateInfo where SName like '%{name}%'"
         self.cursor.execute(sqlstr)
         selectresult = self.query_strip()
@@ -415,6 +415,7 @@ class DataBase:
                     Sheet.append(Sheet2[1])
 
         return templst
+
 
 if __name__ == "__main__":
     D = DataBase("127.0.0.1", "sa", "5151", "MMS")
